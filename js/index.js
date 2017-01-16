@@ -1,4 +1,4 @@
-﻿var _version = 0.6.1;
+﻿var _version = 0.7;
 
 var _semaphore = { };
 _semaphore.mmi_load = false;
@@ -115,7 +115,9 @@ function loadMMI()
 		window.onbeforeunload = confirmExit;
 		function confirmExit()
 		{
-			return "Vous souhaitez quitter la page. Voulez-vous vraiment continuer ?";
+			if(_docIsEdited){
+				return "Vous souhaitez quitter la page. Voulez-vous vraiment continuer ?";
+			}
 		}
 		
 		//Header

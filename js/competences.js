@@ -231,17 +231,19 @@ function updateSelectedCompetences()
 	var capacites_bareme = computeCompetencesStats();
 	//Browse all capacites used in the devoir
 	
-	$.each(_content.grilles[_content.data.general.grille.id].competences, function(competence_id,competence) {
-		$.each(competence.capacites, function(capacite_id,capacite_texte) {
-			//Get all usefull info on this capacite (from grid definition)
-			var capacite = getCapacite(capacite_id);
-			if(capacite){
-				if(_content.data.general.grille.capacites[capacite_id]){
-					$("#s1_gen_competence tbody").append("<tr><td style='color:"+capacite.competence.couleur+"'>"+capacite.id+"</td><td>"+capacites_bareme[capacite_id].stats["acquis"]+"<div>"+capacites_bareme[capacite_id].stats["acquis100"]+"%</div></td><td>"+capacites_bareme[capacite_id].stats["encours"]+"<div>"+capacites_bareme[capacite_id].stats["encours100"]+"%</div></td><td>"+capacites_bareme[capacite_id].stats["nonacquis"]+"<div>"+capacites_bareme[capacite_id].stats["nonacquis100"]+"%</div></td><td>"+capacites_bareme[capacite_id].stats["moyenne"]+"/"+capacites_bareme[capacite_id].max+" pts<div>"+capacites_bareme[capacite_id].stats["moyenne100"]+"%</div></td></tr>");
+	if(_content.data.general.grille && _content.data.general.grille.id){
+		$.each(_content.grilles[_content.data.general.grille.id].competences, function(competence_id,competence) {
+			$.each(competence.capacites, function(capacite_id,capacite_texte) {
+				//Get all usefull info on this capacite (from grid definition)
+				var capacite = getCapacite(capacite_id);
+				if(capacite){
+					if(_content.data.general.grille.capacites[capacite_id]){
+						$("#s1_gen_competence tbody").append("<tr><td style='color:"+capacite.competence.couleur+"'>"+capacite.id+"</td><td>"+capacites_bareme[capacite_id].stats["acquis"]+"<div>"+capacites_bareme[capacite_id].stats["acquis100"]+"%</div></td><td>"+capacites_bareme[capacite_id].stats["encours"]+"<div>"+capacites_bareme[capacite_id].stats["encours100"]+"%</div></td><td>"+capacites_bareme[capacite_id].stats["nonacquis"]+"<div>"+capacites_bareme[capacite_id].stats["nonacquis100"]+"%</div></td><td>"+capacites_bareme[capacite_id].stats["moyenne"]+"/"+capacites_bareme[capacite_id].max+" pts<div>"+capacites_bareme[capacite_id].stats["moyenne100"]+"%</div></td></tr>");
+					}
 				}
-			}
+			});
 		});
-	});
+	}
 }
 
 /* Function in charge of computing ll stats about competences and capacites in the devoir
