@@ -1,0 +1,6 @@
+var _classes = {
+    _4emeA:["BARRAL","BLANPAIN","BLARY","BONACCHI LIBERATO","CHANAY","COLAS","DELHAYE","DEMONGEOT","DOUCET","DUCASA","HABARES","HORGASSAN","KANAGENDRAN","LAFFAILLE","LAGUES","LATCHERE","LOPES SANTOS","MONPIERRE","MOUSSOUNI","PADIOLEAU","PERRET-LATAPIE","POQUET","PRAT","RIBEIRO DE AMORIM","SMAIL","THOMAS","THOMAS","VIGNES"],
+    _2ndeB:["BAT Nelly","BEAUNAT Arthur","BOUSQUET Annaelle","BRIGNOL Lisa","CHENAL Chloe","CLOT Pauline","DENIZOT Andrea","DEVELTER Laurine","DEVIGNE Kathleen","DI PALO Helène","DOMEC Marc","DUPUY Léa","FERRERE Aurélie","GAROBY Evan","GONI Y PEREZ Ludivine","HEINS Jérémie","IGUACEL Maylis","IRIART Carla","KUDELA Louise","LE TUTOUR Clément","MADRANE Sokheina","PERIOU Thibault","PRAT Quentin","PRAT Romane","PRIU Brice","QUESSETTE Thomas","RICHEME Florian","ROUX Lucie","SERRA Océana"],
+    _1ereC:["CAZENAVETTE Rémi","CHASSARD-BABIN Apollinaire","CRABARIE Pierre","DUSSER Paul-Henri","FORGEAU Guilhem","GUILLAUME Vanille","HOHMANN Cléa","MAI Phi-Long","MALLARD-WAGNER Théophile","MARY Kathleen","PINSOLLE-MANSOUROU Thibault","PONTICO Chloé","SOURNET Raphael","TAMBORINI Moragne","VIROLLE Christelle"],
+    _Tspe:["CHOI Soog-ee","DUFRAISSE Vincent","FALLIERO Mila","FERREIRA Mathilde"],
+}
