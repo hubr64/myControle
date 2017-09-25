@@ -215,7 +215,7 @@
 				<table class="tablesorter">
 					<thead>
 						<tr>
-							<th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Fichier</th><th>Titre</th><th>Barême</th><th data-sorter="false">Capacités</th><th>Moyenne</th><th>Min</th><th>Max</th><th>&lt; Moyenne</th>
+							<th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Fichier</th><th>Titre</th><th>Barême</th><th data-sorter="false">Capacités</th><th>Coefficient</th><th>Moyenne</th><th>Min</th><th>Max</th><th>&lt; Moyenne</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -263,12 +263,16 @@
 				<div id="s5_stat_evol_comp">
 					<div class="s5_det_graph_l"><canvas id="s5_stat_evol_comp_graph" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
 				</div>
+				<h3>Moyenne d'acquisition des compétences</h3>
+				<div id="s5_stat_bilan_comp">
+					<div class="s5_det_graph_l"><canvas id="s5_stat_bilan_comp_graph" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
 				<h3>Bilan d'utilisation des capacités</h3>
 				<div id="s5_stat_bilan_capa">
 					<table class="tablesorter">
 						<thead>
 							<tr>
-								<th>Capacité</th><th>Volume</th><th>Taux</th>
+								<th>Capacité</th><th>Acquisition Moyenne</th><th>Volume</th><th>Taux</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -297,6 +301,7 @@
 					<div id="s5_det_title"><span>Titre</span><span></span></div>
 					<div id="s5_det_date"><span>Date</span><span></span></div>
 					<div id="s5_det_bareme"><span>Barême</span><span></span></div>
+					<div id="s5_det_coeff"><span>Coefficient</span><span></span></div>
 				</div>
 				<h3>Statistiques</h3>
 				<div>
@@ -338,7 +343,7 @@
 				</div>
 				<h3>Evolution annuelle</h3>
 				<div>
-					<table class="tablesorter" id="s5_det_pup_notes"><thead><tr><th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Titre</th><th>Note</th><th>Moyenne</th><th>Capacités</th><th>Commentaire</th></tr></thead><tbody></tbody></table>
+					<table class="tablesorter" id="s5_det_pup_notes"><thead><tr><th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Titre</th><th>Note</th><th>Moyenne</th><th>Capacités</th><th>Coefficient</th><th>Commentaire</th></tr></thead><tbody></tbody></table>
 					<div class="s5_det_graph_l"><canvas id="s5_det_pup_graph_evol_notes" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
 				</div>
 				<h3>Bilan par compétence</h3>

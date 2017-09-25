@@ -559,7 +559,7 @@ function printSuiviGlobal()
 	$("#s2 > div.s2_page:last-child").append("<h2><span>"+_content.data.general.titre+"</span><span>"+_content.data.general.classe+"</span></h2>");
 	$("#s5_stat_rep_notes").prev().clone().appendTo("#s2 > div.s2_page:last-child");
 	$("#s5_stat_rep_notes").clone().show().css("height","auto").appendTo("#s2 > div.s2_page:last-child");
-	$("#s2 > div.s2_page:last-child canvas").replaceWith(getImageFromCanvas("s5_stat_evol_notes_graph"));
+	$("#s2 > div.s2_page:last-child canvas").replaceWith(getImageFromCanvas("s5_stat_rep_notes_graph"));
 	$("#s5_stat_rep_notes").hide();
 
 	$("#s5_stat_evol_comp").show();
@@ -570,6 +570,15 @@ function printSuiviGlobal()
 	$("#s5_stat_evol_comp").clone().show().css("height","auto").appendTo("#s2 > div.s2_page:last-child");
 	$("#s2 > div.s2_page:last-child canvas").replaceWith(getImageFromCanvas("s5_stat_evol_comp_graph"));
 	$("#s5_stat_evol_comp").hide();
+	
+	$("#s5_stat_bilan_comp").show();
+	updateStatSuivi("s5_stat_bilan_comp");
+	$('#s2').append('<div class="s2_page s5_stat"></div>');
+	$("#s2 > div.s2_page:last-child").append("<h2><span>"+_content.data.general.titre+"</span><span>"+_content.data.general.classe+"</span></h2>");
+	$("#s5_stat_bilan_comp").prev().clone().appendTo("#s2 > div.s2_page:last-child");
+	$("#s5_stat_bilan_comp").clone().show().css("height","auto").appendTo("#s2 > div.s2_page:last-child");
+	$("#s2 > div.s2_page:last-child canvas").replaceWith(getImageFromCanvas("s5_stat_bilan_comp_graph"));
+	$("#s5_stat_bilan_comp").hide();
 	
 	$("#s5_stat_bilan_capa").show();
 	updateStatSuivi("s5_stat_bilan_capa");

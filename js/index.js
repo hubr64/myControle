@@ -1,4 +1,4 @@
-﻿var _version = 0.7;
+﻿var _version = 0.71;
 
 var _semaphore = { };
 _semaphore.mmi_load = false;

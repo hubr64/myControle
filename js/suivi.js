@@ -254,6 +254,8 @@ function loadSuiviFile(file_content)
 			//Content is compliant then transfer it in the globa var _content
 			_content = tmp_content
 			_content.meta.date_save = new Date(_content.meta.date_save);
+			//First migrate
+			migrateSuivi();
 			//Load meta data
 			loadMetaData();
 			//Load general data
@@ -345,7 +347,7 @@ function importSuiviFileCb(file_content)
 					if(tmp_content.data.general.grille.id!=_content.data.general.grille.id){
 						error_message("La grille de compétences du devoir ne correspond pas à celle du suivi.<br\>L'importation ne peut pas se poursuivre !");
 					}else{
-						if(tmp_content.meta.version < _version){
+						if(tmp_content.meta.version < 0.6){
 							error_message("La version du fichier du devoir n'est pas compatible de la version actuelle du logiciel.<br\>L'importation ne peut pas se poursuivre !<br\><br\>Veuillez ouvrir d'abord le devoir, le convertir dans la version actuelle puis essayer de nouveau une importation.");
 						}else{
 							//On transform la date string en vrai date javascript
@@ -413,8 +415,9 @@ function importSuiviFileCb(file_content)
 							$('#s2').hide();
 							$("#s2").append("<fieldset><legend>Devoir à importer :</legend><div><span>Titre : </span><span>"+tmp_devoir.general.titre+"</span></div><div><span>Date : </span><span>"+tmp_devoir.general.date.toLocaleDateString()+"</span></div></fieldset>");
 							$("#s2").append("<fieldset><legend>Type d'importation :</legend><label for='import_note_type_normalise'>Normalisé</label><input checked type='radio' name='import_note_type' id='import_note_type_normalise' value='1'><label for='import_note_type_bulletin'>Bulletin</label><input type='radio' name='import_note_type' id='import_note_type_bulletin' value='2'><label for='import_note_type_reel'>Réel</label><input type='radio' name='import_note_type' id='import_note_type_reel' value='3'></fieldset>");
+							$("#s2").append("<fieldset><legend>Coefficient :</legend><input type='text' value='1' id='import_coefficient'/></fieldset>");
 							
-							$( "#s2 input" ).checkboxradio({
+							$( "#s2 input[type=radio]" ).checkboxradio({
 							  icon: false
 							});
 							
@@ -429,16 +432,18 @@ function importSuiviFileCb(file_content)
 											//Get the full configuration desired by the user
 											var import_note_normalise = false;
 											var import_note_bulletin = false;
+											var import_coefficient = 1;
 											if (parseInt($('input[name=import_note_type]:checked').val()) == 1){
 												import_note_normalise = true;
 											};
 											if (parseInt($('input[name=import_note_type]:checked').val()) == 2){
 												import_note_bulletin = true;
 											};
+											import_coefficient = parseFloat($('input#import_coefficient').val());
 											//Close the export configuration window
 											$("#s2").dialog( "close" );
 											//Now proceed to final importation
-											importSuiviFileCb2(tmp_devoir,import_note_normalise,import_note_bulletin);
+											importSuiviFileCb2(tmp_devoir,import_note_normalise,import_note_bulletin,import_coefficient);
 										}
 									},
 								close: function() {
@@ -459,7 +464,7 @@ function importSuiviFileCb(file_content)
 		}
 	}
 }
-function importSuiviFileCb2(tmp_devoir,import_note_normalise,import_note_bulletin)
+function importSuiviFileCb2(tmp_devoir,import_note_normalise,import_note_bulletin,import_coefficient)
 {
 	//If user wants to import the standardised notes (proportionnel sur 20 arrondi à 0.5)
 	if(import_note_normalise){
@@ -503,6 +508,9 @@ function importSuiviFileCb2(tmp_devoir,import_note_normalise,import_note_bulleti
 		}
 	}
 
+	//Set coefficient of the devoir
+	tmp_devoir.general.coefficient = import_coefficient;
+	
 	//Insert the new devoir in the array of devoirs but at the right position regarding its date
 	var devoir_position = 0;
 	$.each(_content.data.devoirs, function(numd,devoir) {
@@ -532,6 +540,8 @@ function computeSuiviStats()
 	if(_filteredContent){
 		local_content = _filteredContent
 	}
+	//Compute nb for global mean
+	var devoir_nb_coeff = 0;
 	//Get number of devoirs
 	local_content.data.general.stats.nb = local_content.data.devoirs.length;
 	//Now compute the mean, min and max
@@ -539,13 +549,14 @@ function computeSuiviStats()
 	local_content.data.general.stats.max = 0;
 	local_content.data.general.stats.min = 200;
 	$.each(local_content.data.devoirs, function(numd,devoir) {
-		local_content.data.general.stats.mean += devoir.general.stats.mean;
+		local_content.data.general.stats.mean += devoir.general.stats.mean * devoir.general.coefficient;
 		if(devoir.general.stats.min < local_content.data.general.stats.min){local_content.data.general.stats.min = devoir.general.stats.min;}
 		if(devoir.general.stats.max > local_content.data.general.stats.max){local_content.data.general.stats.max = devoir.general.stats.max;}
+		devoir_nb_coeff += devoir.general.coefficient;
 	});
 	//If there is at least one devoir in the array (or creat an error /0)
 	if(local_content.data.general.stats.nb != 0){
-		local_content.data.general.stats.mean = Number((local_content.data.general.stats.mean / local_content.data.general.stats.nb).toFixed(2));
+		local_content.data.general.stats.mean = Number((local_content.data.general.stats.mean / devoir_nb_coeff).toFixed(2));
 	}else{
 		local_content.data.general.stats.mean = "?";
 		local_content.data.general.stats.max = "?";
@@ -585,6 +596,7 @@ function updateSuiviGlobal()
 			});
 		});
 		ligne_devoir += "</td>";
+		ligne_devoir += "<td><span contenteditable='true'>"+devoir.general.coefficient+"</span></td>";
 		ligne_devoir += "<td>"+devoir.general.stats.mean+"</td>";
 		ligne_devoir += "<td>"+devoir.general.stats.min+"</td>";
 		ligne_devoir += "<td>"+devoir.general.stats.max+"</td>";
@@ -592,6 +604,41 @@ function updateSuiviGlobal()
 		ligne_devoir += "</tr>";
 		//Add the created line in the array
 		$("#s5_global > table > tbody").append(ligne_devoir);
+	});
+	
+	$("#s5_global > table > tbody > tr > td > span").blur(function(event) {
+		//Get devoir id
+		var devoir_id = $(this).parent().parent().attr("devoir_id");
+		//Get old value in cas of problem
+		var old_coeff = _content.data.devoirs[devoir_id].general.coefficient;
+		//Get new value, manage dot problem and convert it to float
+		var new_coeff = $(this).html();
+		new_coeff = new_coeff.replace(",", "."); 
+		_content.data.devoirs[devoir_id].general.coefficient = parseFloat(new_coeff);
+		//If the value is not a valid float
+		if(isNaN(_content.data.devoirs[devoir_id].general.coefficient)){
+			warning_message("Votre coefficient n'est pas un nombre valide.");
+			_content.data.devoirs[devoir_id].general.coefficient = old_coeff;
+			$(this).html(old_coeff);
+		}else{
+			//If round is valid float but is zero (impossible to manage)
+			if(_content.data.devoirs[devoir_id].general.coefficient == 0){
+				warning_message("Votre coefficient ne peut pas être égal à 0.");
+				_content.data.devoirs[devoir_id].general.coefficient = old_coeff;
+				$(this).html(old_coeff);
+			}else{
+				$(this).html(_content.data.devoirs[devoir_id].general.coefficient);
+				//Recompute all stats without the removed devoir
+				computeSuiviStats();
+				//Reload all global information in MMI
+				loadDefaultDataSuivi();
+				//Generate a new array for the list of devoirs and for the list of pupils (much more simple than update them)
+				updateSuiviGlobal();
+				updateSuiviPupil();
+				//Memorize that document is modified
+				toggleDocumentEdition(true);
+			}
+		}
 	});
 	
 	//Update the array to update the plugin table sorter
@@ -635,22 +682,24 @@ function updateSuiviPupil()
 		ligne_pupil += "<td><a>"+pupil+"</a></td>";
 		var pupil_mean = 0;
 		var pupil_nb = 0;
+		var pupil_nb_coeff = 0;
 		var pupil_min = 200;
 		var pupil_max = 0;
 		var pupil_inf_moy = 0;
 		$.each(local_content.data.devoirs, function(numd,devoir) {
 			if(devoir.notes[pupil]){
 				var pupil_note = devoir.notes[pupil].note;
-				pupil_mean+=pupil_note;
+				pupil_mean+=pupil_note * devoir.general.coefficient;
 				if(pupil_note<pupil_min){pupil_min = pupil_note;}
 				if(pupil_note>pupil_max){pupil_max = pupil_note;}
 				if(pupil_note < devoir.notes[pupil].max/2){pupil_inf_moy++;}
 				pupil_nb++;
+				pupil_nb_coeff += devoir.general.coefficient;
 			}
 		});
 		//If the pupil has a note at least on one devoir then display stats otherwise display NE for Not Evaluated
 		if(pupil_nb!=0){
-			pupil_mean = Number((pupil_mean/pupil_nb).toFixed(2));
+			pupil_mean = Number((pupil_mean/pupil_nb_coeff).toFixed(2));
 		}else{
 			pupil_mean = "-";
 			pupil_nb = "-";
@@ -669,9 +718,11 @@ function updateSuiviPupil()
 		//Ad the line in the array
 		$("#s5_pupil > table > tbody").append(ligne_pupil);
 	});
+	
 	//Add now the final rank of each pupil (compute at the end to prvent a recursive loop inside each pupil)
 	var pupil_notes = [];
 	var pupil_rank = 0;
+	//The rank is computed according to the global mean
 	$.each($("#s5_pupil > table > tbody > tr"), function(index,pupil) {
 		var pupil_note = parseFloat($(this).children("td:nth-child(3)").html());
 		if(isNaN(pupil_note)){
@@ -680,7 +731,7 @@ function updateSuiviPupil()
 		pupil_notes.push(pupil_note);
 	});
 	pupil_notes.sort(function(a, b){return b-a});
-	
+	//Now that all notes are retrieved ad ordered, loof for the note in the array to get its position and thus pupil rank
 	$.each($("#s5_pupil > table > tbody > tr"), function(index,pupil) {
 		var pupil_note = parseFloat($(this).children("td:nth-child(3)").html());
 		if(pupil_notes.indexOf(pupil_note) == -1){
@@ -760,6 +811,7 @@ function cleanSuiviDetails()
 	$('#s5_det_title > span:nth-child(2)').html("");
 	$('#s5_det_date > span:nth-child(2)').html("");	
 	$("#s5_det_bareme > span:last-child").html("");
+	$("#s5_det_coeff > span:last-child").html("");
 	$("#s5_det_mean > span:last-child").html("");
 	$("#s5_det_maximum > span:last-child").html("");
 	$("#s5_det_minimum > span:last-child").html("");
@@ -786,6 +838,7 @@ function openSuiviDetails(devoir_id)
 	$('#s5_det_title > span:nth-child(2)').html(devoir.general.titre);
 	$('#s5_det_date > span:nth-child(2)').html(devoir.general.date.getDate()+'/'+(devoir.general.date.getMonth()+1)+'/'+devoir.general.date.getFullYear());	
 	$("#s5_det_bareme > span:last-child").html(devoir.general.bareme);
+	$("#s5_det_coeff > span:last-child").html(devoir.general.coefficient);
 	$("#s5_det_mean > span:last-child").html(devoir.general.stats.mean);
 	$("#s5_det_maximum > span:last-child").html(devoir.general.stats.max);
 	$("#s5_det_minimum > span:last-child").html(devoir.general.stats.min);
@@ -1024,7 +1077,7 @@ function openSuiviDetails(devoir_id)
 		options: {
 			title: {
 				display: true,
-				text: 'Moyenne d\'acquisition des capacités'
+				text: "Moyenne d'acquisition des capacités"
 			},
 			legend: {
 				display: false,
@@ -1057,7 +1110,7 @@ function openSuiviDetails(devoir_id)
 		options: {
 			title: {
 				display: true,
-				text: 'Moyenne d\'acquisition des compétences'
+				text: "Moyenne d'acquisition des compétences"
 			},
 			legend: {
 				display: false,
@@ -1067,6 +1120,8 @@ function openSuiviDetails(devoir_id)
 				yAxes: [{
 					ticks: {
 						beginAtZero:true,
+						min:0,
+						max:0
 					}
 				}],
 			},
@@ -1120,6 +1175,7 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 	$.each(local_content.classes["_"+classe_id], function(nump,pupil) {
 		var pupil_mean_tmp = 0;
 		var pupil_nb_tmp = 0;
+		var pupil_nb_coeff_tmp = 0;
 		var pupil_min_tmp = 200;{}
 		var pupil_max_tmp = 0;
 		var pupil_inf_moy_tmp = 0;
@@ -1127,16 +1183,17 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 		$.each(local_content.data.devoirs, function(numd,devoir) {
 			if(devoir.notes[pupil]){
 				var pupil_note_tmp = devoir.notes[pupil].note;
-				pupil_mean_tmp+=pupil_note_tmp;
+				pupil_mean_tmp += pupil_note_tmp * devoir.general.coefficient;
 				if(pupil_note_tmp<pupil_min_tmp){pupil_min_tmp = pupil_note_tmp;}
 				if(pupil_note_tmp>pupil_max_tmp){pupil_max_tmp = pupil_note_tmp;}
 				if(pupil_note_tmp<devoir.general.bareme/2){pupil_inf_moy_tmp++;}
 				pupil_nb_tmp++;
+				pupil_nb_coeff_tmp += devoir.general.coefficient;
 				pupil_notes_tmp.push(pupil_note_tmp);
 			}
 		});
 		if(pupil_nb_tmp!=0){
-			pupil_mean_tmp = Number((pupil_mean_tmp/pupil_nb_tmp).toFixed(2));
+			pupil_mean_tmp = Number((pupil_mean_tmp/pupil_nb_coeff_tmp).toFixed(2));
 			pupil_rank.push(pupil_mean_tmp);
 		}else{
 			pupil_mean_tmp = "-";
@@ -1197,7 +1254,6 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 			pupil_line += '<td>'+devoir.notes[pupil_name].note+'</td>';
 			pupil_line += '<td>'+devoir.general.stats["mean"]+'</td>';
 			pupil_line += '<td>';
-			
 			$.each(_content.grilles[_content.data.general.grille.id].competences, function(competence_id,competence) {
 				$.each(competence.capacites, function(capacite_id,capacite_texte) {
 					if(devoir.capacites[capacite_id]){
@@ -1208,8 +1264,8 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 					}
 				});
 			});
-			
 			pupil_line += '</td>';
+			pupil_line += '<td>'+devoir.general.coefficient+'</td>';
 			pupil_line += '<td>'+devoir.notes[pupil_name].commentaire+'</td>';
 			pupil_line += '</tr>';
 			$("#s5_pupil_details #s5_det_pup_notes > tbody").append(pupil_line);
@@ -1274,6 +1330,7 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 	var graph_comp =[];
 	
 	$("#s5_pupil_details #s5_det_pup_competences").trigger("destroy");
+	
 	var comp_line = '<tr><th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Titre</th>';
 	$.each(local_content.grilles[grille_id].competences, function(numco,competence) {
 		comp_line += "<th>"+competence.titre+"</th>";
@@ -1305,6 +1362,7 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 					comp_tmp_graph[numco].push(competence_tmp);
 					comp_line += "<td style='color:"+competence.couleur+"'>"+competence_tmp+"%</td>";
 				}else{
+					comp_tmp[numco].push(null);
 					comp_tmp_graph[numco].push("-");
 					comp_line += "<td style='color:"+competence.couleur+"'>- %</td>";
 				}
@@ -1318,11 +1376,16 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 	$.each(local_content.grilles[grille_id].competences, function(numco,competence) {
 		
 		var comp_tmp_mean = 0;
-		if(comp_tmp[numco].length > 0){
-			for( var i = 0; i < comp_tmp[numco].length; i++ ){
-				comp_tmp_mean += comp_tmp[numco][i];
+		var comp_tmp_nb_coeff = 0;
+		$.each(local_content.data.devoirs, function(numd,devoir) {
+			if(comp_tmp[numco][numd]){
+				comp_tmp_mean += comp_tmp[numco][numd] * devoir.general.coefficient;
+				comp_tmp_nb_coeff += devoir.general.coefficient;
 			}
-			comp_tmp_mean = Number((comp_tmp_mean/comp_tmp[numco].length).toFixed(2));
+		});
+		
+		if(comp_tmp_nb_coeff > 0){
+			comp_tmp_mean = Math.round(comp_tmp_mean/comp_tmp_nb_coeff);
 		}else{
 			comp_tmp_mean = "- ";
 		}
@@ -1340,7 +1403,6 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 			spanGaps: false
 		});
 	});
-
 	$("#s5_pupil_details #s5_det_pup_competences > tbody").append(comp_line);
 	
 	s5_det_pup_graph_evol_comp = new Chart($("#s5_pupil_details #s5_det_pup_graph_evol_comp"), {
@@ -1375,11 +1437,13 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 	
 	//Bilan par capacité
 	var cap_tmp =[];
+	var cap_tmp_nb_coeff =[];
 	var graph_capa_label =[];
 	var graph_capa_val =[];
 	$.each(local_content.grilles[grille_id].competences, function(numco,competence) {
 		$.each(competence.capacites, function(numca,capacite) {
 			cap_tmp[numca] = [];
+			cap_tmp_nb_coeff[numca] = [];
 			graph_capa_label.push(numca);
 		});
 	});
@@ -1388,6 +1452,7 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 		if(devoir.notes[pupil_name]){
 			$.each(devoir.capacites, function(numca,capacite) {
 				cap_tmp[numca].push(100 * devoir.notes[pupil_name].capacites[numca]/capacite.max);
+				cap_tmp_nb_coeff[numca].push(devoir.general.coefficient);
 			});
 		}
 	});
@@ -1402,10 +1467,12 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 				cap_line += "<td>"+capacite.texte+"</td>";
 			
 				var cap_tmp_mean = 0;
+				var cap_tmp_mean_nb_coeff = 0;
 				for( var i = 0; i < cap_tmp[numca].length; i++ ){
-					cap_tmp_mean += cap_tmp[numca][i];
+					cap_tmp_mean += cap_tmp[numca][i] * cap_tmp_nb_coeff[numca][i];
+					cap_tmp_mean_nb_coeff += cap_tmp_nb_coeff[numca][i];
 				}
-				cap_tmp_mean = Number((cap_tmp_mean/cap_tmp[numca].length).toFixed(2));
+				cap_tmp_mean = Math.round(cap_tmp_mean/cap_tmp_mean_nb_coeff);
 				cap_line += "<td>"+cap_tmp_mean+"%</td>";
 				graph_capa_val.push(cap_tmp_mean);
 				cap_line += "</tr>";
@@ -1466,6 +1533,7 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 var s5_stat_evol_notes_graph = null;
 var s5_stat_rep_notes_graph = null;
 var s5_stat_evol_comp_graph = null;
+var s5_stat_bilan_comp_graph = null;
 var s5_stat_bilan_capa_graph = null;
 function updateStatSuivi(stat_id)
 {
@@ -1661,123 +1729,6 @@ function updateStatSuivi(stat_id)
 		});
 		
 	}
-	//Bilan d'utilisation des capacités
-	if(stat_id == "s5_stat_bilan_capa"){
-		//FIrst destroy the table and reinit it
-		if($("#s5_stat_bilan_capa > table").attr("role") == "grid"){$("#s5_stat_bilan_capa > table").trigger("destroy");}
-		$("#s5_stat_bilan_capa > table > tbody").html("");
-		//var that will be used to display the graph
-		var graph_colors = [];
-		var graph_capacite_text = [];
-		var graph_capacite_id = [];
-		var graph_capacite_val = [];
-		var capacite_total_val = 0;
-		
-		var html_table ="";
-		var capacite_is_used = false;
-		var capacite_val = false;
-		//Browe all competences and all capacites of the grill (even unused ones)
-		$.each(local_content.grilles[grille_id].competences, function(numco,competence) {
-			$.each(competence.capacites, function(numca,capacite) {
-				//Init usage to 0
-				capacite_val = 0;
-				//Now browse all devoirs to look for usage of this capacite
-				$.each(local_content.data.devoirs, function(numd,devoir) {
-					//If this capcite is used in the devoir
-					if(devoir.capacites[numca]){
-						//Add the amount of points used in the devoir
-						capacite_val += devoir.capacites[numca].max;
-						//Add in the total (used to compute the ratio at the end)
-						capacite_total_val += devoir.capacites[numca].max;
-						//Memorize that the capacite has been used at least one time
-						capacite_is_used = true;
-					}
-				});
-				if(capacite_is_used == true){
-					//memorize their colors and their IDs
-					graph_colors.push(competence.couleur);
-					graph_capacite_text.push(capacite);
-					graph_capacite_id.push(numca);
-					//Init usage to 0
-					graph_capacite_val.push(capacite_val);
-					//Reset capacite used
-					capacite_is_used = false;
-				}
-			});
-		});
-		//Build the array with the several values computed before
-		$.each(graph_capacite_id, function(num,capacite_id) {
-			html_table += "<tr><td><div style='font-weight:bold;font-size:1.2em;color:"+graph_colors[num]+"'>"+capacite_id+"</div><div style='font-size:0.8em;color:#666'>"+graph_capacite_text[num]+"</div></td>";
-			html_table += "<td>"+graph_capacite_val[num]+"</td>";
-			if(capacite_total_val!=0){
-				html_table += "<td>"+Number((100*graph_capacite_val[num]/capacite_total_val).toFixed(2))+"%</td></tr>";
-			}else{
-				html_table += "<td>-</td></tr>";
-			}
-		});
-		//Create the final table and transform it to tablesorter
-		$("#s5_stat_bilan_capa > table > tbody").append(html_table);
-		$("#s5_stat_bilan_capa > table").tablesorter({theme : 'blue', sortList: [[0,0]],widthFixed: true,dateFormat : "ddmmyyyy",});
-		
-		s5_stat_bilan_capa_graph = new Chart($("#s5_stat_bilan_capa_graph"),{
-			type: 'doughnut',
-			data: {
-				labels: graph_capacite_id,
-				datasets: [{
-						data: graph_capacite_val,
-						backgroundColor: graph_colors,
-						borderWidth:0,
-						label: 'My dataset' // for legend
-					}],
-			},
-			options: {
-				responsive: true,
-				//animation: false,
-				animation: {
-					duration: 500,
-					easing: "easeOutQuart",
-					onComplete: function () {
-					  var ctx = this.chart.ctx;
-					  ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
-					  ctx.textAlign = 'center';
-					  ctx.textBaseline = 'bottom';
-					  var datalabels = this.data.labels;
-					  this.data.datasets.forEach(function (dataset) {
-
-						for (var i = 0; i < dataset.data.length; i++) {
-						  var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
-							  total = dataset._meta[Object.keys(dataset._meta)[0]].total,
-							  mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
-							  start_angle = model.startAngle,
-							  end_angle = model.endAngle,
-							  mid_angle = start_angle + (end_angle - start_angle)/2;
-
-						  var x = mid_radius * Math.cos(mid_angle);
-						  var y = mid_radius * Math.sin(mid_angle);
-
-						  ctx.fillStyle = '#fff';
-						  if (i == 3){ // Darker text color for lighter background
-							ctx.fillStyle = '#444';
-						  }
-						  var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
-						  ctx.fillText(datalabels[i], model.x + x, model.y + y);
-						  // Display percent in another line, line break doesn't work for fillText
-						  ctx.fillText(percent, model.x + x, model.y + y + 15);
-						}
-					  });               
-					}
-				  },
-				title: {
-					display: false,
-					text: 'Proportion vs. moyenne'
-				},
-				legend: {
-					display: false,
-					position: 'bottom',
-				}
-			}
-		});
-	}
 	if(stat_id == "s5_stat_evol_comp"){
 		$("#s5_stat_evol_comp > table").remove();
 		
@@ -1871,4 +1822,230 @@ function updateStatSuivi(stat_id)
 			}
 		});
 	}
+	if(stat_id == "s5_stat_bilan_comp"){
+		
+		var s5_stat_bilan_comp_labels = [];
+		var s5_stat_bilan_comp_colors = [];
+		var s5_stat_bilan_comp_moyenne100 = [];
+		
+		$.each(_content.grilles[_content.data.general.grille.id].competences, function(competence_id,competence) {
+			var comp_moyenne100 = 0;
+			var comp_moyenne100_nb = 0;
+			$.each(competence.capacites, function(capacite_id,capacite_texte) {
+				$.each(local_content.data.devoirs, function(numd,devoir) {
+					if(devoir.capacites[capacite_id] != null){
+						comp_moyenne100 += devoir.capacites[capacite_id].stats["moyenne100"] * devoir.general.coefficient;
+						comp_moyenne100_nb += devoir.general.coefficient;
+					}
+				});
+			});
+			s5_stat_bilan_comp_labels.push(competence.titre);
+			s5_stat_bilan_comp_colors.push(competence.couleur);
+			if(comp_moyenne100_nb > 0){
+				s5_stat_bilan_comp_moyenne100.push(Math.round(comp_moyenne100/comp_moyenne100_nb));
+			}else{
+				s5_stat_bilan_comp_moyenne100.push(0);
+			}
+		});
+
+		s5_stat_bilan_comp_graph = new Chart($("#s5_stat_bilan_comp_graph"),{
+			type: 'bar',
+			data: {
+				labels: s5_stat_bilan_comp_labels,
+				datasets: [
+					{
+						label: "% d'acquisition",
+						backgroundColor: s5_stat_bilan_comp_colors,
+						borderColor: s5_stat_bilan_comp_colors,
+						borderWidth: 1,
+						data: s5_stat_bilan_comp_moyenne100,
+					}
+				]
+			},
+			options: {
+				title: {
+					display: true,
+					text: 'Moyenne d\'acquisition des compétences'
+				},
+				legend: {
+					display: false,
+					position: 'bottom',
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero:true,
+							min:0,
+							max:100
+						}
+					}],
+				},
+				animation: false
+			}
+		});
+	}
+	//Bilan d'utilisation des capacités
+	if(stat_id == "s5_stat_bilan_capa"){
+		//FIrst destroy the table and reinit it
+		if($("#s5_stat_bilan_capa > table").attr("role") == "grid"){
+			$("#s5_stat_bilan_capa > table").trigger("destroy");
+		}
+		$("#s5_stat_bilan_capa > table > tbody").html("");
+		//var that will be used to display the graph
+		var graph_colors = [];
+		var graph_capacite_text = [];
+		var graph_capacite_id = [];
+		var graph_capacite_val = [];
+		var graph_capacite_mean = [];
+		var capacite_total_val = 0;
+		
+		var html_table ="";
+		var capacite_is_used = false;
+		var capacite_val = 0;
+		var capacite_mean = 0;
+		var capacite_nb_coeff = 0;
+		//Browe all competences and all capacites of the grill (even unused ones)
+		$.each(local_content.grilles[grille_id].competences, function(numco,competence) {
+			$.each(competence.capacites, function(numca,capacite) {
+				//Init usage to 0
+				capacite_val = 0;
+				capacite_mean = 0;
+				capacite_nb_coeff = 0;
+				//Now browse all devoirs to look for usage of this capacite
+				$.each(local_content.data.devoirs, function(numd,devoir) {
+					//If this capcite is used in the devoir
+					if(devoir.capacites[numca]){
+						//Add the amount of points used in the devoir
+						capacite_val += devoir.capacites[numca].max * devoir.general.coefficient;
+						capacite_mean += devoir.capacites[numca].stats["moyenne100"] * devoir.general.coefficient;
+						capacite_nb_coeff += devoir.general.coefficient;
+						//Add in the total (used to compute the ratio at the end)
+						capacite_total_val += devoir.capacites[numca].max * devoir.general.coefficient;
+						//Memorize that the capacite has been used at least one time
+						capacite_is_used = true;
+					}
+				});
+				if(capacite_is_used == true){
+					//memorize their colors and their IDs
+					graph_colors.push(competence.couleur);
+					graph_capacite_text.push(capacite);
+					graph_capacite_id.push(numca);
+					//Init usage to 0
+					graph_capacite_val.push(capacite_val);
+					capacite_mean = Math.round(capacite_mean/capacite_nb_coeff);
+					graph_capacite_mean.push(capacite_mean);
+					//Reset capacite used
+					capacite_is_used = false;
+				}
+			});
+		});
+		//Build the array with the several values computed before
+		$.each(graph_capacite_id, function(num,capacite_id) {
+			html_table += "<tr><td><div style='font-weight:bold;font-size:1.2em;color:"+graph_colors[num]+"'>"+capacite_id+"</div><div style='font-size:0.8em;color:#666'>"+graph_capacite_text[num]+"</div></td>";
+			html_table += "<td>"+graph_capacite_mean[num]+"%</td>";
+			html_table += "<td>"+graph_capacite_val[num]+"</td>";
+			if(capacite_total_val!=0){
+				html_table += "<td>"+Math.round(100*graph_capacite_val[num]/capacite_total_val)+"%</td></tr>";
+			}else{
+				html_table += "<td>-</td></tr>";
+			}
+		});
+		//Create the final table and transform it to tablesorter
+		$("#s5_stat_bilan_capa > table > tbody").append(html_table);
+		$("#s5_stat_bilan_capa > table").tablesorter({theme : 'blue', sortList: [[0,0]],widthFixed: true,dateFormat : "ddmmyyyy",});
+		
+		s5_stat_bilan_capa_graph = new Chart($("#s5_stat_bilan_capa_graph"),{
+			type: 'doughnut',
+			data: {
+				labels: graph_capacite_id,
+				datasets: [{
+						data: graph_capacite_val,
+						backgroundColor: graph_colors,
+						borderWidth:0,
+						label: 'My dataset' // for legend
+					}],
+			},
+			options: {
+				responsive: true,
+				//animation: false,
+				animation: {
+					duration: 500,
+					easing: "easeOutQuart",
+					onComplete: function () {
+					  var ctx = this.chart.ctx;
+					  ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+					  ctx.textAlign = 'center';
+					  ctx.textBaseline = 'bottom';
+					  var datalabels = this.data.labels;
+					  this.data.datasets.forEach(function (dataset) {
+
+						for (var i = 0; i < dataset.data.length; i++) {
+						  var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+							  total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+							  mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+							  start_angle = model.startAngle,
+							  end_angle = model.endAngle,
+							  mid_angle = start_angle + (end_angle - start_angle)/2;
+
+						  var x = mid_radius * Math.cos(mid_angle);
+						  var y = mid_radius * Math.sin(mid_angle);
+
+						  ctx.fillStyle = '#fff';
+						  if (i == 3){ // Darker text color for lighter background
+							ctx.fillStyle = '#444';
+						  }
+						  var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
+						  ctx.fillText(datalabels[i], model.x + x, model.y + y);
+						  // Display percent in another line, line break doesn't work for fillText
+						  ctx.fillText(percent, model.x + x, model.y + y + 15);
+						}
+					  });               
+					}
+				  },
+				title: {
+					display: false,
+					text: 'Proportion vs. moyenne'
+				},
+				legend: {
+					display: false,
+					position: 'bottom',
+				}
+			}
+		});
+	}
+	
+}
+/*************************/
+/*	VARIOUS SECTION	*/
+/*************************/
+/* Function in charge of migrating data in the data model has changed between version */
+function migrateSuivi()
+{
+	var has_migrate = false;
+	
+	//Migration pour la version 0.6 (traitement des unknown)
+	if(_content.meta.version < 0.71)
+	{
+		console.log("Migration pour traitement des coefficients de note.")
+		//On ne migre que s'il y a des devoirs importés
+		if(Object.keys(_content.data.devoirs).length != 0){
+			
+			console.log("Des devoirs doivent être migrés ("+Object.keys(_content.data.devoirs).length+" devoirs).");
+			
+			has_migrate = true;
+			alert("Une migration des données doit être réalisée. A la fin de la migration, il est conseillé d'enregistrer le document dans un nouveau fichier.");
+
+			$.each(_content.data.devoirs, function(numd,devoir) {
+				devoir.general.coefficient = 1;
+			});
+		}
+	}
+	//Update to last version
+	_content.meta.version = _version;
+	//Migration is finisehd
+	if(has_migrate == true){
+		console.log("Migration terminée !");
+	}
+	//Memorize that document is modified
+	toggleDocumentEdition(true);
 }
