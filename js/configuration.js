@@ -25,7 +25,9 @@ function load_cookie()
         });
 		
 		if(global_configurations["classes"]){
-			global_configurations["classes"] = jQuery.parseJSON(global_configurations["classes"]);
+			if(typeof global_configurations["classes"] == "string"){
+				global_configurations["classes"] = jQuery.parseJSON(global_configurations["classes"]);
+			}
 		}
     }
 	
