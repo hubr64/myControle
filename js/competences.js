@@ -363,8 +363,13 @@ function computeCompetencesStats(tmp_content)
 				capacites_bareme[capacite_id].stats["moyenne"]+=note;
 			});
 			//Finalize stats with the computation of the final mean and the percent values
+			capacites_bareme[capacite_id].max = Number((capacites_bareme[capacite_id].max).toFixed(2));
 			capacites_bareme[capacite_id].stats["moyenne"] = Number((capacites_bareme[capacite_id].stats["moyenne"]/capacites_bareme[capacite_id].notes.length).toFixed(2));
-			capacites_bareme[capacite_id].stats["moyenne100"] = Math.round(100*capacites_bareme[capacite_id].stats["moyenne"]/capacites_bareme[capacite_id].max);
+			if(capacites_bareme[capacite_id].max!=0){
+				capacites_bareme[capacite_id].stats["moyenne100"] = Math.round(100*capacites_bareme[capacite_id].stats["moyenne"]/capacites_bareme[capacite_id].max);
+			}else{
+				capacites_bareme[capacite_id].stats["moyenne100"] = 100;
+			}
 			capacites_bareme[capacite_id].stats["acquis100"] = Math.round(100*capacites_bareme[capacite_id].stats["acquis"]/capacites_bareme[capacite_id].notes.length);
 			capacites_bareme[capacite_id].stats["encours100"] = Math.round(100*capacites_bareme[capacite_id].stats["encours"]/capacites_bareme[capacite_id].notes.length);
 			capacites_bareme[capacite_id].stats["nonacquis100"] = Math.round(100*capacites_bareme[capacite_id].stats["nonacquis"]/capacites_bareme[capacite_id].notes.length);
