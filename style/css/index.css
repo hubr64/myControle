@@ -120,37 +120,37 @@ header div.head_action{
 	background-image:url('../images/note_new.png');
 }
 #head_print{
-	background-image:url('../images/print.png');  
+	background-image:url('../images/print.png');
 }
 #head_print_correction{
-	background-image:url('../images/print_correction.png');  
+	background-image:url('../images/print_correction.png');
 }
 #head_export{
-	background-image:url('../images/export.png');  
+	background-image:url('../images/export.png');
 }
 #head_print_bilan{
-	background-image:url('../images/note_sumup.png');  
+	background-image:url('../images/note_sumup.png');
 }
 #head_configurer{
-	background-image:url('../images/configurer.png');  
+	background-image:url('../images/configurer.png');
 }
 #head_new_suivi{
-	background-image:url('../images/suivi_new.png');  
+	background-image:url('../images/suivi_new.png');
 }
 #head_edit_suivi{
-	background-image:url('../images/suivi_edit.png');  
+	background-image:url('../images/suivi_edit.png');
 }
 #head_import_suivi{
-	background-image:url('../images/import.png');  
+	background-image:url('../images/import.png');
 }
 #head_save{
-	background-image:url('../images/download.png');  
+	background-image:url('../images/download.png');
 }
 #head_export_global{
-	background-image:url('../images/chart_bar.png');  
+	background-image:url('../images/chart_bar.png');
 }
 #head_export_eleves{
-	background-image:url('../images/chart_line.png');  
+	background-image:url('../images/chart_line.png');
 }
 header div.head_action:hover{
 	color:white;
@@ -209,7 +209,7 @@ header div.head_action:hover{
 	font-family:'Passion One';
 	color:#AAA;
 	width:95px;
-	display:inline-block;  
+	display:inline-block;
 }
 #head_filename > span:last-child, #head_datesave > span:last-child{
 	color:#CCC;
@@ -584,7 +584,7 @@ height: 30px;
 .s1_det_exercice .exe_menu .exe_minimize,
 .s1_det_exercice .exe_menu .exe_maximize,
 .s1_det_exercice .exe_menu .exe_copy,
-.s1_det_exercice .exe_menu .exe_del{ 
+.s1_det_exercice .exe_menu .exe_del{
 	padding-left:24px;
 	margin-right:5px;
 	width:0px;
@@ -608,11 +608,11 @@ height: 30px;
 	background-size:24px auto;
 	background-image:url('../images/down.png');
 }
-.s1_det_exercice .exe_menu .exe_copy{ 
+.s1_det_exercice .exe_menu .exe_copy{
 	background-size:26px auto;
 	background-image:url('../images/copy.png');
 }
-.s1_det_exercice .exe_menu .exe_del{ 
+.s1_det_exercice .exe_menu .exe_del{
 	background-size:24px auto;
 	background-image:url('../images/delete.png');
 }
@@ -674,7 +674,7 @@ height: 30px;
 .s1_det_question .que_menu .que_move,
 .s1_det_question .que_menu .que_minimize,
 .s1_det_question .que_menu .que_maximize,
-.s1_det_question .que_menu .que_del{ 
+.s1_det_question .que_menu .que_del{
 	padding-left:28px;
 	width:0px;
 	height:28px;
@@ -702,7 +702,7 @@ height: 30px;
 	background-size:24px auto;
 	background-image:url('../images/down.png');
 }
-.s1_det_question .que_menu .que_del{ 
+.s1_det_question .que_menu .que_del{
 	background-size:24px auto;
 	background-image:url('../images/delete.png');
 }
@@ -762,7 +762,7 @@ height: 30px;
 	opacity:1.0;
 }
 .s1_det_critere .cri_menu .cri_move,
-.s1_det_critere .cri_menu .cri_del{ 
+.s1_det_critere .cri_menu .cri_del{
 	padding-left:26px;
 	width:0px;
 	height:26px;
@@ -770,13 +770,13 @@ height: 30px;
 	background-repeat:no-repeat;
 	background-position:center center;
 	cursor:pointer;
-	transition:all 200ms ease 0s;	
+	transition:all 200ms ease 0s;
 }
-.s1_det_critere .cri_menu .cri_move{ 
+.s1_det_critere .cri_menu .cri_move{
 	background-size:24px auto;
 	background-image:url('../images/move.png');
 }
-.s1_det_critere .cri_menu .cri_del{ 
+.s1_det_critere .cri_menu .cri_del{
 	background-size:24px auto;
 	background-image:url('../images/delete.png');
 }
@@ -879,7 +879,7 @@ height: 30px;
 	opacity:1.0;
 }
 .s1_det_freetext .free_menu .free_move,
-.s1_det_freetext .free_menu .free_del{ 
+.s1_det_freetext .free_menu .free_del{
 	padding-left:26px;
 	width:0px;
 	height:26px;
@@ -887,13 +887,13 @@ height: 30px;
 	background-repeat:no-repeat;
 	background-position:center center;
 	cursor:pointer;
-	transition:all 200ms ease 0s;	
+	transition:all 200ms ease 0s;
 }
-.s1_det_freetext .free_menu .free_move{ 
+.s1_det_freetext .free_menu .free_move{
 	background-size:24px auto;
 	background-image:url('../images/move.png');
 }
-.s1_det_freetext .free_menu .free_del{ 
+.s1_det_freetext .free_menu .free_del{
 	background-size:24px auto;
 	background-image:url('../images/delete.png');
 }
@@ -1206,7 +1206,7 @@ height: 30px;
 	background-image:url('../images/comments.png')
 }
 #s1_note > table > thead > tr:nth-child(3) > th{
-	
+
 }
 #s1_note > table > thead > tr:nth-child(3) > th > span:first-child{
 	font-family:"Passion One";
@@ -1392,7 +1392,7 @@ height: 30px;
 	width:32%;
 	vertical-align:top;
 	border-left:5px solid transparent;
-	padding-left:5px;	
+	padding-left:5px;
 	box-sizing:border-box;
 }
 #s4 > div > h2{

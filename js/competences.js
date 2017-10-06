@@ -1,5 +1,5 @@
-/* Function in charge of loading the new grille selected by the user 
-   @input grille_id : a unique identifier for the grille 
+/* Function in charge of loading the new grille selected by the user
+   @input grille_id : a unique identifier for the grille
    @input grille_title : the name of the grille
    @return : nothing
 */
@@ -40,7 +40,7 @@ function loadGrille(grille_id, grille_titre)
 	}
 	//Load in MMI all the competences and capacites of the new grid
 	loadCompetences();
-	
+
 	//Memorize that document is modified
 	toggleDocumentEdition(true);
 }
@@ -69,7 +69,7 @@ function reinitCompetences()
     });
 	//Replace all competences in MMI to the value NO_COMPETENCE
 	$("#s1_det .cri_competence > span").html(NO_COMPETENCE);
-	
+
 	//Memorize that document is modified
 	toggleDocumentEdition(true);
 }
@@ -80,7 +80,7 @@ function loadCompetences()
 	if(_content.data.general.grille && _content.data.general.grille.id)
 	{
 		//Display the name of the grid and add a button to consult the grid definition
-		$('#gen_competence > span:nth-child(2)').html(_content.data.general.grille.titre); 
+		$('#gen_competence > span:nth-child(2)').html(_content.data.general.grille.titre);
 		$("#gen_competence > span:nth-child(3)").show();
 		//Build the grid definition in a dedicated window
 		buildCompetencesMenu();
@@ -129,7 +129,7 @@ function seeCompetences()
 {
 	//Display only if a grid is correclty defined
 	if(_content.data.general.grille && _content.data.general.grille.id){
-		
+
 		var dialog = $( "#s4" ).dialog({
 			autoOpen: false,
 			modal: true,
@@ -155,9 +155,9 @@ function seeCompetences()
 */
 function chooseCompetence($cri)
 {
-	//If a gris is correctly defined
+	//If a grid is correctly defined
 	if(_content.data.general.grille && _content.data.general.grille.id){
-		
+
 		var dialog;
 		//Define the action when a capacite is selected (it will be linked in the criteria)
 		$( "#s4 > div > div" ).click(function(event) {
@@ -194,7 +194,7 @@ function chooseCompetence($cri)
 		error_message('Aucune grille de compétence choisie !');
 	}
 }
-/* Function in charge of highlighting selected capacites in the grid definition window and 
+/* Function in charge of highlighting selected capacites in the grid definition window and
    compute stats for each selected capacite */
 function updateSelectedCompetences()
 {
@@ -226,11 +226,11 @@ function updateSelectedCompetences()
 		//Display a sum up of the capacite through the whole devoir
 		$("#s4 div[capacite_id="+capacite_id+"]").attr("title","Sélectionné "+capacite_num+" fois pour un total de "+competence_bareme+" point(s)");
 	});
-	
+
 	//Get all stats for the function in charge of computing the stats for all capacites in the devoir
 	var capacites_bareme = computeCompetencesStats();
 	//Browse all capacites used in the devoir
-	
+
 	if(_content.data.general.grille && _content.data.general.grille.id){
 		$.each(_content.grilles[_content.data.general.grille.id].competences, function(competence_id,competence) {
 			$.each(competence.capacites, function(capacite_id,capacite_texte) {
@@ -257,21 +257,21 @@ function computeCompetencesStats(tmp_content)
 	if(tmp_content == null){
 		local_content = _content;
 	}
-	
+
 	//The object that will be returned with all usefull stats
 	var capacites_bareme = {};
 	//A temporary object that will be used to compute the notes of a pupil on the devoir to compute after the notes on capacites
 	//This object is an array indexed with capacite IDs
 	var capacites_eleve = {};
-	
+
 	//FIrst initialize the stats array with the used capacites in the devoir (only these ones not all capacites of the grid)
 	$.each(local_content.data.general.grille.capacites, function(capacite_id,capacite_num) {
 		capacites_bareme[capacite_id] = { max: 0, notes: [], stats:{"encours":0, "encours100":0, "acquis":0, "acquis100":0,"nonacquis":0,"nonacquis100":0, "moyenne":0} };
 		capacites_eleve[capacite_id] = null;
 	});
-	
+
 	// Now we will compute the maximum value for each capacite used in the devoir
-	
+
 	//Now browse the whole devoir to compute the maximum possible value of criteria (sum of bareme defined to criteria that used capacites)
 	$.each(local_content.data.exercices, function(nume,exercice) {
 		//Free text don't have capacites
@@ -293,9 +293,9 @@ function computeCompetencesStats(tmp_content)
 			});
 		}
     });
-	
+
 	//Now we will compute the notes for each pupil for each capacites in the devoir
-	
+
 	//If a classe has been defined in this devoir
 	if(local_content.data.general.classe != NO_CLASSE){
 		//Get all pupils of this classe
@@ -341,9 +341,9 @@ function computeCompetencesStats(tmp_content)
 			}
 		});
 	}
-	
+
 	//According to max and to all computed notes of each pupils for each capacity, compute the stats for each capacite
-	
+
 	//Browse the used capacites in the devoir (only these ones not all capacites of the grid)
 	$.each(local_content.data.general.grille.capacites, function(capacite_id,capacite_num){
 		//If at least one note exists for this capacite
@@ -380,7 +380,7 @@ function computeCompetencesStats(tmp_content)
 	});
 	return capacites_bareme;
 }
-/* Function in charge of displaying the sum up of capacites for the selected pupil 
+/* Function in charge of displaying the sum up of capacites for the selected pupil
    @input pupil_name : the name of the pupil to display capacites
    @input pupil_name : the name of the pupil to display capacites
    @return : an object with a html string and a another object with all competences of the pupil
@@ -415,7 +415,7 @@ function getPupilCompetence(pupil_name)
 												if(capacites_eleve[_content.data.exercices[nume]["questions"][numq]["criteres"][numc].competence] == null){
 													capacites_eleve[_content.data.exercices[nume]["questions"][numq]["criteres"][numc].competence] = 0;
 												}
-												//Everythins is OK so a state has been given to the criteria and a note can then be computed												
+												//Everythins is OK so a state has been given to the criteria and a note can then be computed
 												if(_content.data.notes[pupil_name].exercices[nume]["questions"][numq]["criteres"][numc].state == "ok"){
 													capacites_eleve[_content.data.exercices[nume]["questions"][numq]["criteres"][numc].competence] += _content.data.exercices[nume]["questions"][numq]["criteres"][numc].bareme;
 												}
@@ -433,10 +433,10 @@ function getPupilCompetence(pupil_name)
 			});
 			//Get the global stats for all capacites used in the devoir
 			var capacites_bareme = computeCompetencesStats();
-			
+
 			//If at least one capacite has been used in the devoir
 			if(Object.keys(capacites_bareme).length!=0){
-				
+
 				//Browse all competences
 				$.each(_content.grilles[_content.data.general.grille.id].competences, function(competence_id,competence) {
 					//Browse all capacites
@@ -454,16 +454,16 @@ function getPupilCompetence(pupil_name)
 							if(capacites_eleve[capacite_id] >= global_configurations["coeff_capacite_encours"] * capacites_bareme[capacite_id].max){capacite_comment = "encours"};
 							if(capacites_eleve[capacite_id] >= global_configurations["coeff_capacite_acquis"] * capacites_bareme[capacite_id].max){capacite_comment = "acquis"};
 							pupil_competence_capacites_text += "<div class='s1_det_competence_capa'><span style='color:"+competence.couleur+"'>"+capacite_id+"</span><span>"+TEXTE_CAPACITE[capacite_comment]+"</span><span>("+capacites_eleve[capacite_id]+"/"+capacites_bareme[capacite_id].max+" points - Moyenne : "+capacites_bareme[capacite_id].stats["moyenne"]+" points)</span><span>"+capacite_texte+"</span></div>";
-							
+
 							pupil_competence_note += capacites_eleve[capacite_id];
 							pupil_competence_max += capacites_bareme[capacite_id].max;
 							pupil_competence_moyenne += capacites_bareme[capacite_id].stats["moyenne"];
 							pupil_competence_capacites_nb++;
-							
+
 							pupil_competence_capacites[capacite_id] = {state: capacite_comment, note: capacites_eleve[capacite_id], max: capacites_bareme[capacite_id].max, mean: capacites_bareme[capacite_id].stats["moyenne"]};
 						}
 					});
-					
+
 					if(pupil_competence_capacites_nb!=0){
 						pupil_competence_moyenne = Number((pupil_competence_moyenne / pupil_competence_capacites_nb).toFixed(2));
 						var competence_comment = "nonacquis";
@@ -471,7 +471,7 @@ function getPupilCompetence(pupil_name)
 						if(pupil_competence_note >= global_configurations["coeff_capacite_acquis"] * pupil_competence_max){competence_comment = "acquis"};
 						pupil_competences.html += "<div><span style='color:"+competence.couleur+"'>"+competence.titre+"</span><span>"+TEXTE_CAPACITE[competence_comment]+"</span><span>("+pupil_competence_note+"/"+pupil_competence_max+" points - Moyenne : "+pupil_competence_moyenne+" points)</span><span></span></div>";
 						pupil_competences.html += pupil_competence_capacites_text;
-						
+
 						pupil_competences.list[competence_id] = {state:competence_comment, note: pupil_competence_note, max: pupil_competence_max, mean: pupil_competence_moyenne, capacites: pupil_competence_capacites};
 					}
 				});
@@ -485,6 +485,6 @@ function getPupilCompetence(pupil_name)
 	}else{
 		pupil_competences.html = 'Aucune grille de compétence choisie !';
 	}
-	
+
 	return pupil_competences;
 }
