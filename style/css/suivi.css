@@ -1,0 +1,198 @@
+#s2_suivi_init{
+	text-align:center;
+}
+#s2_suivi_init > div{
+	margin:10px 0;
+}
+#s2_suivi_init > input,
+#s2_suivi_init > select{
+	width:90%;
+	border:1px solid #E5E5E5;
+	padding:5px;
+	background-color:#F6F6F6;
+}
+#s2_suivi_init > select[multiple]{
+	height: 400px;
+}
+
+#s5_gen, #s5_stat{
+	width:1024px;
+	margin:10px auto 0px auto;
+	padding:10px;
+	position:relative;
+	border:1px solid #E5E5E5;
+	background-color:#F5F5F5;
+}
+#s5_gen>div>div>span:first-child, #s5_stat>div>div>span:first-child{
+	font-family:"Passion One";
+	font-size:1.4em;
+	color:#CCC;
+	margin-right:5px;
+	width:200px;
+	display:inline-block;
+	text-align:right;
+	background-repeat:no-repeat;
+	background-size:32px auto;
+	background-position:10px center;
+	padding-left:50px;
+}
+#s5_gen_title>span:first-child{
+	background-image:url('../images/comments.png');
+}
+#s5_gen_classe>span:first-child{
+	background-image:url('../images/classe.png');
+}
+#s5_gen_competence>span:first-child{
+	background-image:url('../images/competence.png');
+}
+#s5_gen>div>div>span:nth-child(2){
+	font-size:1.2em;
+}
+#s5_stat tbody{
+	font-size:0.7em;
+}
+.s5_title{
+	margin-bottom:10px;
+	position:relative;
+	font-size:1.2em;
+	font-weight:bold;
+	padding:5px;
+}
+#s5_global, #s5_pupil, #s5_pupil_details, .s5_pupil_details{
+	width:1024px;
+	margin:10px auto 0px auto;
+	padding:10px;
+	position:relative;
+	border:1px solid #E5E5E5;
+	background-color:#F5F5F5;
+	transition:all 200ms;
+}
+#s5_global > table a, #s5_det_notes a, #s5_pupil a{
+	cursor:pointer;
+	text-decoration:underline;
+	color:#666;
+}
+#s5_global > table > tbody > tr > td:nth-child(1),
+#s5_global > table > tbody > tr > td:nth-child(4),
+#s5_global > table > tbody > tr > td:nth-child(6),
+#s5_global > table > tbody > tr > td:nth-child(7),
+#s5_global > table > tbody > tr > td:nth-child(8),
+#s5_global > table > tbody > tr > td:nth-child(9){
+	text-align:center;
+}
+#s5_pupil > table > tbody > tr > td:nth-child(2),
+#s5_pupil > table > tbody > tr > td:nth-child(3),
+#s5_pupil > table > tbody > tr > td:nth-child(4),
+#s5_pupil > table > tbody > tr > td:nth-child(5),
+#s5_pupil > table > tbody > tr > td:nth-child(6){
+	text-align:center;
+}
+#s5_pupil > table > tbody > tr > td:nth-child(1){
+	font-weight:bold;
+}
+#s5_details > h3, #s5_pupil_details > h3, .s5_pupil_details > h3{
+	font-family:'Passion One';
+	font-weight:unset;
+	color:#aaa;
+	font-size:1.4em;
+	margin-top:0;
+	margin-bottom:0;
+}
+#s5_details > div > div>span:first-child,
+#s5_pupil_details > div > div>span:first-child,
+.s5_pupil_details > div > div>span:first-child{
+	font-family:"Passion One";
+	font-size:1.4em;
+	color:#CCC;
+	margin-right:5px;
+	width:160px;
+	display:inline-block;
+	text-align:right;
+	background-repeat:no-repeat;
+	background-size:32px auto;
+	background-position:10px center;
+	padding-left:50px;
+}
+#s5_details > div > div>span:nth-child(2),
+#s5_pupil_details > div > div>span:nth-child(2),
+.s5_pupil_details > div > div>span:nth-child(2){
+	font-size:1.2em;
+}
+#s5_details tbody p,
+#s5_pupil_details tbody p,
+.s5_pupil_details tbody p{
+	margin:0;
+}
+#s5_det_notes > tbody > tr > td:nth-child(1), #s5_det_pup_notes > tbody > tr > td:nth-child(1){
+	font-weight:bold;
+}
+#s5_det_notes > tbody > tr > td:nth-child(2), #s5_det_pup_notes > tbody > tr > td:nth-child(3), #s5_det_pup_notes > tbody > tr > td:nth-child(4){
+	text-align:center;
+}
+#s5_det_notes > tbody > tr > td:nth-child(3) > span, #s5_det_pup_notes > tbody > tr > td:nth-child(5) > span, #s5_global > table > tbody > tr > td:nth-child(5) > span {
+	display: inline-block;
+	width: 40px;
+	border: 1px solid rgb(229, 229, 229);
+	background-color: rgb(245, 245, 245);
+	margin: 2px;
+	text-align: center;
+	font-size:0.7em;
+}
+#s5_det_competences > tbody > tr.s5_det_competences_comp > td {
+	font-weight:bold;
+	background-color:#E0E0E0;
+}
+#s5_det_competences > tbody > tr > td:nth-child(1),
+#s5_det_pup_capacites > tbody > tr > td:nth-child(1),
+#s5_det_competences > tbody > tr.s5_det_competences_comp > td:nth-child(2) {
+	text-align:center;
+	font-family:"Passion One";
+	font-size:1.4em;
+}
+#s5_det_competences > tbody > tr > td:nth-child(2),
+#s5_det_pup_capacites > tbody > tr > td:nth-child(2){
+	font-size:0.9em;
+}
+#s5_det_competences > tbody > tr > td:nth-child(3),
+#s5_det_competences > tbody > tr > td:nth-child(4),
+#s5_det_competences > tbody > tr > td:nth-child(5),
+#s5_det_competences > tbody > tr > td:nth-child(6),
+#s5_det_pup_competences > tbody > tr > td:nth-child(n+2){
+	text-align:center;
+}
+#s5_det_competences > tbody > tr > td > div{
+	color:#999;
+	font-size: 0.7em;
+}
+#s5_det_pup_competences > tbody > tr:last-child{
+	font-weight:bold;
+	color: white;
+}
+#s5_det_pup_competences > tbody > tr:last-child > td{
+	background-color:#EEE!important;
+}
+#s5_det_pup_capacites > tbody > tr > td:nth-child(3){
+	font-weight:bold;
+	text-align:center;
+}
+
+.s5_det_graph{
+	width:470px;
+	height:300px;
+	background-color:#FFF;
+	border:1px solid #ddd;
+	box-sizing:border-box;
+	padding:10px;
+	margin:10px;
+	display:inline-block;
+}
+.s5_det_graph_l{
+	width:930px;
+	height:460px;
+	background-color:#FFF;
+	border:1px solid #ddd;
+	box-sizing:border-box;
+	padding:10px;
+	margin:10px auto;
+	display:inline-block;
+}
