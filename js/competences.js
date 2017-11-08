@@ -112,7 +112,7 @@ function getCapacite(current_capacite_id)
 {
 	var capacite = null;
 	//If a grid is correctly defined
-	if(_content.data.general.grille && _content.data.general.grille.id){
+	if(_content.data.general.grille && _content.data.general.grille.id && _content.grilles[_content.data.general.grille.id]){
 		$.each(_content.grilles[_content.data.general.grille.id].competences, function(competence_id,competence) {
 			$.each(competence.capacites, function(capacite_id,capacite_texte) {
 				//Yes, I've found the desired capacite then build the object with all usefull informations

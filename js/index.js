@@ -29,22 +29,22 @@ function loadindex()
 
 	//Load cookies
 	load_cookie();
-	
+
 	//init content
 	initContent();
-	
+
 	//Load all MMI items
 	setTimeout("loadMMI()",10);
-	
+
 	//Load default data
 	setTimeout("loadDefaultData()",10);
-	
+
 	//Load meta data
 	setTimeout("loadMetaData()",10);
-	
+
 	//Load competence
 	setTimeout("loadCompetences()",10);
-	
+
 	//Everythin is ended can continue
 	if(_semaphore.mmi_load == false &&
 	   _semaphore.meta_data_load &&
@@ -89,13 +89,13 @@ function initContent()
 		_content.data.general.stats = {nb: 0, mean: 0, max: 0, min: 0};
 		_content.data.devoirs = [];
 	}
-	
+
 	$("#s1_det_que").html("");
 	reinitNotes();
 	$("#s1_gen_competence tbody").html('<tr><td colspan="5">Non évalué</td></tr>');
-	
+
 	$("#gen_competence > span:nth-child(3)").hide();
-	
+
 	$("#s5_global > table > tbody").html("");
 	$("#s5_pupil > table > tbody").html("");
 	cleanSuiviDetails();
@@ -103,7 +103,7 @@ function initContent()
 
 	$(".ui-dialog-content").dialog("close");
 	$("#s4").hide();
-	
+
 	//Memorize that document is no more modified
 	toggleDocumentEdition(false);
 	resetDocumentSaveInfo();
@@ -119,12 +119,12 @@ function loadMMI()
 				return "Vous souhaitez quitter la page. Voulez-vous vraiment continuer ?";
 			}
 		}
-		
+
 		//Header
 		$("header").hide();
 		$("#s5").hide();
 		$("#s1_note").hide();
-		
+
 		$("#head_new").click(function(event) {
 			openNewDocument();
 		});
@@ -169,11 +169,11 @@ function loadMMI()
 			load_configuration(false);
 		});
 		$("#head_import_suivi,#head_export_global, #head_export_eleves").hide();
-		
+
 		$("#s1_mode").click(function(event) {
 			toggleModeNotation();
 		});
-		
+
 		//General Information
 		$("#s1_gen").accordion({
 			collapsible: true,
@@ -194,7 +194,7 @@ function loadMMI()
 				}
 			},
 		});
-		
+
 		$("#gen_title > span:nth-child(2)").blur(function(event) {
 			_content.data.general.titre = $("#gen_title > span:nth-child(2)").html();
 			//Memorize that document is modified
@@ -204,8 +204,8 @@ function loadMMI()
 			var gen_date = $(this).html().split("/");
 			var gen_date = new Date(parseInt(gen_date[2]), (parseInt(gen_date[1])-1), parseInt(gen_date[0]));
 			$(this).datepicker(
-				"dialog", 
-				gen_date, 
+				"dialog",
+				gen_date,
 				function(dateText,inst){
 					var gen_date = dateText.split("/");
 					var gen_date = new Date(parseInt(gen_date[2]), (parseInt(gen_date[1])-1), (parseInt(gen_date[0])+1));
@@ -213,11 +213,11 @@ function loadMMI()
 					$("#gen_date > span:nth-child(2)").html(dateText);
 					//Memorize that document is modified
 					toggleDocumentEdition(true);
-				} , 
+				} ,
 				{dateFormat:"dd/mm/yy",showButtonPanel:true,showWeek:true,duration:"fast",}, [event.pageX, event.pageY]);
 			    $(this).datepicker( "option",$.datepicker.regional["fr"] );
 		});
-	   
+
 		$('#classe_menu').html("");
 		$.each(global_configurations["classes"], function(classe_name,classe) {
 			$('#classe_menu').append('<menuitem label="'+classe_name.substring(1)+'" icon="./style/images/classe.png"></menuitem>');
@@ -226,7 +226,7 @@ function loadMMI()
 			var classe_name = $(this).attr("label");
 			loadClasse(classe_name);
 		});
-		
+
 		$('#grille_menu').html("");
 		$.each(_grilles, function(grille_id,grille) {
 			$('#grille_menu').append('<menuitem grille_id="'+grille_id+'" label="'+grille.titre+'" icon="./style/images/competence.png"></menuitem>');
@@ -236,11 +236,11 @@ function loadMMI()
 			var grille_titre = $(this).attr("label");
 			loadGrille(grille_id,grille_titre);
 		});
-		
+
 		$("#gen_competence > span:nth-child(3), #s5_gen_competence > span:nth-child(3)").click(function(event) {
 			seeCompetences();
 		});
-		
+
 		$('#note_final_mode_menu').html("");
 		$.each(NOTATION_FINAL, function(note_mode_id,note_mode) {
 			$('#note_final_mode_menu').append('<menuitem note_mode_id="'+note_mode_id+'" title=""'+note_mode.description+'"" label="'+note_mode.titre+'" icon="./style/images/competence.png"></menuitem>');
@@ -250,13 +250,13 @@ function loadMMI()
 			_content.data.general.note_final_mode = parseInt(note_mode_id);
 			$('#gen_note_final_mode > span:nth-child(2)').html(NOTATION_FINAL[_content.data.general.note_final_mode].titre);
 			$('#gen_note_final_mode > span:nth-child(2)').attr("title",NOTATION_FINAL[_content.data.general.note_final_mode].description);
-			
+
 			if(note_mode_id!="1"){
 				$("#gen_note_final_cible").show();
 			}else{
 				$("#gen_note_final_cible").hide();
 			}
-			
+
 			_content.data.general.note_final_cible = _content.data.general.bareme;
 			$("#gen_note_final_cible > span:nth-child(2)").html(_content.data.general.note_final_cible);
 			//Memorize that document is modified
@@ -267,7 +267,7 @@ function loadMMI()
 			var old_note_final_cible = _content.data.general.note_final_cible;
 			//Get new value, manage dot problem and convert it to float
 			var new_note_final_cible = $("#gen_note_final_cible > span:nth-child(2)").html();
-			new_note_final_cible = new_note_final_cible.replace(",", "."); 
+			new_note_final_cible = new_note_final_cible.replace(",", ".");
 			_content.data.general.note_final_cible = parseFloat(new_note_final_cible);
 			//If the value is not a valid float
 			if(isNaN(_content.data.general.note_final_cible)){
@@ -294,7 +294,7 @@ function loadMMI()
 			var old_note_arrondi = _content.data.general.note_arrondi;
 			//Get new value, manage dot problem and convert it to float
 			var new_note_arrondi = $("#gen_note_arrondi > span:nth-child(2)").html();
-			new_note_arrondi = new_note_arrondi.replace(",", "."); 
+			new_note_arrondi = new_note_arrondi.replace(",", ".");
 			_content.data.general.note_arrondi = parseFloat(new_note_arrondi);
 			//If the value is not a valid float
 			if(isNaN(_content.data.general.note_arrondi)){
@@ -314,7 +314,7 @@ function loadMMI()
 				}
 			}
 		});
-		
+
 		//Edition information
 		$('#s1_det_new_exe').click(function(event) {
 			addEditionExe();
@@ -328,13 +328,13 @@ function loadMMI()
 		$('#s1_note_add_groupe').click(function(event) {
 			dialogNoteGroupe();
 		});
-		$( "#s1_det_que").sortable({ 
-			axis: "y", 
-			cursor:"move", 
-			handle: ".exe_move, .free_move[level~=exercices]", 
+		$( "#s1_det_que").sortable({
+			axis: "y",
+			cursor:"move",
+			handle: ".exe_move, .free_move[level~=exercices]",
 			opacity: 0.8,
-			placeholder: "s1_placeholder_exe", 
-			revert: false,  
+			placeholder: "s1_placeholder_exe",
+			revert: false,
 			scroll: true,
 			helper: "clone",
 			stop: function( event, ui ) {
@@ -381,7 +381,7 @@ function loadMMI()
 		$('#s1_det_comment_gen').click(function(event) {
 			generateComment();
 		});
-		
+
 		$("#s5_details").hide();
 		$("#s5_pupil_details").hide();
 		$("#s5_global .tablesorter").tablesorter( {
@@ -395,7 +395,7 @@ function loadMMI()
 				if(_modeSuivi == true){
 					filterSuivi();
 				}
-			} 
+			}
 		});
 
 		$("#s5_pupil .tablesorter").tablesorter( {
@@ -438,7 +438,7 @@ function loadMMI()
 		});
 
 		updateProgressBar(33,true);
-		
+
 		_semaphore.mmi_load = true;
 	}
 }
@@ -450,20 +450,20 @@ function loadMetaData()
 	}else{
 		$("#head_nosave").hide();
 	}
-	
+
 	updateProgressBar(33,true);
 	_semaphore.meta_data_load = true;
 }
 function loadDefaultData()
 {
 	$('#gen_title > span:nth-child(2)').html(_content.data.general.titre);
-	$('#gen_date > span:nth-child(2)').html(_content.data.general.date.getDate()+'/'+(_content.data.general.date.getMonth()+1)+'/'+_content.data.general.date.getFullYear());	
+	$('#gen_date > span:nth-child(2)').html(_content.data.general.date.getDate()+'/'+(_content.data.general.date.getMonth()+1)+'/'+_content.data.general.date.getFullYear());
 	$('#gen_classe > span:nth-child(2)').html(_content.data.general.classe);
 	var pupils = _content.classes["_"+_content.data.general.classe];
 	if(pupils){
-		$("#gen_classe > span:nth-child(2)").attr("title",pupils.length+" élèves :\n"+pupils.join("\n"));	
+		$("#gen_classe > span:nth-child(2)").attr("title",pupils.length+" élèves :\n"+pupils.join("\n"));
 	}
-	
+
 	if(_content.data.general.grille){
 		$('#gen_competence > span:nth-child(2)').html(_content.data.general.grille.titre);
 	}
@@ -484,15 +484,15 @@ function loadDefaultData()
 	$("#gen_minimum > span:last-child").html(_content.data.general.stats.min);
 	$("#gen_maximum > span:last-child").html(_content.data.general.stats.max);
 	$("#gen_inf_moyenne > span:last-child").html(_content.data.general.stats.nb_inf);
-	
+
 	$('#s1_det_title > span:nth-child(2)').html(_content.data.general.bareme);
-	
+
 	updateProgressBar(34,true);
 	_semaphore.default_data_load = true;
 }
 
 /* Function in charge of loading the selected classe into the globa var _content and display it in memory
-   @input classe_name : thr name of the classe to load 
+   @input classe_name : thr name of the classe to load
    @return : nothing
 */
 function loadClasse(classe_name)
@@ -507,7 +507,7 @@ function loadClasse(classe_name)
 		_content.classes["_"+_content.data.general.classe] = global_configurations["classes"]["_"+_content.data.general.classe];
 		//Reset all the defined groupes
 		_content.data.groupes = [];
-		
+
 	}
 	//If no old classe and new classe
 	if(old_classe == NO_CLASSE && classe_name != NO_CLASSE){
@@ -552,9 +552,9 @@ function loadClasse(classe_name)
 			return;
 		}
 	}
-	
+
 	//Get all pupils of the selected class
-	var pupils = _content.classes["_"+_content.data.general.classe];	
+	var pupils = _content.classes["_"+_content.data.general.classe];
 	//Display class name in MMI
 	$("#gen_classe > span:nth-child(2)").html(classe_name);
 	//Display all pupils of the classe in the MMI
@@ -586,7 +586,7 @@ function openNewDocumentCb()
 	initContent();
 	loadMetaData();
 	loadDefaultData();
-	
+
 	if(_modeNotation){
 		toggleModeNotation();
 	}
@@ -608,7 +608,7 @@ function openEditDocumentCb()
 {
 	//Prepare all (MMI and default data)
 	openNewDocumentCb();
-	
+
 	//Make things as if the user has clicked on a browse button
 	document.getElementById('head_edit_file').addEventListener('change', openDocumentFile, false);
 	var elem = document.getElementById("head_edit_file");
@@ -666,7 +666,7 @@ function loadDocumentFile(file_content)
 {
 	var tmp_content = jQuery.parseJSON(file_content);
 	setTimeout("hideProgressBar()",500);
-	
+
 	if(tmp_content == null){
 		error_message("Le contenu du fichier n'est pas conforme.");
 	}else{
@@ -674,6 +674,20 @@ function loadDocumentFile(file_content)
 			_content = tmp_content
 			_content.meta.date_save = new Date(_content.meta.date_save);
 			_content.data.general.date = new Date(_content.data.general.date);
+
+			if(_content.data.general.grille.id){
+				var grilles_count = Object.keys(_content.grilles).length;
+				if(grilles_count == 0){
+						warning_message("Une grille est définie mais la définition de cette grille n'est pas enregistrée dans le fichier.");
+						if(_grilles[_content.data.general.grille.id]){
+								_content.grilles[_content.data.general.grille.id] = _grilles[_content.data.general.grille.id];
+								ok_message("La grille "+_content.data.general.grille.id+" a été associée à ce devoir.");
+						}else{
+								error_message("Impossible d'attribuer une grille à ce devoir.");
+						}
+				}
+			}
+
 			//Load meta data
 			loadMetaData();
 			//Load general data
@@ -712,11 +726,11 @@ function saveDocument()
 	}else{
 		save_name = _currentFileName;
 	}
-	
+
 	//Store that new save date
 	_content.meta.date_save = new Date();
 	_currentFileName = save_name;
-	
+
 	//Transform json into string
 	var content = JSON.stringify(_content);
 	//Manage automatically the action of opennig a saving file dialog
@@ -738,7 +752,7 @@ function saveDocument()
 function migrateContent()
 {
 	var has_migrate = false;
-	
+
 	//Migration pour la version 0.6 (traitement des unknown)
 	if(_content.meta.version < 0.6)
 	{
@@ -746,20 +760,20 @@ function migrateContent()
 		_content.data.general.note_arrondi = 0.5;
 		_content.data.general.note_final_mode = 1;
 		_content.data.general.note_final_cible = 0;
-		
+
 		console.log("Migration nécessaire suite au traitement des unknown.");
-		
+
 		//On ne migre que s'il y a des notes
 		if(Object.keys(_content.data.notes).length != 0){
-			
+
 			console.log("Des notes doivent être migrées ("+Object.keys(_content.data.notes).length+" notes).");
-			
+
 			has_migrate = true;
 			alert("Une migration des données doit être réalisée. A la fin de la migration, il est conseillé d'enregistrer le document dans un nouveau fichier.");
-			
+
 			//First load all notes  in MMI
 			loadNotes();
-			
+
 			//Then browse all notes and save them again in _content
 			$.each($("#s1_note > table > thead > tr:nth-child(1) > th:not(:first-child)"), function(nume,pupil) {
 				//Save this pupil note with the new bareme according to its position
@@ -778,7 +792,7 @@ function migrateContent()
 }
 function setDocumentSaveInfo(){
 	$("#head_saveinfo").show();
-	
+
 	var document_info = "";
 	if(_currentFileName){
 		document_info += "Nom du fichier : "+_currentFileName;
@@ -796,7 +810,7 @@ function resetDocumentSaveInfo(){
 	$("#head_saveinfo").removeAttr("title");
 }
 function toggleDocumentEdition(isEdited){
-	
+
 	if(isEdited){
 		_docIsEdited = true;
 		$("#head_nosave").show();
@@ -821,7 +835,7 @@ function toggleModeNotation()
 	if(_modeNotation == false)
 	{
 		if(_content.data.general.classe != NO_CLASSE){
-			loadNotes();			
+			loadNotes();
 			selectNotePupil();
 			selectNoteCriteria(false);
 			canToogle = true;
@@ -832,7 +846,7 @@ function toggleModeNotation()
 	}else{
 		canToogle = true;
 	}
-	
+
 	if(canToogle == true){
 		$('#s1_det').animate({height:'toggle'},350);
 		$('#s1_note').animate({height:'toggle'},350);
@@ -840,7 +854,7 @@ function toggleModeNotation()
 	}
 }
 function toggleModeSuivi()
-{	
+{
 	if(_modeSuivi == true){
 		$("#s1").hide();
 		$("#s5").show();
@@ -880,23 +894,23 @@ function updateProgressBar(value, delta)
 function hideProgressBar()
 {
 	$('#s0').hide();
-	$("#s0_bar").progressbar( "destroy" ); 
+	$("#s0_bar").progressbar( "destroy" );
 }
 function error_message(message)
 {
-	var temp_id = Math.floor((Math.random()*100)+1); 
+	var temp_id = Math.floor((Math.random()*100)+1);
 	$('#s3').append('<div class="error_box" id="error_'+temp_id+'"><div>Erreur !</div><div>'+message+'</div></div>');
 	setTimeout('show_message("error_'+temp_id+'")',100);
 }
 function warning_message(message)
 {
-	var temp_id = Math.floor((Math.random()*100)+1); 
+	var temp_id = Math.floor((Math.random()*100)+1);
 	$('#s3').append('<div class="warning_box" id="warning_'+temp_id+'"><div>Attention !</div><div>'+message+'</div></div>');
 	setTimeout('show_message("warning_'+temp_id+'")',100);
 }
 function ok_message(message)
 {
-	var temp_id = Math.floor((Math.random()*100)+1); 
+	var temp_id = Math.floor((Math.random()*100)+1);
 	$('#s3').append('<div class="message_box" id="message_'+temp_id+'"><div>Information</div><div>'+message+'</div></div>');
 	setTimeout('show_message("message_'+temp_id+'")',100);
 }
@@ -917,7 +931,7 @@ function delete_message(box_id)
 
 function manage_key_up(e){
 	var keynum;
-	
+
 	if(e.which)	{
 		keynum = e.which;
 	}
@@ -988,7 +1002,7 @@ jQuery.fn.selectText = function(){
 	   range.moveToElementText(element);
 	   range.select();
    } else if (window.getSelection) {
-	   var selection = window.getSelection();		
+	   var selection = window.getSelection();
 	   var range = document.createRange();
 	   range.selectNodeContents(element);
 	   selection.removeAllRanges();
