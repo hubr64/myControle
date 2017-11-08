@@ -504,7 +504,7 @@ function importSuiviFileCb2(tmp_devoir,import_note_normalise,import_note_bulleti
 		});
 		//If at least one note is defined then can finished to compute the mean
 		if(Object.keys(tmp_devoir.notes).length != 0){
-			tmp_devoir.general.stats.mean = Number((tmp_devoir.general.stats.mean / Object.keys(tmp_devoir.notes).length).toFixed(2));
+			tmp_devoir.general.stats.mean = Number((tmp_devoir.general.stats.mean / Object.keys(tmp_devoir.notes).length).toFixed(3));
 		}
 	}
 
@@ -556,7 +556,7 @@ function computeSuiviStats()
 	});
 	//If there is at least one devoir in the array (or creat an error /0)
 	if(local_content.data.general.stats.nb != 0){
-		local_content.data.general.stats.mean = Number((local_content.data.general.stats.mean / devoir_nb_coeff).toFixed(2));
+		local_content.data.general.stats.mean = Number((local_content.data.general.stats.mean / devoir_nb_coeff).toFixed(3));
 	}else{
 		local_content.data.general.stats.mean = "?";
 		local_content.data.general.stats.max = "?";
@@ -699,7 +699,7 @@ function updateSuiviPupil()
 		});
 		//If the pupil has a note at least on one devoir then display stats otherwise display NE for Not Evaluated
 		if(pupil_nb!=0){
-			pupil_mean = Number((pupil_mean/pupil_nb_coeff).toFixed(2));
+			pupil_mean = Number((pupil_mean/pupil_nb_coeff).toFixed(3));
 		}else{
 			pupil_mean = "-";
 			pupil_nb = "-";
@@ -899,7 +899,7 @@ function openSuiviDetails(devoir_id)
 			competence_stat["encours100"] =  Math.round(competence_stat["encours100"] / competence_stat["nb"]);
 			competence_stat["acquis100"] =  Math.round(competence_stat["acquis100"] / competence_stat["nb"]);
 			competence_stat["nonacquis100"] =  Math.round(competence_stat["nonacquis100"] / competence_stat["nb"]);
-			competence_stat["moyenne"] =  Number((competence_stat["moyenne"]).toFixed(2));
+			competence_stat["moyenne"] =  Number((competence_stat["moyenne"]).toFixed(3));
 			competence_stat["moyenne100"] =  Math.round(competence_stat["moyenne100"] / competence_stat["nb"]);
 			
 			$("#s5_det_competences > tbody").append("<tr class='s5_det_competences_comp'><td>&nbsp;</td><td style='color:"+competence.couleur+"'>"+competence.titre+"</td><td>"+competence_stat["acquis"]+"<div>"+competence_stat["acquis100"]+"%</div></td><td>"+competence_stat["encours"]+"<div>"+competence_stat["encours100"]+"%</div></td><td>"+competence_stat["nonacquis"]+"<div>"+competence_stat["nonacquis100"]+"%</div></td><td>"+competence_stat["moyenne"]+"/"+competence_stat.max+" pts<div>"+competence_stat["moyenne100"]+"%</div></td></tr>");
@@ -1193,7 +1193,7 @@ function openSuiviPupilDetails(pupil_name, in_dialog)
 			}
 		});
 		if(pupil_nb_tmp!=0){
-			pupil_mean_tmp = Number((pupil_mean_tmp/pupil_nb_coeff_tmp).toFixed(2));
+			pupil_mean_tmp = Number((pupil_mean_tmp/pupil_nb_coeff_tmp).toFixed(3));
 			pupil_rank.push(pupil_mean_tmp);
 		}else{
 			pupil_mean_tmp = "-";

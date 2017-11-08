@@ -10,7 +10,7 @@ function loadGrille(grille_id, grille_titre)
 	if(_content.data.general.grille){
 		old_grille_id = _content.data.general.grille.id;
 		_content.grilles = {};
-		_content.grilles[_content.data.general.grille.id] = _grilles[_content.data.general.grille.id];
+		//_content.grilles[_content.data.general.grille.id] = _grilles[_content.data.general.grille.id];
 	}
 	//There was no grid selected and no new grid (should not happen)
 	if(old_grille_id == null && grille_id == null){
@@ -79,6 +79,17 @@ function loadCompetences()
 	//Load the competences only if a grid is correctly defined
 	if(_content.data.general.grille && _content.data.general.grille.id)
 	{
+
+		var found_grid = false;
+		$.each(_grilles, function(grille_id,grille) {
+			if(grille_id==_content.data.general.grille.id){
+				found_grid = true;
+			}
+		});
+		if(found_grid==false){
+			warning_message("Attention ! La grille du devoir ne correspond pas à une grille connue (il s'agit sans doute d'une ancienne grille.");
+		}
+
 		//Display the name of the grid and add a button to consult the grid definition
 		$('#gen_competence > span:nth-child(2)').html(_content.data.general.grille.titre);
 		$("#gen_competence > span:nth-child(3)").show();

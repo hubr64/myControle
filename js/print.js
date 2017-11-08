@@ -160,6 +160,11 @@ function printDocumentNotes()
 	$( "#s2 input" ).checkboxradio({
       icon: false
     });
+	if(_content.data.general.grille.id == null){
+		$( "#s2 input[name=print_capacites_bilan]" ).checkboxradio({
+			disabled: true
+	    });
+	}
 	
 	$("#s2").dialog({
 		autoOpen: false,
@@ -244,7 +249,7 @@ function printDocumentNotesCb(display_only_validated, display_notes_reel,display
                     
 					//Add an area to display the detailled stat of the pupil for each exercise
                     $('#s2').children('div.s2_page:last-child').append('<table class="s2_det_stats"><thead><tr><th colspan="3">Bilan personnel par exercice</th></tr><tr><th>&nbsp;</th><th>Votre Bilan</th><th>Moyenne Classe</th></tr></thead><tbody></tbody></table>');
-                    //Browse all eercices of the devoir
+                    //Browse all exercices of the devoir
                     $.each(_content.data.exercices, function(nume,exercice) {
                         //No note for fre text
 						if(exercice.type!="free"){
@@ -264,6 +269,7 @@ function printDocumentNotesCb(display_only_validated, display_notes_reel,display
                     });
 					
 					//Add an area to display the detailled stat of the pupil for each capacite
+					if(_content.data.general.grille.id){
 					$('#s2').children('div.s2_page:last-child').append('<table class="s2_competences"><thead><tr><th colspan="5">Bilan personnel de compétences</th></tr><tr><th>Compétence/Capacité</th><th>&nbsp;</th><th>Etat</th><th>Note</th><th>Moyenne Classe</th></tr></thead><tbody></tbody></table>');
 					
 					var pupil_competences = getPupilCompetence(pupil);
@@ -280,7 +286,7 @@ function printDocumentNotesCb(display_only_validated, display_notes_reel,display
 						}
 					});
 					$('#s2').children('div.s2_page:last-child').children('table.s2_competences').children('tbody').append(pupil_competences_text);
-
+				}
 					
                     //Now that the global and detailled resume are included, we will now include the details for the devoir
 					$.each(_content.data.exercices, function(nume,exercice) {
@@ -370,7 +376,11 @@ function printDocumentBilan()
 	$( "#s2 input" ).checkboxradio({
 		icon: false
     });
-	
+	if(_content.data.general.grille.id == null){
+		$( "#s2 input[name=print_capacites_bilan]" ).checkboxradio({
+			disabled: true
+	    });
+	}
 	$("#s2").dialog({
 		autoOpen: false,
 		modal: true,
@@ -469,6 +479,7 @@ function printDocumentBilanCb(display_only_validated, display_notes_reel,display
 				}
 			});
 			
+			if(_content.data.general.grille.id){
 			//Add an area to display the detailled stat of each capacite
 			$('#s2').children('div.s2_page:last-child').append('<table class="s2_competences"><thead><tr><th colspan="6">Bilan des compétences</th></tr><tr><th>Capacité</th><th>&nbsp;</th><th>Acquis</th><th>En cours</th><th>Non acquis</th><th>Moyenne</th></tr></thead><tbody></tbody></table>');
 			
@@ -509,6 +520,7 @@ function printDocumentBilanCb(display_only_validated, display_notes_reel,display
 					}
 				}
 			});
+		}
 			
 			//On recupere le contenu fabrique
 			var document_content = $("#s2").html();

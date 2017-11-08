@@ -49,7 +49,7 @@ function saveEdition()
                             _content.data.exercices["_"+nume]["questions"]["_"+numq]["criteres"]["_"+numc] = {type:"free", text:$(this).children("span.free_text").children("div").html() };
                         }else{
                             var cri_bareme_val = parseFloat($(this).children("span.cri_bareme").children("span:first-child").html());
-                            cri_bareme_val = Number(cri_bareme_val.toFixed(2));
+                            cri_bareme_val = Number(cri_bareme_val.toFixed(3));
 
 							var cri_competence = $(this).children("span.cri_competence").children("span:first-child").html();
 
@@ -185,9 +185,9 @@ function pasteEditionExe($exe)
 	    <label for='paste_bareme_yes'>Oui</label><input checked type='radio' name='paste_bareme' id='paste_bareme_yes' value='1'>\
 		<label for='paste_bareme_no'>Non</label><input type='radio' name='paste_bareme' id='paste_bareme_no' value='0'>\
 		</fieldset>\
-		<fieldset><legend>Coller les critères :</legend>\
-	    <label for='paste_critere_yes'>Oui</label><input checked type='radio' name='paste_critere' id='paste_critere_yes' value='1'>\
-		<label for='paste_critere_no'>Non</label><input type='radio' name='paste_critere' id='paste_critere_no' value='0'>\
+		<fieldset><legend>Coller les capacités :</legend>\
+	    <label for='paste_capacite_yes'>Oui</label><input checked type='radio' name='paste_capacite' id='paste_capacite_yes' value='1'>\
+		<label for='paste_capacite_no'>Non</label><input type='radio' name='paste_capacite' id='paste_capacite_no' value='0'>\
 		</fieldset>");
 
 	$( "#s2 input" ).checkboxradio({
@@ -205,12 +205,12 @@ function pasteEditionExe($exe)
 					try {
 
 						var paste_bareme = false;
-						var paste_critere = false;
+						var paste_capacite = false;
 						if (parseInt($('input[name=paste_bareme]:checked').val()) == 1){
 							paste_bareme = true;
 						};
-						if (parseInt($('input[name=paste_critere]:checked').val()) == 1){
-							paste_critere = true;
+						if (parseInt($('input[name=paste_capacite]:checked').val()) == 1){
+							paste_capacite = true;
 						};
 
 						var exercice = jQuery.parseJSON($("#s2 > textarea").val());
@@ -225,7 +225,7 @@ function pasteEditionExe($exe)
 										if(critere.type=="free"){
 											$free = addEditionFree($que.find(".que_criteres"), critere.text);
 										}else{
-											$cri = addEditionCri($que, critere.text, paste_bareme?critere.bareme:0, paste_critere?critere.competence:null)
+											$cri = addEditionCri($que, critere.text, paste_bareme?critere.bareme:0, paste_capacite?critere.competence:null)
 										}
 									});
 								}
@@ -283,7 +283,7 @@ function deleteEditionExe($exe)
         var old_exe_bareme_val = 0;
         $.each($exe.children("span.exe_questions").children(".s1_det_question"), function(numq,question) {
             $.each($(this).children("span.que_criteres").children(".s1_det_critere"), function(numc,critere) {
-                old_exe_bareme_val += Number(parseFloat($(this).find(".cri_bareme span:first-child").html()).toFixed(2));
+                old_exe_bareme_val += Number(parseFloat($(this).find(".cri_bareme span:first-child").html()).toFixed(3));
             });
         });
         if(isNaN(old_exe_bareme_val)){old_exe_bareme_val=0;}
@@ -397,7 +397,7 @@ function deleteEditionQue($que)
 
         var old_que_bareme_val = 0;
         $.each($que.children("span.que_criteres").children(".s1_det_critere"), function(numc,critere) {
-            old_que_bareme_val += Number(parseFloat($(this).find(".cri_bareme span:first-child").html()).toFixed(2));
+            old_que_bareme_val += Number(parseFloat($(this).find(".cri_bareme span:first-child").html()).toFixed(3));
         });
         if(isNaN(old_que_bareme_val)){old_que_bareme_val=0;}
 
@@ -500,8 +500,8 @@ function saveEditionCri($cri)
         if(isNaN(cri_bareme_val)){
             warning_message("Votre barême n'est pas un nombre valide.")
         }else{
-            cri_bareme_val = Number(cri_bareme_val.toFixed(2));
-            var old_cri_bareme_val = Number(parseFloat($cri.find(".cri_bareme span:first-child").attr("old_bareme")).toFixed(2));
+            cri_bareme_val = Number(cri_bareme_val.toFixed(3));
+            var old_cri_bareme_val = Number(parseFloat($cri.find(".cri_bareme span:first-child").attr("old_bareme")).toFixed(3));
             if(isNaN(old_cri_bareme_val)){old_cri_bareme_val=0;}
 
 			updateEditionQueBareme($cri.parent().parent(),old_cri_bareme_val,cri_bareme_val);
@@ -522,7 +522,7 @@ function deleteEditionCri($cri)
 {
     if(confirm("Voulez-vous vraiment supprimer ce critère ?")){
 
-        var old_cri_bareme_val = Number(parseFloat($cri.find(".cri_bareme span:first-child").html()).toFixed(2));
+        var old_cri_bareme_val = Number(parseFloat($cri.find(".cri_bareme span:first-child").html()).toFixed(3));
         if(isNaN(old_cri_bareme_val)){old_cri_bareme_val=0;}
 
         updateEditionQueBareme($cri.parent().parent(),old_cri_bareme_val,0);

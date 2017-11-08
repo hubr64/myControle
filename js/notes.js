@@ -211,7 +211,7 @@ function computeNoteStat()
 	
 	//If at least one note is defined then can finished to compute the mean
 	if(Object.keys(_content.data.notes).length != 0){
-		_content.data.general.stats.mean = Number((_content.data.general.stats.mean / Object.keys(_content.data.notes).length).toFixed(2));
+		_content.data.general.stats.mean = Number((_content.data.general.stats.mean / Object.keys(_content.data.notes).length).toFixed(3));
 	//If there is no notes at all the indicate undefined stats
 	}else{
 		_content.data.general.stats = {mean: "?", min: "?", max: "?", nb_inf: "?"};
@@ -251,7 +251,7 @@ function computeNoteStat()
 			});
 			//If at least one note is defined then can finisehd to compute the mean
 			if(nb_exe_note != 0){
-				exercice.stats.mean = Number((exercice.stats.mean / nb_exe_note).toFixed(2));
+				exercice.stats.mean = Number((exercice.stats.mean / nb_exe_note).toFixed(3));
 			//If there is no notes at all the indicate undefined stats
 			}else{
 				exercice.stats = {mean: "?", min: "?", max: "?"};
