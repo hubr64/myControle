@@ -1,4 +1,4 @@
-﻿var _version = 0.71;
+﻿var _version = 0.8;
 
 var _semaphore = { };
 _semaphore.mmi_load = false;
@@ -12,6 +12,7 @@ var _modeNotation = false;
 var _modeSuivi = false;
 var _docIsEdited = false;
 var _currentFileName = "";
+var _bigDevoirBareme = 40;
 
 var NO_CLASSE = "Aucune classe";
 var NO_GRILLE = "Aucune grille de compétences";

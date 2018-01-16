@@ -23,6 +23,13 @@ function loadEdition()
             });
         }
     });
+
+    //If the devoir has more than _bigDevoirBareme point then close all exercises
+    if(_content.data.general.bareme > _bigDevoirBareme){
+        $.each($("#s1_det_que").children(".s1_det_exercice, .s1_det_freetext"), function(nume,exe) {
+            toggleExe($(this));
+        });
+    }
 }
 /* Function in charge of retrieving all edition information to store them into the global var _content */
 function saveEdition()
@@ -230,6 +237,13 @@ function pasteEditionExe($exe)
 									});
 								}
 							});
+
+
+                            //Update global bareme if required in the paste configuration
+                            updateEditionTotalBareme(0, paste_bareme?exercice.bareme:0);
+
+                            //Provoque save edition to transfer paste exercise in global var
+                            saveEdition();
 
 							$("#s2").html("");
 							$("#s2").dialog( "close" );
