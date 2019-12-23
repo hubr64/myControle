@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Confirmation de suppression</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>
+    <strong>Êtes-vous sûr de vouloir supprimer
+      <span class="text-danger">{{itemDetails}}</span> ?</strong>
+  </p>
+  <div *ngIf="itemContent">
+    <p>Toutes les informations associées seront définitivement supprimées : </p>
+    <ul [innerHTML]="itemContent"></ul>
+  </div>
+  <p>
+    <span class="text-danger">Cette opération ne peut pas être annulée.</span>
+  </p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Annuler</button>
+  <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close('ok')">OK</button>
+</div>

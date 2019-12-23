@@ -1,0 +1,8 @@
+<section *ngIf="messageService.messagesUser.length">
+  <div *ngFor='let message of messageService.messagesUser'>
+    <ngb-alert [type]="message.type" (close)="close(message)">{{ message.text }}</ngb-alert>
+  </div>
+  <div *ngFor='let message of messageService.messagesDev'>
+    <ngb-alert type="info" (close)="close(message)">{{ message.text }}</ngb-alert>
+  </div>
+</section>

@@ -1,0 +1,55 @@
+<button [ngClass]="{'open': visible}" title="Menu" (click)="toggleVisibility($event)">
+  <i class="material-icons md-dark md-36" *ngIf="visible == false">more_vert</i>
+  <i class="material-icons md-dark md-36" *ngIf="visible == true">close</i>
+</button>
+
+<section [ngClass]="{'open': visible}">
+  <span>myControle</span>
+  <div>
+    <h3>Gestion des devoirs</h3>
+    <div (click)="openNewDevoir()">
+      <i class="material-icons md-36 blueicon">note_add</i>
+      <span>Nouveau devoir</span>
+    </div>
+    <div (click)="openExistingDevoir()">
+      <i class="material-icons  md-36 blueicon">folder_open</i>
+      <span>Ouvrir un devoir</span>
+    </div>
+    <div (click)="saveCurrentDevoir()">
+      <i class="material-icons md-36 blueicon">save</i>
+      <span>Enregistrer&nbsp;</span>
+      <span *ngIf="devoirService.docIsEdited" class="badge badge-danger">Attention !</span>
+    </div>
+    <div>
+      <i class="material-icons md-36 greenicon">local_printshop</i>
+      <span>Imprimer le devoir</span>
+    </div>
+    <div>
+      <i class="material-icons md-36 greenicon">ballot</i>
+      <span>Imprimer la correction</span>
+    </div>
+    <div>
+      <i class="material-icons md-36 greenicon">present_to_all</i>
+      <span>Exporter les notes</span>
+    </div>
+    <div>
+      <i class="material-icons md-36 greenicon">outlined_flag</i>
+      <span>Consulter le bilan</span>
+    </div>
+    <h3>Configuration</h3>
+    <div (click)="configuration.toggleVisibility()">
+      <i class="material-icons md-36">settings_applications</i>
+      <span>Préférences</span>
+    </div>
+    <div>
+      <i class="material-icons md-36">group</i>
+      <span>Configurer les classes</span>
+    </div>
+    <input type="file" #fileInput (change)="openFile($event)" hidden/>
+  </div>
+  <div>
+    <div>&copy; 2020 - Copyright HubR Design - Tous droits réservés - {{appVersionMenu}}</div>
+  </div>
+</section>
+
+<app-configuration #configuration></app-configuration>

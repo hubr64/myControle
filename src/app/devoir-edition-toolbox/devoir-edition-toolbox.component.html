@@ -1,0 +1,14 @@
+<div class="toolBox">
+  <div>
+    <button (click)="addItem(itemType, exeId, queId, criId)" title="Ajouter {{itemTextConversion[itemType]}}">
+      <i [ngClass]="['material-icons', 'md-48', itemType+'-button']">add_circle</i>
+    </button>
+    <button (click)="addItem('freetext', exeId, queId, criId)" title="Ajouter un texte libre">
+      <i class="material-icons md-48 freetext-button">add_circle</i>
+    </button>
+    <button *ngIf="clipboardService.clipboardType == 'freetext' || clipboardService.clipboardType == itemType" (click)="pasteItem(exeId, queId, criId)"
+      title="Coller">
+      <i [ngClass]="['material-icons', 'md-48',  clipboardService.clipboardType+'-button']">loupe</i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+.material-icons.md-18
+  font-size: 18px
+.material-icons.md-24
+  font-size: 24px
+.material-icons.md-36
+  font-size: 36px
+.material-icons.md-48
+  font-size: 48px
+
+$freetext-color: #666
+$exercice-color: #4CAF50
+$question-color: #FAD46D
+$critere-color: #6194C8
+
+.optionBox
+  position: absolute
+  right: -15px
+  top: 3px
+  width: 40px
+  height: 30px
+  overflow: hidden
+  transition: width 200ms
+
+.optionBox:hover
+  width: auto
+  background-color: #FFF
+  border: 1px solid #CCC
+  right: 3px
+
+button
+  display: inline-block
+  margin: 3px
+  cursor: pointer
+  transition: all 200ms
+  border: none
+  height:40px
+  background: transparent
+
+.optionBox:hover > button:first-child
+  display: none
+
+.optionBox > button
+  height: 33px
+  padding: 0 2px
+  margin: 0
+
+.optionBox > button:hover
+  color: $freetext-color
+  background-color: #CCC
+
+.freetext-button
+  color: $freetext-color
+
+.exercice-button
+  color: $exercice-color
+
+.question-button
+  color: $question-color
+
+.critere-button
+  color: $critere-color

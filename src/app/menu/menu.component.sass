@@ -1,0 +1,97 @@
+.material-icons.blueicon
+  color: #427aa1
+.material-icons.greenicon
+  color: #679436
+.material-icons.whiteicon
+  color: #FFF
+
+
+=transform($property)
+  -webkit-transform: $property
+  -ms-transform: $property
+  transform: $property
+
+button
+  position: fixed
+  top: 0px
+  display: inline-block
+  margin: 10px
+  cursor: pointer
+  transition: all 200ms
+  z-index: 900
+  border: none
+  height:40px
+  background: transparent
+
+button:hover
+  background-color: #E5E5E5
+  border-radius: 20px
+
+button.open
+  +transform(rotate(90deg))
+
+section
+  height: 100%
+  width: 0px
+  position: fixed
+  top: 0px
+  left: 0px
+  box-sizing: border-box
+  color:#887788
+  border-right: 1px solid #e5e5e5
+  box-shadow: 5px 0px 5px #888888
+  overflow-y: auto
+  overflow-x: hidden
+  z-index: 500
+  transition: all 200ms
+  background-image: url('/assets/index.png')
+  background-repeat: no-repeat
+  background-size: 120px
+  background-position: center 9px
+  background-color: #f0f0f0
+
+
+section.open
+  width: 300px
+
+section > span:first-child
+  margin-top: 130px
+  display: inline-block
+  text-align: center
+  width: 100%
+  font-size: 1.5em
+  font-family: "Segoe UI Black"
+  color:#3abca7
+
+section > div:nth-child(2) > h3
+  padding:20px 0 5px 0
+  border-bottom:1px solid #D0D0D0
+  margin-bottom:0
+
+section > div:nth-child(2) > div
+  width: 100%
+  border: 1px solid #D0D0D0
+  background: #F9F9F9
+  cursor: pointer
+  padding: 0px
+  border-width:0 0 1px 0
+
+section > div:nth-child(2) > div:hover
+  background: #FFF
+  transition: all 200ms
+
+section > div:nth-child(2) > div > i
+  vertical-align: middle
+  padding: 3px
+  background-color: #E8E8E8
+  margin-right: 4px
+
+section > div:nth-child(2) > div > span:nth-child(2)
+  padding:2px 0
+
+section > div:last-child
+  position: absolute
+  bottom:10px
+  font-size: 0.7em
+  width: 100%
+  text-align: center

@@ -1,0 +1,17 @@
+<span class="optionBox">
+  <button title="Actions">
+    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">more_vert</i>
+  </button>
+  <button (click)="copyItem(item)" title="Copier">
+    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">layers</i>
+  </button>
+  <button (click)="moveUpItem(item)" title="Monter">
+    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">arrow_upward</i>
+  </button>
+  <button (click)="moveDownItem(item)" title="Descendre">
+    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">arrow_downward</i>
+  </button>
+  <button (click)="deleteItem(item)" title="Supprimer">
+    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">delete</i>
+  </button>
+</span>

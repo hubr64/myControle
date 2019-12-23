@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Restauration</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>Un devoir non sauvegardé a été détecté :</p>
+  <p>
+    <strong>{{devoirDetails}}</strong>
+  </p>
+  <br/>
+  <p>Voulez-vous le restaurer ?</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Non</button>
+  <button type="button" ngbAutofocus class="btn btn-success" (click)="modal.close('ok')">OUI</button>
+</div>

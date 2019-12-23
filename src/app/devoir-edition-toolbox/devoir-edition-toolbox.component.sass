@@ -1,0 +1,74 @@
+$freetext-color: #666
+$exercice-color: #4CAF50
+$question-color: #FAD46D
+$critere-color: #6194C8
+
+=transform($property)
+  -webkit-transform: $property
+  -ms-transform: $property
+  transform: $property
+
+.material-icons.md-18
+  font-size: 18px
+.material-icons.md-24
+  font-size: 24px
+.material-icons.md-36
+  font-size: 36px
+.material-icons.md-48
+  font-size: 48px
+
+.freetext-button
+  color: $freetext-color
+.exercice-button
+  color: $exercice-color
+.question-button
+  color: $question-color
+.critere-button
+  color: $critere-color
+
+.toolBox
+  opacity:0
+  margin:2px 0
+  text-align: center
+  background-color: transparent
+  border:1px dashed #D0D0D0
+  position: relative
+  min-height: 15px
+  z-index: 200
+  transition: all 200ms
+
+.toolBox:hover
+  opacity: 1.0
+
+.toolBox > div
+  position: absolute
+  top: -14px
+  right: 50%
+
+button
+  display: inline-block
+  margin: 3px
+  cursor: pointer
+  transition: all 200ms
+  border: none
+  height:40px
+  background: transparent
+
+.toolBox > div > button
+  height: auto !important
+  padding: 0px
+  transition: all 200ms
+
+.toolBox > div > button:hover
+  +transform(rotate(-90deg))
+
+.toolBox > div > button > i
+  vertical-align: middle
+  font-size: 30px
+  text-shadow: #999 0px 2px 5px
+  transition: all 200ms
+
+.toolBox > div > button:hover > i
+  color:#D0D0D0
+  text-shadow: none
+

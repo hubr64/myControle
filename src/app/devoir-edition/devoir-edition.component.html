@@ -1,0 +1,54 @@
+<section>
+  <h1>
+    <span>Votre devoir</span>
+    <span>({{devoirService.devoir.bareme}} pts)</span>
+  </h1>
+  <div *ngFor="let exercice of devoirService.devoir.exercices; trackBy: trackByItems">
+    <app-devoir-edition-toolbox [itemType]='"exercice"' [exeId]="exercice.id" [queId]='null' [criId]='null'></app-devoir-edition-toolbox>
+    <div #exercice.id *ngIf="exercice.constructor.name == 'Freetext'" class="freetext exercicefreetext">
+      <app-devoir-edition-optionbox [itemType]='"freetext"' [item]='exercice'></app-devoir-edition-optionbox>
+      <span *ngIf="itemEdited!==exercice" (click)="convertToEditor(exercice,$event)" [innerHTML]="exercice.text"></span>
+      <ckeditor *ngIf="itemEdited===exercice" [editor]="editor" [(ngModel)]="exercice.text" (blur)="onBlurEditor($event)" (ready)="onReadyEditor($event)"></ckeditor>
+    </div>
+    <div *ngIf="exercice.constructor.name == 'Exercice'" class="exercice">
+      <app-devoir-edition-optionbox [itemType]='"exercice"' [item]='exercice'></app-devoir-edition-optionbox>
+      <input [(ngModel)]="exercice.title" placeholder="Titre de l'exercice" />
+      <span>({{ exercice.bareme }} pts)</span>
+      <div *ngFor="let question of exercice.questions; trackBy: trackByItems">
+        <app-devoir-edition-toolbox [itemType]='"question"' [exeId]="exercice.id" [queId]='question.id' [criId]='null'></app-devoir-edition-toolbox>
+        <div *ngIf="question.constructor.name == 'Freetext'" class="freetext questionfreetext">
+          <app-devoir-edition-optionbox [itemType]='"freetext"' [item]='question'></app-devoir-edition-optionbox>
+          <span *ngIf="itemEdited!==question" (click)="convertToEditor(question,$event)" [innerHTML]="question.text"></span>
+          <ckeditor *ngIf="itemEdited===question" [editor]="editor" [(ngModel)]="question.text" (blur)="onBlurEditor($event)" (ready)="onReadyEditor($event)"></ckeditor>
+        </div>
+        <div *ngIf="question.constructor.name == 'Question'" class="question">
+          <app-devoir-edition-optionbox [itemType]='"question"' [item]='question'></app-devoir-edition-optionbox>
+          <input [(ngModel)]="question.title" placeholder="Intitulé de la question" />
+          <span>({{ question.bareme }} pts)</span>
+          <div *ngFor="let critere of question.criteres; trackBy: trackByItems">
+            <app-devoir-edition-toolbox [itemType]='"critere"' [exeId]="exercice.id" [queId]='question.id' [criId]='critere.id'></app-devoir-edition-toolbox>
+            <div *ngIf="critere.constructor.name == 'Freetext'" class="freetext criterefreetext">
+              <app-devoir-edition-optionbox [itemType]='"freetext"' [item]='critere'></app-devoir-edition-optionbox>
+              <span *ngIf="itemEdited!==critere" (click)="convertToEditor(critere,$event)" [innerHTML]="critere.text"></span>
+              <ckeditor *ngIf="itemEdited===critere" [editor]="editor" [(ngModel)]="critere.text" (blur)="onBlurEditor($event)" (ready)="onReadyEditor($event)"></ckeditor>
+            </div>
+            <div *ngIf="critere.constructor.name == 'Critere'" class="critere">
+              <app-devoir-edition-optionbox [itemType]='"critere"' [item]='critere'></app-devoir-edition-optionbox>
+              <span>
+                <span *ngIf="critere.capacite ; else elseBlock" [ngStyle]="{'color': critere.capacite.getCompetence(devoirService.devoir.grille).couleur}">{{ critere.capacite.id }}</span>
+              </span>
+              <ng-template #elseBlock>Aucune</ng-template>
+              <span *ngIf="itemEdited!==critere" (click)="convertToEditor(critere,$event)" [innerHTML]="critere.text"></span>
+              <ckeditor *ngIf="itemEdited===critere" [editor]="editor" [(ngModel)]="critere.text" (blur)="onBlurEditor($event)" (ready)="onReadyEditor($event)"></ckeditor>
+              <span>
+                <input type="number" step="0.05" min="0" max="20" [(ngModel)]="critere.bareme" placeholder="0" /> pts</span>
+            </div>
+          </div>
+          <app-devoir-edition-toolbox [itemType]='"critere"' [exeId]="exercice.id" [queId]='question.id' [criId]='"end"'></app-devoir-edition-toolbox>
+        </div>
+      </div>
+      <app-devoir-edition-toolbox [itemType]='"question"' [exeId]="exercice.id" [queId]='"end"' [criId]='null'></app-devoir-edition-toolbox>
+    </div>
+  </div>
+  <app-devoir-edition-toolbox [itemType]='"exercice"' [exeId]='"end"' [queId]='null' [criId]='null'></app-devoir-edition-toolbox>
+</section>

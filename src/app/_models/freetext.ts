@@ -1,0 +1,23 @@
+import { Deserializable } from './deserializable.model';
+
+export class Freetext implements Deserializable {
+  id: string;
+  text: string;
+
+  // Convert from JSON
+  deserialize(input: any) {
+    this.id = input.id;
+    this.text = input.text;
+    return this;
+  }
+
+  // Convert to JSON
+  serialize(): any {
+    const serializeFree = {
+      id: this.id,
+      text: this.text,
+      type: 'free'
+    };
+    return serializeFree;
+  }
+}

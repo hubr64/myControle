@@ -1,0 +1,126 @@
+<button id="generalitesButton" [ngClass]="{'open': visible}" title="Généralités du devoir" (click)="toggleVisibility($event)">
+  <i class="material-icons md-48" *ngIf="visible == false">info</i>
+  <i class="material-icons md-36" *ngIf="visible == true">close</i>
+</button>
+
+<section id="generalitesMenu" [ngClass]="{'open': visible}">
+  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+    <ngb-panel title="Informations">
+      <ng-template ngbPanelContent>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Titre</span>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.titre" placeholder="Titre du devoir" aria-label="Titre"
+            aria-describedby="basic-addon1">
+        </div>
+        <ng-template #t2>
+          <button (click)="devoirService.devoir.creationDate = today" class="btn btn-sm btn-outline-primary">Aujourd'hui</button>
+        </ng-template>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Date</span>
+          </div>
+          <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel" [(ngModel)]="devoirService.devoir.devoirDate"
+            ngbDatepicker #d2="ngbDatepicker" [footerTemplate]="t2">
+          <div class="input-group-append">
+            <button class="btn btn-primary btn-sm" (click)="d2.toggle()" type="button">
+              <i class="material-icons md-18 ">calendar_today</i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Arrondi</span>
+          </div>
+          <input type="number" step="0.05" min="0.05" max="5" class="form-control" [(ngModel)]="devoirService.devoir.arrondi" (blur)="checkArrondi($event)"
+            placeholder="0.5" aria-label="Arrondi de notation" aria-describedby="basic-addon1">
+          <div class="input-group-append">
+            <ng-template #popContent>Arrondi appliqué à la note finale bulletin.
+              <hr/>
+              <small>Exemple : si la note est de 18.25 est l'arrondi est 0.5 alors la note finale est 18.5.</small>
+            </ng-template>
+            <ng-template #popTitle>Arrondi de notation</ng-template>
+            <button class="input-group-text" type="button" [ngbPopover]="popContent" [popoverTitle]="popTitle">
+              <i class="material-icons md-18">help</i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Mode</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01" [(ngModel)]="devoirService.devoir.notationMode">
+            <option selected>Choose...</option>
+            <option [ngValue]="notationModeNormal.id">{{notationModeNormal.titre}}</option>
+            <option [ngValue]="notationModeProportionnel.id">{{notationModeProportionnel.titre}}</option>
+            <option [ngValue]="notationModeRapporte.id">{{notationModeRapporte.titre}}</option>
+          </select>
+          <div class="input-group-append">
+            <ng-template #popContent2>{{notationModeNormalContent}}</ng-template>
+            <ng-template #popTitle2>{{notationModeNormalTitre}}</ng-template>
+            <button class="input-group-text" type="button" [ngbPopover]="popContent2" [popoverTitle]="popTitle2" (click)="toggleNotationMode()">
+              <i class="material-icons md-18">help</i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group mb-3" *ngIf="devoirService.devoir.notationMode == 2 || devoirService.devoir.notationMode == 3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Cible</span>
+          </div>
+          <input type="number" class="form-control" [(ngModel)]="devoirService.devoir.notationCible" placeholder="20" aria-label="Note cible"
+            aria-describedby="basic-addon1">
+          <div class="input-group-append">
+            <ng-template #popContent>Note cible obtenue après application du mode transformation.</ng-template>
+            <ng-template #popTitle>Note cible</ng-template>
+            <button class="input-group-text" type="button" [ngbPopover]="popContent" [popoverTitle]="popTitle">
+              <i class="material-icons md-18">help</i>
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+    <ngb-panel title="Généralités">
+      <ng-template ngbPanelContent>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Auteur</span>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.author" placeholder="Auteur du devoir" aria-label="Auteur"
+            readonly aria-describedby="basic-addon1">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Créé le</span>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.creationDate" aria-label="Date de création" aria-describedby="basic-addon1"
+            readonly ngbDatepicker #d1="ngbDatepicker">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Modifié le</span>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.modificationDate" aria-label="Date de modification"
+            aria-describedby="basic-addon1" readonly ngbDatepicker #d3="ngbDatepicker">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Version</span>
+          </div>
+          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.toolVersion" placeholder="Auteur du devoir" aria-label="Auteur"
+            readonly aria-describedby="basic-addon1">
+        </div>
+
+      </ng-template>
+    </ngb-panel>
+
+    <ngb-panel title="Statistiques">
+      <ng-template ngbPanelContent>
+        TBD
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</section>
