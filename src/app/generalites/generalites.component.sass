@@ -11,18 +11,19 @@ input[type=number]
   top: 0px
   right:0px
   display: inline-block
-  margin: 10px
+  margin: 7px
   cursor: pointer
   transition: all 200ms
   z-index: 900
-  border: none
+  border: 1px solid transparent
   height:40px
   background: transparent
   color: rgba(0, 0, 0, 0.54)
 
 #generalitesButton:hover
-  background-color: #E5E5E5
-  border-radius: 20px
+  border-radius: .25rem
+  background-color: #e9ecef
+  border: 1px solid #ced4da
 
 #generalitesButton.open
   +transform(rotate(90deg))
@@ -48,7 +49,15 @@ input[type=number]
 
 #generalitesMenu.open
   width: 500px
-  padding: 30px 5px 0
+  padding: 50px 5px 0
 
 button > i
   font-size: 22px
+
+.dropdown
+  flex: 1 1 0
+
+.dropdown > button:first-child
+  border-radius: 0
+  border-color: #ced4da
+  text-align: left

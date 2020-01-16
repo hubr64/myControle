@@ -48,9 +48,9 @@
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">Mode</label>
+            <label class="input-group-text" for="inputGroupMode">Mode</label>
           </div>
-          <select class="custom-select" id="inputGroupSelect01" [(ngModel)]="devoirService.devoir.notationMode">
+          <select class="custom-select" id="inputGroupMode" [(ngModel)]="devoirService.devoir.notationMode">
             <option selected>Choose...</option>
             <option [ngValue]="notationModeNormal.id">{{notationModeNormal.titre}}</option>
             <option [ngValue]="notationModeProportionnel.id">{{notationModeProportionnel.titre}}</option>
@@ -74,6 +74,56 @@
             <ng-template #popContent>Note cible obtenue après application du mode transformation.</ng-template>
             <ng-template #popTitle>Note cible</ng-template>
             <button class="input-group-text" type="button" [ngbPopover]="popContent" [popoverTitle]="popTitle">
+              <i class="material-icons md-18">help</i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupGrille">Grille</label>
+          </div>
+          <div class="btn-group" ngbDropdown role="group" aria-label="Liste des grilles de notation">
+            <button class="btn btn-outline-secondary" ngbDropdownToggle>{{devoirService.devoir.grille?.titre}}
+              <span *ngIf="devoirService.devoir.grille && grilleService.isAnExistingGrille(devoirService.devoir.grille) == false">(ce devoir)</span>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+              <h6 class="dropdown-header">Grilles configurées dans l'outil</h6>
+              <button *ngFor='let grille of grilleService.grilleItems | keyvalue' [ngClass]="{'active':grilleService.compareGrille(grille.value,devoirService.devoir.grille)}"
+                ngbDropdownItem (click)="grilleChanged(grille.value)">{{grille.value.titre}}</button>
+              <ng-container *ngIf="devoirService.devoir.grille && grilleService.isAnExistingGrille(devoirService.devoir.grille) == false">
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Grille intégrée dans le devoir</h6>
+                <button class="active" ngbDropdownItem>{{devoirService.devoir.grille.titre}} (ce devoir)</button>
+              </ng-container>
+            </div>
+          </div>
+          <div class="input-group-append">
+            <button class="input-group-text" type="button" (click)="toggleGrilleSelection()">
+              <i class="material-icons md-18">help</i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupClasse">Classe</label>
+          </div>
+          <div class="btn-group" ngbDropdown role="group" aria-label="Liste des classes">
+            <button class="btn btn-outline-secondary" ngbDropdownToggle>{{devoirService.devoir.classe?.titre}}
+              <span *ngIf="devoirService.devoir.classe && classeService.isAnExistingClasse(devoirService.devoir.classe) == false">(ce devoir)</span>
+            </button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+              <h6 class="dropdown-header">Classes configurées dans l'outil</h6>
+              <button *ngFor='let classe of classeService.classeItems | keyvalue' [ngClass]="{'active':classeService.compareClasse(classe.value,devoirService.devoir.classe)}"
+                ngbDropdownItem (click)="classeChanged(classe.value)">{{classe.value.titre}}</button>
+              <ng-container *ngIf="devoirService.devoir.classe && classeService.isAnExistingClasse(devoirService.devoir.classe) == false">
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">Classe intégrée dans le devoir</h6>
+                <button class="active" ngbDropdownItem>{{devoirService.devoir.classe.titre}} (ce devoir)</button>
+              </ng-container>
+            </div>
+          </div>
+          <div class="input-group-append">
+            <button class="input-group-text" type="button" (click)="toggleClasseSelection()">
               <i class="material-icons md-18">help</i>
             </button>
           </div>
