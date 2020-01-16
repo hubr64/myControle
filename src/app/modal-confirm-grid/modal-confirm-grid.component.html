@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Modification de la grille</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>
+    <strong>Êtes-vous sûr de vouloir modifier la grille actuelle par la nouvelle grille
+      <span class="text-danger">{{grilleConfirm.titre}}</span> ?</strong>
+  </p>
+  <div *ngIf="impactedCriteres.length > 0;else noRemovedCapacites">
+    <p>Les capacités suivantes n'existent plus dans la nouvelle grille : </p>
+    <ul class="list-group">
+      <li *ngFor="let removedCapacite of impactedCriteres" class="d-flex justify-content-between align-items-center" [ngClass]="{'list-group-item-danger': removedCapacite.criteres>0, 'list-group-item' : true}">{{removedCapacite.capacite.id}}
+        <span *ngIf="removedCapacite.criteres > 0" class="badge badge-danger badge-pill">{{removedCapacite.criteres}} critères</span>
+        <span *ngIf="removedCapacite.criteres == 0" class="badge badge-warning badge-pill">Non utilisé</span>
+      </li>
+    </ul>
+
+  </div>
+  <ng-template #noRemovedCapacites>
+    Toutes les capacités utilisées seront remplacées sans affecter le devoir.
+  </ng-template>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Non</button>
+  <button type="button" ngbAutofocus class="btn btn-success" (click)="modal.close('ok')">OUI</button>
+</div>

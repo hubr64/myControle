@@ -1,0 +1,51 @@
+<div class="modal-header" *ngIf="selectedgrille">
+  <h4 class="modal-title" id="modal-title">{{selectedgrille.titre}}</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <ngb-tabset *ngIf="selectedgrille==null">
+    <ngb-tab *ngFor='let grille of grilles | keyvalue'>
+      <ng-template ngbTabTitle>{{grille.value.titre}}</ng-template>
+      <ng-template ngbTabContent>
+        <ng-container *ngTemplateOutlet="grid; context:{currentGrille: grille.value}"></ng-container>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+  <div *ngIf="selectedgrille">
+    <ng-container *ngTemplateOutlet="grid; context:{currentGrille: selectedgrille}"></ng-container>
+  </div>
+</div>
+<div class="modal-footer">
+  <ng-container *ngIf="canChooseCapacite;else default">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Annuler</button>
+    <button type="button" class="btn btn-warning" (click)="selectCapacite(null)">Retirer la capacité</button>
+  </ng-container>
+  <ng-template #default>
+    <button type="button" ngbAutofocus class="btn btn-outline-secondary" (click)="modal.close('ok')">Fermer</button>
+  </ng-template>
+</div>
+
+<ng-template #grid let-currentGrille="currentGrille">
+
+  <div class="row card-group">
+    <div class="col-4" *ngFor="let competence of currentGrille.competences">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title" [ngStyle]="{'color': competence.couleur}">
+            <span class="badge badge-pill" [ngStyle]="{'background-color': competence.couleur}">&nbsp;</span> {{competence.titre}}</h5>
+          <div class="card-text">
+            <div class="list-group">
+              <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" *ngFor='let capacite of competence.capacites'
+                (click)="selectCapacite(capacite)">
+                <span>{{capacite.texte}}</span>
+                <span class="badge badge-pill" [ngStyle]="{'background-color': competence.couleur}">{{capacite.id}}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

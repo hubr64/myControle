@@ -7,7 +7,8 @@ export class Capacite implements Deserializable {
   texte: string;
 
   deserialize(input: any) {
-    Object.assign(this, input);
+    this.id = input.id;
+    this.texte = input.texte;
     return this;
   }
 
