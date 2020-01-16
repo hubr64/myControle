@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -21,6 +22,12 @@ import { DevoirEditionToolboxComponent } from './devoir-edition-toolbox/devoir-e
 import { DevoirEditionOptionboxComponent } from './devoir-edition-optionbox/devoir-edition-optionbox.component';
 import { ModalConfirmRestoreDevoirComponent } from './modal-confirm-restore-devoir/modal-confirm-restore-devoir.component';
 import { ConfigurationComponent } from './configuration/configuration.component';
+import { ModalGridSelectionComponent } from './modal-grid-selection/modal-grid-selection.component';
+import { ModalMoveComponent } from './modal-move/modal-move.component';
+import { StripHtmlPipe } from './_helpers/strip-html.pipe';
+import { ModalConfirmGridComponent } from './modal-confirm-grid/modal-confirm-grid.component';
+import { ModalConfirmClasseComponent } from './modal-confirm-classe/modal-confirm-classe.component';
+import { ModalClasseSelectionComponent } from './modal-classe-selection/modal-classe-selection.component';
 
 @NgModule({
   declarations: [
@@ -35,15 +42,29 @@ import { ConfigurationComponent } from './configuration/configuration.component'
     DevoirEditionToolboxComponent,
     DevoirEditionOptionboxComponent,
     ModalConfirmRestoreDevoirComponent,
-    ConfigurationComponent
+    ConfigurationComponent,
+    ModalGridSelectionComponent,
+    ModalMoveComponent,
+    StripHtmlPipe,
+    ModalConfirmGridComponent,
+    ModalConfirmClasseComponent,
+    ModalClasseSelectionComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
     CKEditorModule,
     NgbModule
   ],
-  entryComponents: [ModalConfirmComponent, ModalConfirmRestoreDevoirComponent],
+  entryComponents: [
+    ModalConfirmComponent,
+    ModalConfirmRestoreDevoirComponent,
+    ModalConfirmGridComponent,
+    ModalConfirmClasseComponent,
+    ModalGridSelectionComponent,
+    ModalClasseSelectionComponent,
+    ModalMoveComponent],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' }
   ],
