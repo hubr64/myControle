@@ -1,0 +1,33 @@
+<div class="modal-header" *ngIf="selectedClasse">
+  <h4 class="modal-title" id="modal-title">{{selectedClasse.titre}}</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <ngb-tabset *ngIf="selectedClasse==null">
+    <ngb-tab *ngFor='let classe of classes | keyvalue'>
+      <ng-template ngbTabTitle>{{classe.value.titre}}</ng-template>
+      <ng-template ngbTabContent>
+        <ng-container *ngTemplateOutlet="classeListe; context:{currentClasse: classe.value}"></ng-container>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+  <div *ngIf="selectedClasse">
+    <ng-container *ngTemplateOutlet="classeListe; context:{currentClasse: selectedClasse}"></ng-container>
+  </div>
+</div>
+<div class="modal-footer">
+  <ng-container *ngIf="canChooseEleve;else default">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Annuler</button>
+  </ng-container>
+  <ng-template #default>
+    <button type="button" ngbAutofocus class="btn btn-outline-secondary" (click)="modal.close('ok')">Fermer</button>
+  </ng-template>
+</div>
+
+<ng-template #classeListe let-currentClasse="currentClasse">
+  <div class="list-group">
+    <button type="button" class="list-group-item list-group-item-action" *ngFor='let eleve of currentClasse.eleves' (click)="selectEleve(eleve)">{{eleve}}</button>
+  </div>
+</ng-template>

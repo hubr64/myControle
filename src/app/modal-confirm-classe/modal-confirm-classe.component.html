@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Modification de la classe</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>
+    <strong>Êtes-vous sûr de vouloir modifier la classe actuelle par la nouvelle classe
+      <span class="text-danger">{{classeConfirm.titre}}</span> ?</strong>
+  </p>
+  <div *ngIf="removedEleves.length > 0;else noRemovedEleves">
+    <p>Les élèves suivants n'existent plus dans la nouvelle classe : </p>
+    <ul class="list-group">
+      <li *ngFor="let removedEleve of removedEleves" class="d-flex justify-content-between align-items-center" [ngClass]="{'list-group-item-danger': removedEleve.notation, 'list-group-item' : true}">{{removedEleve.eleve}}
+        <span *ngIf="removedEleve.notation" class="badge badge-danger badge-pill">Noté</span>
+        <span *ngIf="removedEleve.notation == false" class="badge badge-warning badge-pill">Non noté</span>
+      </li>
+    </ul>
+
+  </div>
+  <ng-template #noRemovedEleves>
+    Tous les élèves seront remplacés sans affecter la notation du devoir.
+  </ng-template>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Non</button>
+  <button type="button" ngbAutofocus class="btn btn-success" (click)="modal.close('ok')">OUI</button>
+</div>
