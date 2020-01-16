@@ -5,30 +5,40 @@
 .material-icons.whiteicon
   color: #FFF
 
-
 =transform($property)
   -webkit-transform: $property
   -ms-transform: $property
   transform: $property
 
-button
+#menuButton
   position: fixed
   top: 0px
   display: inline-block
-  margin: 10px
+  margin: 7px
   cursor: pointer
   transition: all 200ms
   z-index: 900
-  border: none
-  height:40px
+  border: 1px solid transparent
+  height:39px
   background: transparent
 
-button:hover
-  background-color: #E5E5E5
-  border-radius: 20px
+#menuButton:hover
+  background-color: #e9ecef
+  border: 1px solid #ced4da
+  border-radius: .25rem
 
-button.open
+#menuButton.open
   +transform(rotate(90deg))
+
+#menuButton > span.badge
+  position: absolute
+  right: 0
+
+.btn-toolbar > div:first-child
+  margin-left: 50px
+
+.btn-toolbar > div:last-child
+  margin-right: 45px
 
 section
   height: 100%
@@ -49,7 +59,6 @@ section
   background-size: 120px
   background-position: center 9px
   background-color: #f0f0f0
-
 
 section.open
   width: 300px

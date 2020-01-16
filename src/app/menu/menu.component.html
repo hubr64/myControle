@@ -1,7 +1,25 @@
-<button [ngClass]="{'open': visible}" title="Menu" (click)="toggleVisibility($event)">
+<button id="menuButton" [ngClass]="{'open': visible}" title="Menu" (click)="toggleVisibility($event)">
   <i class="material-icons md-dark md-36" *ngIf="visible == false">more_vert</i>
   <i class="material-icons md-dark md-36" *ngIf="visible == true">close</i>
+  <span *ngIf="devoirService.docIsEdited && visible==false" class="badge badge-danger">!</span>
 </button>
+
+<div class="btn-toolbar justify-content-between bg-light p-2" role="toolbar" aria-label="Toolbar with button groups">
+  <div class="btn-group" role="group" aria-label="First group">
+    <button type="button" (click)="toggleMode('edition')" class="btn" [ngClass]="{'btn-primary': mode == 'edition', 'btn-secondary': mode != 'edition'}"
+      [disabled]="this.devoirService.devoir == null">Edition</button>
+    <button type="button" (click)="toggleMode('notation')" class="btn" [ngClass]="{'btn-primary': mode == 'notation', 'btn-secondary': mode != 'notation'}"
+      [disabled]="this.devoirService.devoir == null">Notation</button>
+  </div>
+  <div class="input-group ">
+    <input class="form-control" type="search" placeholder="Chercher" aria-label="Chercher" aria-describedby="basic-addon1">
+    <div class="input-group-append">
+      <button class="input-group-text" type="button" (click)="search()">
+        <i class="material-icons md-18">search</i>
+      </button>
+    </div>
+  </div>
+</div>
 
 <section [ngClass]="{'open': visible}">
   <span>myControle</span>
@@ -41,9 +59,13 @@
       <i class="material-icons md-36">settings_applications</i>
       <span>Préférences</span>
     </div>
-    <div>
+    <div (click)="classeService.showClasse()">
       <i class="material-icons md-36">group</i>
       <span>Configurer les classes</span>
+    </div>
+    <div (click)="grilleService.showGrille()">
+      <i class="material-icons md-36">emoji_events</i>
+      <span>Consulter les grilles</span>
     </div>
     <input type="file" #fileInput (change)="openFile($event)" hidden/>
   </div>

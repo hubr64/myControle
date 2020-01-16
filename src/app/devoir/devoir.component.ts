@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 
 import { DevoirService } from '../_services/devoir.service';
 import { MessageService } from '../_services/message.service';
+import { ConfigurationService } from '../_services/configuration.service';
 
 @Component({
   selector: 'app-devoir',
@@ -9,6 +10,8 @@ import { MessageService } from '../_services/message.service';
   styleUrls: ['./devoir.component.sass']
 })
 export class DevoirComponent implements OnInit {
+
+  public mode = '';
 
   // Function inserted to prevent user to close the window without saving the content
   @HostListener('window:beforeunload', ['$event'])
@@ -21,10 +24,19 @@ export class DevoirComponent implements OnInit {
     }
   }
 
-  constructor(private devoirService: DevoirService, private messageService: MessageService) {
+  constructor(
+    private devoirService: DevoirService,
+    private configurationService: ConfigurationService,
+    private messageService: MessageService
+  ) {
+    this.mode = this.configurationService.getValue('defaultMode');
   }
 
   ngOnInit() {
+  }
+
+  toggleMode(newMode: string) {
+    this.mode = newMode;
   }
 
 }

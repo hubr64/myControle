@@ -1,5 +1,5 @@
 <section *ngIf="devoirService.devoir">
   <app-generalites></app-generalites>
-  <app-devoir-edition></app-devoir-edition>
-  <app-devoir-notation></app-devoir-notation>
+  <app-devoir-edition *ngIf="mode == 'edition'"></app-devoir-edition>
+  <app-devoir-notation *ngIf="mode == 'notation'"></app-devoir-notation>
 </section>
