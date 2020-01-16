@@ -38,6 +38,10 @@ export class DevoirEditionToolboxComponent implements OnInit {
   ngOnInit() {
   }
 
+  isVisible(): boolean {
+    return this.devoirService.devoir.exercices.length === 0;
+  }
+
   addItem(itemType: string, idExe: string, idQue: string, idCri: string, itemValue?: any) {
     if (itemType === 'exercice') {
       this.additemExercice(idExe, itemValue);

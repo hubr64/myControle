@@ -1,4 +1,4 @@
-<div class="toolBox">
+<div class="toolBox" [ngClass]="{'active': isVisible()}">
   <div>
     <button (click)="addItem(itemType, exeId, queId, criId)" title="Ajouter {{itemTextConversion[itemType]}}">
       <i [ngClass]="['material-icons', 'md-48', itemType+'-button']">add_circle</i>
