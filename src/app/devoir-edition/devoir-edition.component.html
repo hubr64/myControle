@@ -35,9 +35,12 @@
             <div *ngIf="critere.constructor.name == 'Critere'" class="critere">
               <app-devoir-edition-optionbox [itemType]='"critere"' [item]='critere'></app-devoir-edition-optionbox>
               <span>
-                <span *ngIf="critere.capacite ; else elseBlock" [ngStyle]="{'color': critere.capacite.getCompetence(devoirService.devoir.grille).couleur}">{{ critere.capacite.id }}</span>
+                <span class="badge badge-dark" *ngIf="critere.capacite ; else elseBlock" [ngStyle]="{'background-color': critere.capacite.getCompetence(devoirService.devoir.grille)?.couleur}"
+                  placement="right" [ngbTooltip]="critere.capacite.texte" tooltipClass="capaciteTooltip" (click)="devoirService.chooseCapacite(critere)">{{ critere.capacite.id }}</span>
               </span>
-              <ng-template #elseBlock>Aucune</ng-template>
+              <ng-template #elseBlock>
+                <span class="badge badge-light" ngbTooltip="Aucune capacité associée au critère" placement="right" (click)="devoirService.chooseCapacite(critere)">Aucune</span>
+              </ng-template>
               <span *ngIf="itemEdited!==critere" (click)="convertToEditor(critere,$event)" [innerHTML]="critere.text"></span>
               <ckeditor *ngIf="itemEdited===critere" [editor]="editor" [(ngModel)]="critere.text" (blur)="onBlurEditor($event)" (ready)="onReadyEditor($event)"></ckeditor>
               <span>

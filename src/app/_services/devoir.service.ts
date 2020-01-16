@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { Devoir } from '../_models/devoir';
-import { Classe } from '../_models/classe';
 import { Grille } from '../_models/grille';
+import { Classe } from '../_models/classe';
 import { Exercice } from '../_models/exercice';
 import { Freetext } from '../_models/freetext';
 import { Notation } from '../_models/notation';
+import { Critere } from '../_models/critere';
 
 import { MessageService } from './message.service';
+import { GrilleService } from './grille.service';
+import { ClasseService } from './classe.service';
 import { ConfigurationService } from './configuration.service';
 
 import { ModalConfirmRestoreDevoirComponent } from '../modal-confirm-restore-devoir/modal-confirm-restore-devoir.component';
@@ -25,10 +29,15 @@ export class DevoirService {
   private toolVersion = environment.appVersion;
 
   public docIsEdited = false;
+  public oldDevoir = '';
   public devoir;
+
+  public loadNewDevoirSub = new Subject<boolean>();
 
   constructor(
     private messageService: MessageService,
+    private grilleService: GrilleService,
+    private classeService: ClasseService,
     private configurationService: ConfigurationService,
     private modalService: NgbModal) {
 
@@ -44,12 +53,12 @@ export class DevoirService {
       modalRef.result.then((result) => {
         // If user confirms thus restore the devoir
         this.loadDevoir(tmpDevoir);
+        // State that the devoir is edtited and should be saved
         this.docIsEdited = true;
       }, (reason) => {
         // Restoration is cancelled
         this.messageService.add('Restauration non demandée', 'warning', 'USER');
       });
-
     }
   }
 
@@ -83,40 +92,81 @@ export class DevoirService {
   }
 
   loadDevoir(content) {
-    try {
-      // Get content from JSON
-      let tmpContent = JSON.parse(content);
+    if (this.docIsEdited === false ||
+      (this.docIsEdited === true &&
+        confirm('Le devoir actuel n\'est pas sauvegardé. Êtes-vous sûr de vouloir continuer (le travail non sauvegardé sera perdu) ? '))) {
+      try {
+        // Get content from JSON
+        let tmpContent = JSON.parse(content);
 
-      // Migrate content in case of old version
-      tmpContent = this.migrateDevoir(tmpContent);
+        // Migrate content in case of old version
+        tmpContent = this.migrateDevoir(tmpContent);
 
-      // Convert JSON content into structured Devoir object
-      this.devoir = new Devoir().deserialize(tmpContent);
+        // Convert JSON content into structured Devoir object
+        this.devoir = new Devoir().deserialize(tmpContent);
+        this.oldDevoir = JSON.stringify(this.devoir);
+        this.docIsEdited = false;
 
-      this.updateDevoir();
+        // Display a succeed message
+        this.messageService.add('Devoir chargé avec succès !', 'success', 'USER');
 
-      // Display a succeed message
-      this.messageService.add('Devoir chargé avec succès !', 'success', 'USER');
+        // Send information to every subscribers
+        this.loadNewDevoirSub.next(true);
 
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        this.messageService.add('Le contenu du fichier n\'est pas conforme.', 'danger', 'USER');
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          this.messageService.add('Le contenu du fichier n\'est pas conforme.', 'danger', 'USER');
+        }
       }
     }
   }
 
   clearDevoir() {
-    this.devoir = new Devoir();
-    this.devoir.author = this.configurationService.getValue('author');
-    this.devoir.toolVersion = this.toolVersion;
-    this.devoir.titre = this.configurationService.getValue('devoirTitreDefault');
-    this.devoir.arrondi = parseFloat(this.configurationService.getValue('devoirArrondiDefault'));
-    this.devoir.notationMode = parseInt(this.configurationService.getValue('devoirNotationModeDefault'), 10);
-    this.devoir.notationCible = parseFloat(this.configurationService.getValue('devoirNotationCibleDefault'));
-    this.updateDevoir();
+
+
+    if (this.docIsEdited === false ||
+      (this.docIsEdited === true &&
+        confirm('Le devoir actuel n\'est pas sauvegardé. Êtes-vous sûr de vouloir continuer (le travail non sauvegardé sera perdu) ? '))) {
+
+      this.devoir = new Devoir();
+      this.devoir.author = this.configurationService.getValue('author');
+      this.devoir.toolVersion = this.toolVersion;
+      this.devoir.titre = this.configurationService.getValue('devoirTitreDefault');
+      this.devoir.arrondi = parseFloat(this.configurationService.getValue('devoirArrondiDefault'));
+      this.devoir.notationMode = parseInt(this.configurationService.getValue('devoirNotationModeDefault'), 10);
+      this.devoir.notationCible = parseFloat(this.configurationService.getValue('devoirNotationCibleDefault'));
+
+      this.oldDevoir = JSON.stringify(this.devoir);
+      this.docIsEdited = false;
+
+      // Send information to every subscribers
+      this.loadNewDevoirSub.next(true);
+    }
+  }
+
+  doCheck() {
+    // Convert to JSON to prevent shadow copy
+    let currentDevoir = JSON.stringify(this.devoir);
+
+    // Remove the modification date that is by definition not to take into account
+    const modificationDateRegex = /,"modificationDate":"[^"]*"/gi; // ,"modificationDate":"2020-01-15T17:05:12.362Z",
+    currentDevoir = currentDevoir.replace(modificationDateRegex, '');
+    this.oldDevoir = this.oldDevoir.replace(modificationDateRegex, '');
+    // If the deep copies are different then we should warn user
+    if (currentDevoir !== this.oldDevoir) {
+      console.log('Devoir has changed');
+      this.updateDevoir();
+      this.oldDevoir = currentDevoir;
+    }
   }
 
   updateDevoir() {
+    // State that the devoir is edtited and should be saved
+    setTimeout(() => {
+      this.docIsEdited = true;
+    });
+
+    // Store it in local storage to avoid lost
     let tmpContent = this.devoir.serialize();
     localStorage.setItem('devoir', JSON.stringify(tmpContent));
   }
@@ -248,9 +298,13 @@ export class DevoirService {
       }
 
       this.messageService.add('Génération des nouvelles structures de notation.', 'success', 'DEV');
+      let tmpNotations = [];
       for (const keyEleve of Object.keys(devoirContent.data.notes)) {
-        devoirContent.data.notes[keyEleve].eleve = keyEleve;
-        devoirContent.data.notes[keyEleve].notes = [];
+        let tmpNotation = {
+          eleve: keyEleve,
+          notes: [],
+          commentaire: devoirContent.data.notes[keyEleve].commentaire
+        };
         for (const keyExe of Object.keys(devoirContent.data.notes[keyEleve].exercices)) {
           const IdExe = keyExe.substr(1);
           for (const keyQue of Object.keys(devoirContent.data.notes[keyEleve].exercices[keyExe].questions)) {
@@ -259,24 +313,23 @@ export class DevoirService {
               if (devoirContent.data.notes[keyEleve].exercices[keyExe].questions[keyQue].criteres[keyCri].state
                 === this.configurationService.getValue('noteStatusEnCours') ||
                 devoirContent.data.notes[keyEleve].exercices[keyExe].questions[keyQue].criteres[keyCri].state
-                === this.configurationService.getValue('Configuration.noteStatusKo') ||
+                === this.configurationService.getValue('noteStatusKo') ||
                 devoirContent.data.notes[keyEleve].exercices[keyExe].questions[keyQue].criteres[keyCri].state
-                === this.configurationService.getValue('Configuration.noteStatusOk')) {
+                === this.configurationService.getValue('noteStatusOk')) {
                 const idCri = keyCri.substr(1);
-                devoirContent.data.notes[keyEleve].notes.push({
+                tmpNotation.notes.push({
                   critere: IdExe + '_' + idQue + '_' + idCri,
                   status: devoirContent.data.notes[keyEleve].exercices[keyExe].questions[keyQue].criteres[keyCri].state
                 });
-
-              } else {
-                // On supprime les unknown dont on ne veut pas garder trace
-                delete devoirContent.data.notes[keyEleve].exercices[keyExe].questions[keyQue].criteres[keyCri];
               }
-
             }
           }
         }
+        tmpNotations.push(tmpNotation);
       }
+      delete devoirContent.data.notes;
+      devoirContent.data.notes = tmpNotations;
+
       // Memorize migration operations
       hasMigration = true;
     }
@@ -290,6 +343,97 @@ export class DevoirService {
     }
 
     return devoirContent;
+  }
+
+  getImpactedCriteres(removedCapacites) {
+    let impactedCriteres = removedCapacites;
+
+    if (removedCapacites.length > 0) {
+      removedCapacites.forEach((removedCapacite, indexCapa) => {
+        for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+          if (exercice.questions) {
+            for (const [indexQue, question] of exercice.questions.entries()) {
+              if (question.criteres) {
+                for (const [indexCri, critere] of question.criteres.entries()) {
+                  if (critere.capacite && critere.capacite.id === removedCapacite.capacite.id) {
+                    removedCapacite.criteres++;
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    return impactedCriteres;
+  }
+
+  replaceGrille(newGrille: Grille) {
+    let capacitesRemplaces = 0;
+    let capacitesSupprimes = 0;
+    for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+      if (exercice.questions) {
+        for (const [indexQue, question] of exercice.questions.entries()) {
+          if (question.criteres) {
+            for (const [indexCri, critere] of question.criteres.entries()) {
+              if (critere.capacite && critere.capacite.id) {
+                const newCapacite = newGrille.getCapacite(critere.capacite.id);
+                if (newCapacite) {
+                  critere.capacite = newCapacite;
+                  capacitesRemplaces++;
+                } else {
+                  critere.capacite = null;
+                  capacitesSupprimes++;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Replacement is now finished then display a confirmation
+    this.messageService.add(
+      'Remplacement de la grille terminé (' +
+      capacitesRemplaces + ' critères avec capacités remplacées / ' +
+      capacitesSupprimes + ' critères avec capacités supprimées)', 'success', 'USER');
+
+    // On remplace l'ancienne grille par la nouvelle
+    this.devoir.grille = newGrille;
+  }
+
+  replaceClasse(newClasse: Classe) {
+    let elevesRemplaces = 0;
+    let elevesSupprimes = 0;
+
+    // TODO remplacer la classe
+
+    // Replacement is now finished then display a confirmation
+    this.messageService.add(
+      'Remplacement de la classe terminé (' +
+      elevesRemplaces + ' élèves avec notation remplacée / ' +
+      elevesSupprimes + ' élèves avec notation supprimée)', 'success', 'USER');
+
+    // On remplace l'ancienne classe par la nouvelle
+    this.devoir.classe = newClasse;
+  }
+
+  chooseCapacite(critere: Critere) {
+    // No grille defined then can assigned a new one
+    if (this.devoir.grille === null) {
+      this.messageService.add('Aucune grille de compétences n\'est asscoiée au devoir. Impossible de choisir un capacité.', 'warning', 'USER');
+    } else {
+      this.grilleService.showGrille(this.devoir.grille, true);
+      this.grilleService.selectedCapaciteSub.subscribe((selectedCapacite) => {
+        if (selectedCapacite !== null) {
+          critere.capacite = selectedCapacite;
+        } else {
+          critere.capacite = null;
+          this.messageService.add('La capacité a bien été retirée du critère.', 'success', 'USER');
+        }
+      });
+    }
   }
 
 }

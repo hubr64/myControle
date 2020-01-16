@@ -134,49 +134,47 @@ section > h1 > span:last-child
   padding: 3px
   position: relative
   border-left: 3px solid $critere-color
-  min-height: 38px
+  min-height: 41px
+  display: flex
+  flex-direction: row
+  flex-wrap: nowrap
+  justify-content: flex-start
+  align-items: stretch
 
 .critere > span:nth-child(2)
-  width: 8%
-  box-sizing: border-box
+  width: 60px
   font-weight: 700
   font-family: "Segoe UI"
   color:#D0D0D0
   text-align: left
   font-size: 1.1em
-  display: inline-block
-  cursor: pointer
-  vertical-align: middle
 
 .critere > span:nth-child(2) > span
-  border: 1px solid transparent
-
-.critere > span:nth-child(2) > span:hover
-  background:#FFF
-  border: 1px solid #E5E5E5
+  cursor: pointer
 
 .critere > span:nth-child(3)
-  width: 82%
-  box-sizing: border-box
-  display: inline-block
-  vertical-align: middle
   border: 1px solid transparent
   transition: all 200ms
+  flex: 1
 
 .critere > span:nth-child(3):hover
   background-color:#FFF
   border: 1px solid #E5E5E5
 
+.critere > ckeditor
+  flex: 1
+  background-color:#FFF
+  border: 1px solid #E5E5E5
+
 .critere > span:last-child
-  width: 9%
+  width: 80px
   box-sizing: border-box
   font-family: "Segoe UI"
   font-weight: 600
   color:#999
   text-align: right
   font-size: 1.1em
-  display: inline-block
-  vertical-align: middle
+  margin-right: 20px
 
 .critere > span:last-child > input
   border: 1px solid transparent
