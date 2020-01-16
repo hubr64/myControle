@@ -1,17 +1,20 @@
 <span class="optionBox">
-  <button title="Actions">
-    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">more_vert</i>
-  </button>
-  <button (click)="copyItem(item)" title="Copier">
-    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">layers</i>
-  </button>
-  <button (click)="moveUpItem(item)" title="Monter">
-    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">arrow_upward</i>
-  </button>
-  <button (click)="moveDownItem(item)" title="Descendre">
-    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">arrow_downward</i>
-  </button>
-  <button (click)="deleteItem(item)" title="Supprimer">
-    <i [ngClass]="['material-icons', 'md-18',  itemType+'-button']">delete</i>
-  </button>
+  <i title="Actions" [ngClass]="['material-icons', 'md-24',  itemType+'-button']">more_vert</i>
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-success btn-sm" (click)="copyItem(item)" title="Copier">
+      <i [ngClass]="['material-icons', 'md-24']">layers</i>
+    </button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="deleteItem(item)" title="Supprimer">
+      <i [ngClass]="['material-icons', 'md-24']">delete</i>
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="moveUpItem(item)" title="Monter">
+      <i [ngClass]="['material-icons', 'md-24']">arrow_upward</i>
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="moveDownItem(item)" title="Descendre">
+      <i [ngClass]="['material-icons', 'md-24']">arrow_downward</i>
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="moveItem(item)" title="Déplacer">
+      <i [ngClass]="['material-icons', 'md-24']">compare_arrows</i>
+    </button>
+  </div>
 </span>

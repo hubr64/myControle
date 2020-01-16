@@ -14,39 +14,24 @@ $critere-color: #6194C8
 
 .optionBox
   position: absolute
-  right: -15px
-  top: 3px
-  width: 40px
-  height: 30px
-  overflow: hidden
-  transition: width 200ms
+  right: 0px
+  top: 7px
 
 .optionBox:hover
-  width: auto
-  background-color: #FFF
-  border: 1px solid #CCC
-  right: 3px
+  right: 2px
+  top: 2px
 
-button
-  display: inline-block
-  margin: 3px
-  cursor: pointer
-  transition: all 200ms
-  border: none
-  height:40px
-  background: transparent
-
-.optionBox:hover > button:first-child
+.optionBox > .btn-group
   display: none
 
-.optionBox > button
-  height: 33px
-  padding: 0 2px
-  margin: 0
+.optionBox:hover > .btn-group
+  display: block
 
-.optionBox > button:hover
-  color: $freetext-color
-  background-color: #CCC
+.optionBox:hover > i:first-child
+  display: none
+
+.btn-group > button
+  padding: 4px 8px 0 8px
 
 .freetext-button
   color: $freetext-color
