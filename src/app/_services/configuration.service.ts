@@ -29,6 +29,7 @@ export class ConfigurationService {
       notationModeArr: { modifiable: false, value: Configuration.notationModeArr },
 
       messageDuration: { modifiable: true, title: 'Durée affichage messages', value: Configuration.messageDuration },
+      defaultMode: { modifiable: true, title: 'Mode par défaut', value: Configuration.defaultMode },
 
       author: { modifiable: true, title: 'Auteur des devoirs', value: Configuration.author },
       devoirTitreDefault: { modifiable: true, title: 'Devoir / Titre par défaut', value: Configuration.devoirTitreDefault },
@@ -47,8 +48,7 @@ export class ConfigurationService {
     // Load local storage that replace the global initial storage
     this.load();
 
-    console.dir('Configuration chargée : ');
-    console.dir(this.configurationItems);
+    // console.dir(this.configurationItems);
   }
 
   load() {

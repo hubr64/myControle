@@ -9,7 +9,6 @@ export const noteStatusKo = 'ko';
 export const noteStatusOkCoeff = 1;
 export const noteStatusEnCoursCoeff = 0.5;
 export const noteStatusKoCoeff = 0;
-
 export const notationModeNormal = {
   id: 1,
   titre: 'Normal',
@@ -31,6 +30,7 @@ export const notationModeRapporte = {
 export const notationModeArr = [notationModeNormal, notationModeProportionnel, notationModeRapporte];
 
 export const messageDuration = 5000;
+export const defaultMode = 'edition';
 
 export const author = 'MARTIN-DEIDIER';
 export const devoirTitreDefault = 'Titre du devoir';
