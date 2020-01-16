@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Déplacement dans le devoir avant :</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="list-group list-group-root well">
+    <ng-container *ngFor='let exercice of devoirService.devoir.exercices'>
+      <button [ngClass]="{'active': exercice==item, 'list-group-item-success' : exercice==selectedItem}" type="button" class="list-group-item list-group-item-action"
+        [disabled]="itemType != 'Exercice' && itemType != 'Freetext'" (click)="selectItem(exercice, 'before')">
+        <span *ngIf="exercice.constructor.name == 'Freetext'">
+          <span class="badge badge-pill freetext">&nbsp;</span>{{exercice.text | stripHtml | slice:0:50}}...</span>
+        <span *ngIf="exercice.constructor.name == 'Exercice'">
+          <span class="badge badge-pill exercice">&nbsp;</span>{{exercice.title}}</span>
+      </button>
+      <div class="list-group">
+        <ng-container *ngFor='let question of exercice.questions'>
+          <button [ngClass]="{'active': question==item, 'list-group-item-success' : question==selectedItem}" type="button" class="list-group-item list-group-item-action"
+            [disabled]="itemType != 'Question' && itemType != 'Freetext'" (click)="selectItem(question, 'before')">
+            <span *ngIf="question.constructor.name == 'Freetext'">
+              <span class="badge badge-pill freetext">&nbsp;</span>{{question.text | stripHtml | slice:0:50}}...</span>
+            <span *ngIf="question.constructor.name == 'Question'">
+              <span class="badge badge-pill question">&nbsp;</span>{{question.title}}</span>
+          </button>
+          <div class="list-group">
+            <ng-container *ngFor='let critere of question.criteres'>
+              <button type="button" [ngClass]="{'active': critere==item, 'list-group-item-success' : critere==selectedItem}" class="list-group-item list-group-item-action"
+                [disabled]="itemType != 'Critere' && itemType != 'Freetext'" (click)="selectItem(critere, 'before')">
+                <span *ngIf="critere.constructor.name == 'Freetext'">
+                  <span class="badge badge-pill freetext">&nbsp;</span>{{critere.text | stripHtml | slice:0:50}}...</span>
+                <span *ngIf="critere.constructor.name == 'Critere'">
+                  <span class="badge badge-pill critere">&nbsp;</span>{{critere.text | stripHtml | slice:0:50}}</span>
+              </button>
+            </ng-container>
+            <button [ngClass]="{'list-group-item-success' : question==selectedItem&&'end'==selectedPosition}" type="button" class="list-group-item list-group-item-action last"
+              *ngIf="question.constructor.name != 'Freetext' && ( itemType == 'Critere' || itemType == 'Freetext') " (click)="selectItem(question, 'end')">
+              <span class="badge badge-pill critere">&nbsp;</span>En dernier</button>
+          </div>
+        </ng-container>
+        <button [ngClass]="{'list-group-item-success' : exercice==selectedItem&&'end'==selectedPosition}" type="button" class="list-group-item list-group-item-action last"
+          *ngIf="exercice.constructor.name != 'Freetext' && ( itemType == 'Question' || itemType == 'Freetext') " (click)="selectItem(exercice, 'end')">
+          <span class="badge badge-pill question">&nbsp;</span>En dernier</button>
+      </div>
+    </ng-container>
+    <button [ngClass]="{'list-group-item-success' : null==selectedItem&&'end'==selectedPosition}" type="button" class="list-group-item list-group-item-action last"
+      *ngIf="itemType == 'Exercice' || itemType == 'Freetext'" (click)="selectItem(null, 'end')">
+      <span class="badge badge-pill exercice last">&nbsp;</span>En dernier</button>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Annuler</button>
+  <button type="button" ngbAutofocus class="btn btn-success" (click)="modal.close(returnValue)" [disabled]="selectedItem == null&&selectedPosition==null">DEPLACER</button>
+</div>
