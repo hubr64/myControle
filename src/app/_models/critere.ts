@@ -13,6 +13,8 @@ export class Critere implements Deserializable {
     this.id = input.id;
     this.text = input.text;
     this.bareme = parseFloat(input.bareme);
+    this.capacite = null;
+
     if (grille !== undefined) {
       if (input.capacite) {
         this.capacite = grille.getCapacite(input.capacite);
