@@ -29,7 +29,9 @@ export class ConfigurationService {
       notationModeArr: { modifiable: false, value: Configuration.notationModeArr },
 
       messageDuration: { modifiable: true, title: 'Durée affichage messages', value: Configuration.messageDuration },
-      defaultMode: { modifiable: true, title: 'Mode par défaut', value: Configuration.defaultMode },
+      defaultMode: { modifiable: true, title: 'Mode par défaut [edition,notation]', value: Configuration.defaultMode },
+      notationDefaultOrder: { modifiable: true, title: 'Ordre affichage par défaut [nom,note]', value: Configuration.notationDefaultOrder },
+      notationDefaultNoteMode: { modifiable: true, title: 'Affichage des notes par défaut [brut,ajuste]', value: Configuration.notationDefaultNoteMode },
 
       author: { modifiable: true, title: 'Auteur des devoirs', value: Configuration.author },
       devoirTitreDefault: { modifiable: true, title: 'Devoir / Titre par défaut', value: Configuration.devoirTitreDefault },

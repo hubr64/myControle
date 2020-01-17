@@ -1,1 +1,51 @@
-<p>devoir-notation works!</p>
+<div class="btn-toolbar bg-light py-1 border-top border-white" role="toolbar" aria-label="Toolbar notation">
+  <div class="btn-group btn-group-sm mr-2" role="actions" aria-label="Actions">
+    <button type="button" class="btn btn-sm btn-outline-secondary" title="Lancer la notation de la classe">
+      <i class="material-icons md-dark">play_circle_outline</i>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" title="Noter un nouvel élève">
+      <i class="material-icons md-dark">add_circle_outline</i>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-danger" title="Supprimer toutes les notes">
+      <i class="material-icons md-dark">delete_sweep</i>
+    </button>
+  </div>
+  <div class="btn-group btn-group-sm mr-2" role="configuration" aria-label="Configuration">
+    <div class="btn-group" ngbDropdown role="group" aria-label="Trier par">
+      <button class="btn btn-sm btn-outline-secondary" title="Trier par" ngbDropdownToggle>
+        <i class="material-icons md-dark">filter_list</i>
+      </button>
+      <div class="dropdown-menu" ngbDropdownMenu>
+        <button (click)="orderList = 'nom'" ngbDropdownItem>Nom</button>
+        <button (click)="orderList = 'note'" ngbDropdownItem>Note</button>
+      </div>
+    </div>
+    <div class="btn-group" ngbDropdown role="group" aria-label="Mode d'affichage des notes">
+      <button class="btn btn-sm btn-outline-secondary" title="Mode d'affichage des notes" ngbDropdownToggle>
+        <i class="material-icons md-dark">compare</i>
+      </button>
+      <div class="dropdown-menu" ngbDropdownMenu>
+        <button (click)="noteMode = 'brut'" ngbDropdownItem>Notes brutes (sans arrondi ni ajustement)</button>
+        <button (click)="noteMode = 'ajuste'" ngbDropdownItem>Note ajustées (arrondies et ajustées)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="list-group m-3 w-50 mx-auto">
+  <button type="button" class="list-group-item list-group-item-action" *ngFor='let notation of sortNotationby()' (click)="selectNotation(notation)"
+    [ngClass]="{'list-group-item-danger': devoirService.devoir.isMinimumNote(notation.getNote(noteCoeffs),noteCoeffs), 'list-group-item-success': devoirService.devoir.isMaximumNote(notation.getNote(noteCoeffs),noteCoeffs)}">
+    <span>
+      <h5>{{notation.eleve}}</h5>
+      <small [innerHTML]="notation.commentaire"></small>
+    </span>
+    <span class="bg-light" *ngIf="noteMode == 'brut'">
+      <span class="h3 mb-0">{{notation.getNote(noteCoeffs)}}</span>
+      <span>{{devoirService.devoir.bareme}}</span>
+    </span>
+    <span class="bg-light" *ngIf="noteMode == 'ajuste'">
+      <span class="h3 mb-0">{{devoirService.devoir.ajusterNote(notation.getNote(noteCoeffs))}}</span>
+      <span>{{devoirService.devoir.ajusterNote(devoirService.devoir.bareme)}}</span>
+    </span>
+  </button>
+</div>

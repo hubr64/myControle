@@ -328,7 +328,7 @@ export class DevoirService {
         tmpNotations.push(tmpNotation);
       }
       delete devoirContent.data.notes;
-      devoirContent.data.notes = tmpNotations;
+      devoirContent.data.notations = tmpNotations;
 
       // Memorize migration operations
       hasMigration = true;

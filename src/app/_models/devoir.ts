@@ -22,7 +22,7 @@ export class Devoir {
   grille: Grille;
 
   exercices: any[];
-  notes: Notation[];
+  notations: Notation[];
   groupes: Groupe[];
 
   constructor() {
@@ -39,7 +39,7 @@ export class Devoir {
     this.classe = null;
     this.grille = null;
     this.exercices = [];
-    this.notes = [];
+    this.notations = [];
     this.groupes = [];
   }
 
@@ -59,7 +59,7 @@ export class Devoir {
     this.grille = input.data.general.grille ? new Grille().deserialize(input.data.general.grille) : null;
     this.groupes = input.data.groupes ? input.data.groupes : [];
     this.exercices = [];
-    this.notes = [];
+    this.notations = [];
 
     for (const keyExe of Object.keys(input.data.exercices)) {
       if (input.data.exercices[keyExe].type === 'exe') {
@@ -69,8 +69,8 @@ export class Devoir {
         this.exercices.push(new Freetext().deserialize(input.data.exercices[keyExe]));
       }
     }
-    for (const keyEleve of Object.keys(input.data.notes)) {
-      this.notes.push(new Notation().deserialize(input.data.notes[keyEleve], this));
+    for (const keyEleve of Object.keys(input.data.notations)) {
+      this.notations.push(new Notation().deserialize(input.data.notations[keyEleve], this));
     }
 
     return this;
@@ -96,15 +96,15 @@ export class Devoir {
           grille: this.grille
         },
         exercices: [],
-        notes: [],
+        notations: [],
         groupes: this.groupes
       }
     };
     for (const exercice of this.exercices) {
       serializeDevoir.data.exercices.push(exercice.serialize());
     }
-    for (const note of this.notes) {
-      serializeDevoir.data.notes.push(note.serialize());
+    for (const note of this.notations) {
+      serializeDevoir.data.notations.push(note.serialize());
     }
     return serializeDevoir;
   }
@@ -123,6 +123,48 @@ export class Devoir {
       bareme = Math.round(bareme / this.arrondi) * this.arrondi;
     }
     return bareme;
+  }
+
+  ajusterNote(note: number) {
+    let noteFinale = note;
+
+    // Normal
+    if (this.notationMode === 1) {
+      noteFinale = noteFinale;
+    }
+    // Proportionnel
+    if (this.notationMode === 2 && this.notationCible > 0) {
+      noteFinale = (noteFinale * this.notationCible) / this.bareme;
+    }
+    // Rapporté
+    if (this.notationMode === 3 && this.notationCible > 0) {
+      if (noteFinale > this.notationCible) {
+        noteFinale = this.notationCible;
+      }
+    }
+    // On finit en arrondissant
+    if (this.arrondi > 0) {
+      noteFinale = Math.round(noteFinale / this.arrondi) * this.arrondi;
+    }
+
+    return noteFinale;
+  }
+
+  isMinimumNote(note: number, noteCoeffs) {
+    for (const notation of this.notations) {
+      if (notation.getNote(noteCoeffs) < note) {
+        return false;
+      }
+    }
+    return true;
+  }
+  isMaximumNote(note: number, noteCoeffs) {
+    for (const notation of this.notations) {
+      if (notation.getNote(noteCoeffs) > note) {
+        return false;
+      }
+    }
+    return true;
   }
 
   getCritere(exerciceId: string, questionId: string, critereId: string): Critere {

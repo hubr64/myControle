@@ -30,4 +30,13 @@ export class Notation implements Deserializable {
     }
     return serializeNotation;
   }
+
+  // Compute bareme from all inner questions
+  getNote(noteCoeffs): number {
+    let computeNote = 0;
+    for (const note of this.notes) {
+      computeNote += note.getNote(noteCoeffs);
+    }
+    return computeNote;
+  }
 }

@@ -1,0 +1,49 @@
+.btn-toolbar
+  justify-content: center
+
+.list-group-item
+  display: flex
+  flex-direction: row
+  flex-wrap: nowrap
+  justify-content: flex-start
+  align-items: stretch
+  padding: 0
+
+.list-group-item h5
+  margin: 0
+
+.list-group-item p
+  margin: 0
+
+.list-group-item small
+  font-size: 70%
+  color: #999
+  font-style: italic
+  margin: 0
+  max-height: 35px
+  display: inline-block
+  overflow: hidden
+
+.list-group-item > span:first-child
+  flex: 1
+  padding: 5px
+
+.list-group-item > span:nth-child(2)
+  width: 85px
+  text-align: center
+
+.list-group-item:first-child > span:nth-child(2)
+  border-top-right-radius: .25rem
+.list-group-item:last-child > span:nth-child(2)
+  border-bottom-right-radius: .25rem
+
+.list-group-item > span:nth-child(2) > span:first-child
+  font-weight:900
+  display: block
+
+.list-group-item > span:nth-child(2) > span:last-child
+  color: #999
+  font-size: 1.3rem
+  display: block
+  border-top: 1px solid #999
+  margin: 0 10px

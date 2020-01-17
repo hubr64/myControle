@@ -29,7 +29,7 @@ export class Note implements Deserializable {
   }
 
   // Get note according to status and criteria bareme
-  getNote() {
-    return this.critere.bareme;
+  getNote(noteCoeffs) {
+    return this.critere.bareme * noteCoeffs[this.status];
   }
 }
