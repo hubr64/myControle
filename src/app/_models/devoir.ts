@@ -25,6 +25,8 @@ export class Devoir {
   notations: Notation[];
   groupes: Groupe[];
 
+  noteCoeffs: any[];
+
   constructor() {
     this.author = '';
     this.creationDate = new Date();
@@ -41,6 +43,8 @@ export class Devoir {
     this.exercices = [];
     this.notations = [];
     this.groupes = [];
+
+    this.noteCoeffs = [];
   }
 
   // Convert from JSON
@@ -109,18 +113,17 @@ export class Devoir {
     return serializeDevoir;
   }
 
+  set notes_coefficients(value) {
+    this.noteCoeffs = value;
+    for (const notation of this.notations) {
+      notation.notes_coefficients = this.noteCoeffs;
+    }
+  }
+
   get bareme(): number {
     let bareme = 0;
     for (const exercice of this.exercices) {
       bareme += exercice.bareme ? exercice.bareme : 0;
-    }
-    return bareme;
-  }
-
-  get baremeArrondi(): number {
-    let bareme = this.bareme;
-    if (this.arrondi > 0) {
-      bareme = Math.round(bareme / this.arrondi) * this.arrondi;
     }
     return bareme;
   }
@@ -150,25 +153,45 @@ export class Devoir {
     return noteFinale;
   }
 
-  isMinimumNote(note: number, noteCoeffs) {
+  get note_maximum(): number {
+    let note = 0;
     for (const notation of this.notations) {
-      if (notation.getNote(noteCoeffs) < note) {
-        return false;
+      const curNote = notation.getNote();
+      if (curNote > note) {
+        note = curNote;
       }
     }
-    return true;
+    return note;
   }
-  isMaximumNote(note: number, noteCoeffs) {
+
+  get note_minimum(): number {
+    let note = this.bareme;
     for (const notation of this.notations) {
-      if (notation.getNote(noteCoeffs) > note) {
-        return false;
+      const curNote = notation.getNote();
+      if (curNote < note) {
+        note = curNote;
       }
     }
-    return true;
+    return note;
+  }
+
+  get note_moyenne(): number {
+    let note = 0;
+    let nbNote = 0;
+    for (const notation of this.notations) {
+      note += notation.getNote();
+      nbNote++;
+    }
+    // Moyenne est la somme totale divisée par le nombre de note (on ne tient pas compte des non notés)
+    note = note / nbNote;
+    // On arrondit à 3 chiffres après la virgule
+    note = note * 1000;
+    note = Math.round(note);
+    note = note / 1000;
+    return note;
   }
 
   getCritere(exerciceId: string, questionId: string, critereId: string): Critere {
-
     if (this.exercices !== undefined) {
       for (const exe of this.exercices) {
         if (exe.id === exerciceId) {

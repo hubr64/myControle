@@ -16,17 +16,19 @@
         <i class="material-icons md-dark">filter_list</i>
       </button>
       <div class="dropdown-menu" ngbDropdownMenu>
-        <button (click)="orderList = 'nom'" ngbDropdownItem>Nom</button>
-        <button (click)="orderList = 'note'" ngbDropdownItem>Note</button>
+        <button [ngClass]="{'active':orderList == 'nom'}" (click)="orderList = 'nom'" ngbDropdownItem>Nom</button>
+        <button [ngClass]="{'active':orderList == 'note'}" (click)="orderList = 'note'" ngbDropdownItem>Note</button>
       </div>
     </div>
     <div class="btn-group" ngbDropdown role="group" aria-label="Mode d'affichage des notes">
       <button class="btn btn-sm btn-outline-secondary" title="Mode d'affichage des notes" ngbDropdownToggle>
-        <i class="material-icons md-dark">compare</i>
+        <i class="material-icons md-dark">flip</i>
       </button>
       <div class="dropdown-menu" ngbDropdownMenu>
-        <button (click)="noteMode = 'brut'" ngbDropdownItem>Notes brutes (sans arrondi ni ajustement)</button>
-        <button (click)="noteMode = 'ajuste'" ngbDropdownItem>Note ajustées (arrondies et ajustées)</button>
+        <button [ngClass]="{'active':noteMode == 'brut'}" (click)="noteMode = 'brut'" ngbDropdownItem>
+          <i class="material-icons md-dark">crop_free</i>Notes brutes (sans arrondi ni ajustement)</button>
+        <button [ngClass]="{'active':noteMode == 'ajuste'}" (click)="noteMode = 'ajuste'" ngbDropdownItem>
+          <i class="material-icons md-dark">crop_din</i>Note ajustées (arrondies et ajustées)</button>
       </div>
     </div>
   </div>
@@ -34,18 +36,18 @@
 
 <div class="list-group m-3 w-50 mx-auto">
   <button type="button" class="list-group-item list-group-item-action" *ngFor='let notation of sortNotationby()' (click)="selectNotation(notation)"
-    [ngClass]="{'list-group-item-danger': devoirService.devoir.isMinimumNote(notation.getNote(noteCoeffs),noteCoeffs), 'list-group-item-success': devoirService.devoir.isMaximumNote(notation.getNote(noteCoeffs),noteCoeffs)}">
+    [ngClass]="{'list-group-item-warning': notation.getNote() < devoirService.devoir.note_moyenne, 'list-group-item-danger': notation.getNote() == devoirService.devoir.note_minimum, 'list-group-item-success': notation.getNote() == devoirService.devoir.note_maximum}">
     <span>
       <h5>{{notation.eleve}}</h5>
       <small [innerHTML]="notation.commentaire"></small>
     </span>
     <span class="bg-light" *ngIf="noteMode == 'brut'">
-      <span class="h3 mb-0">{{notation.getNote(noteCoeffs)}}</span>
-      <span>{{devoirService.devoir.bareme}}</span>
+      <span class="h3 mb-0" title="Note brute">{{notation.getNote()}}</span>
+      <span title="Note maximum (critères évalués uniquement)">{{notation.getNoteMax()}}</span>
     </span>
     <span class="bg-light" *ngIf="noteMode == 'ajuste'">
-      <span class="h3 mb-0">{{devoirService.devoir.ajusterNote(notation.getNote(noteCoeffs))}}</span>
-      <span>{{devoirService.devoir.ajusterNote(devoirService.devoir.bareme)}}</span>
+      <span class="h3 mb-0" title="Note ajustée (arrondie)">{{devoirService.devoir.ajusterNote(notation.getNote())}}</span>
+      <span title="Note maximum ajustée (critères évalués uniquement)">{{devoirService.devoir.ajusterNote(notation.getNoteMax())}}</span>
     </span>
   </button>
 </div>

@@ -5,6 +5,7 @@ import { Devoir } from './devoir';
 export class Note implements Deserializable {
   critere: Critere;
   status: string;
+  noteCoeffs: any[];
 
   // Convert from JSON
   deserialize(input: any, devoir: Devoir) {
@@ -29,7 +30,42 @@ export class Note implements Deserializable {
   }
 
   // Get note according to status and criteria bareme
-  getNote(noteCoeffs) {
-    return this.critere.bareme * noteCoeffs[this.status];
+  getNote(critereFiltre?: any[]) {
+    if (this.status && this.noteCoeffs) {
+      // No filter provided thus everything is possible
+      if (critereFiltre === undefined) {
+        return this.critere.bareme * this.noteCoeffs[this.status];
+      } else {
+        // A filter is provided and we found the critere in the filter
+        if (critereFiltre.indexOf(this.critere) !== -1) {
+          return this.critere.bareme * this.noteCoeffs[this.status];
+          // Filter provided and the critere is not in the filter
+        } else {
+          return 0;
+        }
+      }
+    } else {
+      return 0;
+    }
+  }
+
+  // Get note max which mean only note on examining criterias
+  getNoteMax(critereFiltre?: any[]) {
+    if (this.status) {
+      // No filter provided thus everything is possible
+      if (critereFiltre === undefined) {
+        return this.critere.bareme;
+      } else {
+        // A filter is provided and we found the critere in the filter
+        if (critereFiltre.indexOf(this.critere) !== -1) {
+          return this.critere.bareme;
+          // Filter provided and the critere is not in the filter
+        } else {
+          return 0;
+        }
+      }
+    } else {
+      return 0;
+    }
   }
 }

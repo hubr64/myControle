@@ -31,6 +31,7 @@ export class DevoirService {
   public docIsEdited = false;
   public oldDevoir = '';
   public devoir;
+  public noteCoeffs = [];
 
   public loadNewDevoirSub = new Subject<boolean>();
 
@@ -40,6 +41,17 @@ export class DevoirService {
     private classeService: ClasseService,
     private configurationService: ConfigurationService,
     private modalService: NgbModal) {
+
+    const noteStatusOkCoeff = this.configurationService.getValue('noteStatusOkCoeff');
+    const noteStatusEnCoursCoeff = this.configurationService.getValue('noteStatusEnCoursCoeff');
+    const noteStatusKoCoeff = this.configurationService.getValue('noteStatusKoCoeff');
+    const noteStatusOk = this.configurationService.getValue('noteStatusOk');
+    const noteStatusEnCours = this.configurationService.getValue('noteStatusEnCours');
+    const noteStatusKo = this.configurationService.getValue('noteStatusKo');
+
+    this.noteCoeffs[noteStatusOk] = noteStatusOkCoeff;
+    this.noteCoeffs[noteStatusEnCours] = noteStatusEnCoursCoeff;
+    this.noteCoeffs[noteStatusKo] = noteStatusKoCoeff;
 
     const tmpDevoir = localStorage.getItem('devoir');
     if (this.devoir === undefined && tmpDevoir) {
@@ -104,6 +116,9 @@ export class DevoirService {
 
         // Convert JSON content into structured Devoir object
         this.devoir = new Devoir().deserialize(tmpContent);
+        this.devoir.notes_coefficients = this.noteCoeffs;
+
+        // Init information to check for devoir change detection
         this.oldDevoir = JSON.stringify(this.devoir);
         this.docIsEdited = false;
 
@@ -122,12 +137,11 @@ export class DevoirService {
   }
 
   clearDevoir() {
-
-
     if (this.docIsEdited === false ||
       (this.docIsEdited === true &&
         confirm('Le devoir actuel n\'est pas sauvegardé. Êtes-vous sûr de vouloir continuer (le travail non sauvegardé sera perdu) ? '))) {
 
+      // Create the new devoir
       this.devoir = new Devoir();
       this.devoir.author = this.configurationService.getValue('author');
       this.devoir.toolVersion = this.toolVersion;
@@ -135,7 +149,9 @@ export class DevoirService {
       this.devoir.arrondi = parseFloat(this.configurationService.getValue('devoirArrondiDefault'));
       this.devoir.notationMode = parseInt(this.configurationService.getValue('devoirNotationModeDefault'), 10);
       this.devoir.notationCible = parseFloat(this.configurationService.getValue('devoirNotationCibleDefault'));
+      this.devoir.notes_coefficients = this.noteCoeffs;
 
+      // Prepare information to check for devoir change detection
       this.oldDevoir = JSON.stringify(this.devoir);
       this.docIsEdited = false;
 
@@ -154,7 +170,6 @@ export class DevoirService {
     this.oldDevoir = this.oldDevoir.replace(modificationDateRegex, '');
     // If the deep copies are different then we should warn user
     if (currentDevoir !== this.oldDevoir) {
-      console.log('Devoir has changed');
       this.updateDevoir();
       this.oldDevoir = currentDevoir;
     }

@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { DevoirService } from '../_services/devoir.service';
+import { Notation } from '../_models/notation';
 import { ConfigurationService } from '../_services/configuration.service';
+import { ModalEleveNotationComponent } from '../modal-eleve-notation/modal-eleve-notation.component';
 
 @Component({
   selector: 'app-devoir-notation',
@@ -9,38 +13,19 @@ import { ConfigurationService } from '../_services/configuration.service';
 })
 export class DevoirNotationComponent implements OnInit {
 
-  public noteStatusOkCoeff = 0;
-  public noteStatusEnCoursCoeff = 0;
-  public noteStatusKoCoeff = 0;
-  public noteStatusOk = 0;
-  public noteStatusEnCours = 0;
-  public noteStatusKo = 0;
-  public noteCoeffs = [];
-
   public orderList = '';
   public noteMode = '';
 
   constructor(
     private devoirService: DevoirService,
-    private configurationService: ConfigurationService
+    private configurationService: ConfigurationService,
+    private modalService: NgbModal
   ) {
-    this.noteStatusOkCoeff = this.configurationService.getValue('noteStatusOkCoeff');
-    this.noteStatusEnCoursCoeff = this.configurationService.getValue('noteStatusEnCoursCoeff');
-    this.noteStatusKoCoeff = this.configurationService.getValue('noteStatusKoCoeff');
-    this.noteStatusOk = this.configurationService.getValue('noteStatusOk');
-    this.noteStatusEnCours = this.configurationService.getValue('noteStatusEnCours');
-    this.noteStatusKo = this.configurationService.getValue('noteStatusKo');
-
-    this.noteCoeffs[this.noteStatusOk] = this.noteStatusOkCoeff;
-    this.noteCoeffs[this.noteStatusEnCours] = this.noteStatusEnCoursCoeff;
-    this.noteCoeffs[this.noteStatusKo] = this.noteStatusKoCoeff;
-
     this.orderList = this.configurationService.getValue('notationDefaultOrder');
     this.noteMode = this.configurationService.getValue('notationDefaultNoteMode');
   }
 
   ngOnInit() {
-
   }
 
   sortNotationby() {
@@ -50,9 +35,25 @@ export class DevoirNotationComponent implements OnInit {
       );
     } else {
       return this.devoirService.devoir.notations.sort((a, b) =>
-        a.getNote(this.noteCoeffs) > b.getNote(this.noteCoeffs) ? -1 : a.getNote(this.noteCoeffs) === b.getNote(this.noteCoeffs) ? 0 : 1
+        a.getNote() > b.getNote() ? -1 : a.getNote() === b.getNote() ? 0 : 1
       );
     }
+  }
+
+  selectNotation(notation: Notation) {
+    // Display modal window
+    const modalRef = this.modalService.open(ModalEleveNotationComponent, { centered: true, size: 'xl', scrollable: true });
+    // @ts-ignore: Provide it the required notation
+    modalRef.componentInstance.notation = notation;
+    // @ts-ignore: Provide it the required notation mode
+    modalRef.componentInstance.notationMode = 'single';
+
+    // Manage answer of the user
+    modalRef.result.then((result) => {
+
+    }, (reason) => {
+
+    });
   }
 
 }

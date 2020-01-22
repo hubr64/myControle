@@ -1,11 +1,13 @@
 import { Deserializable } from './deserializable.model';
 import { Note } from './note';
+import { Critere } from './critere';
 import { Devoir } from './devoir';
 
 export class Notation implements Deserializable {
   eleve: string;
   commentaire: string;
   notes: Note[];
+  noteCoeffs: any[];
 
   // Convert from JSON
   deserialize(input: any, devoir: Devoir) {
@@ -31,12 +33,37 @@ export class Notation implements Deserializable {
     return serializeNotation;
   }
 
-  // Compute bareme from all inner questions
-  getNote(noteCoeffs): number {
+  set notes_coefficients(value) {
+    this.noteCoeffs = value;
+    for (const note of this.notes) {
+      note.noteCoeffs = this.noteCoeffs;
+    }
+  }
+
+  // Compute note from all note inside the notation
+  getNote(critereFiltre?: any[]): number {
     let computeNote = 0;
     for (const note of this.notes) {
-      computeNote += note.getNote(noteCoeffs);
+      computeNote += note.getNote(critereFiltre);
     }
     return computeNote;
+  }
+
+  // Get note max which mean only note on examining criterias
+  getNoteMax(critereFiltre?: any[]): number {
+    let computeNote = 0;
+    for (const note of this.notes) {
+      computeNote += note.getNoteMax(critereFiltre);
+    }
+    return computeNote;
+  }
+
+  getCritereStatus(critere: Critere) {
+    for (const note of this.notes) {
+      if (note.critere === critere) {
+        return note.status;
+      }
+    }
+    return null;
   }
 }
