@@ -48,6 +48,18 @@ export class Exercice implements Deserializable {
     return bareme;
   }
 
+  get criteres(): Critere[] {
+    let criteres = [];
+    for (const question of this.questions) {
+      if (question.criteres) {
+        for (const critere of question.criteres) {
+          criteres.push(critere);
+        }
+      }
+    }
+    return criteres;
+  }
+
   // Get a criteria anywhere in the exerice
   getCritere(questionId: string, critereId: string): Critere {
     if (this.questions !== undefined) {

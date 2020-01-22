@@ -1,0 +1,80 @@
+$freetext-color: #666
+$exercice-color: #4CAF50
+$question-color: #FAD46D
+$critere-color: #6194C8
+
+.badge
+  margin-right: 10px
+
+.freetext
+  background-color: $freetext-color
+
+.exercice
+  background-color: $exercice-color
+
+.question
+  background-color: $question-color
+
+.critere
+  background-color: $critere-color
+
+.list-group
+  margin-bottom: 10px
+
+.list-group.list-group-root
+  padding: 0
+  overflow: hidden
+
+.list-group.list-group-root .list-group
+  margin-bottom: 0
+
+.list-group.list-group-root .list-group-item
+  border-radius: 0
+  border-width: 1px 0 0 0
+  display: flex
+
+.list-group.list-group-root > .list-group-item
+  font-weight: 600
+  padding-left: 5px
+  padding-right: 2px
+
+.list-group.list-group-root > .list-group-item:first-child
+  border-top-width: 0
+
+.list-group.list-group-root > .list-group > .list-group-item
+  padding-left: 20px
+  padding-right: 2px
+  display: flex
+
+.list-group.list-group-root > .list-group > .list-group > .list-group-item
+  padding-left: 35px
+  padding-right: 2px
+  display: flex
+
+.list-group-item > span:nth-child(2)
+  flex: 1
+  display: inline-block
+
+.list-group-item > span:nth-child(3)
+  width: 80px
+  text-align: right
+  display: inline-block
+
+.list-group-item > span:nth-child(3) > button
+  border: none
+  background: none
+  padding: 0
+
+.list-group-item
+  padding-top: 0px
+  padding-bottom: 0px
+
+:host ::ng-deep img
+  max-height: 3em
+  width: auto
+
+.modal-footer ckeditor
+  width: 100%
+
+button > i
+  vertical-align: top

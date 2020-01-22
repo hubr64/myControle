@@ -28,6 +28,7 @@ import { StripHtmlPipe } from './_helpers/strip-html.pipe';
 import { ModalConfirmGridComponent } from './modal-confirm-grid/modal-confirm-grid.component';
 import { ModalConfirmClasseComponent } from './modal-confirm-classe/modal-confirm-classe.component';
 import { ModalClasseSelectionComponent } from './modal-classe-selection/modal-classe-selection.component';
+import { ModalEleveNotationComponent } from './modal-eleve-notation/modal-eleve-notation.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ModalClasseSelectionComponent } from './modal-classe-selection/modal-cl
     StripHtmlPipe,
     ModalConfirmGridComponent,
     ModalConfirmClasseComponent,
-    ModalClasseSelectionComponent
+    ModalClasseSelectionComponent,
+    ModalEleveNotationComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +66,7 @@ import { ModalClasseSelectionComponent } from './modal-classe-selection/modal-cl
     ModalConfirmClasseComponent,
     ModalGridSelectionComponent,
     ModalClasseSelectionComponent,
+    ModalEleveNotationComponent,
     ModalMoveComponent],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' }
