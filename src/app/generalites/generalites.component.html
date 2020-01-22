@@ -4,7 +4,7 @@
 </button>
 
 <section id="generalitesMenu" [ngClass]="{'open': visible}">
-  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+  <ngb-accordion #acc="ngbAccordion" [closeOthers]="true" activeIds="ngb-panel-0">
     <ngb-panel title="Informations">
       <ng-template ngbPanelContent>
         <div class="input-group mb-3">
@@ -136,7 +136,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">Auteur</span>
           </div>
-          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.author" placeholder="Auteur du devoir" aria-label="Auteur"
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.author" placeholder="Auteur du devoir" aria-label="Auteur"
             readonly aria-describedby="basic-addon1">
         </div>
 
@@ -144,7 +144,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">Créé le</span>
           </div>
-          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.creationDate" aria-label="Date de création" aria-describedby="basic-addon1"
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.creationDate" aria-label="Date de création" aria-describedby="basic-addon1"
             readonly ngbDatepicker #d1="ngbDatepicker">
         </div>
 
@@ -152,7 +152,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">Modifié le</span>
           </div>
-          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.modificationDate" aria-label="Date de modification"
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.modificationDate" aria-label="Date de modification"
             aria-describedby="basic-addon1" readonly ngbDatepicker #d3="ngbDatepicker">
         </div>
 
@@ -160,16 +160,38 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">Version</span>
           </div>
-          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.toolVersion" placeholder="Auteur du devoir" aria-label="Auteur"
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.toolVersion" placeholder="Auteur du devoir" aria-label="Auteur"
             readonly aria-describedby="basic-addon1">
         </div>
-
       </ng-template>
     </ngb-panel>
 
     <ngb-panel title="Statistiques">
       <ng-template ngbPanelContent>
-        TBD
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Note maximum</span>
+          </div>
+          <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_maximum)}} ({{devoirService.devoir.note_maximum}})"
+            placeholder="0" aria-label="Note maximum" aria-describedby="basic-addon1">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Note minimum</span>
+          </div>
+          <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_minimum)}} ({{devoirService.devoir.note_minimum}})"
+            placeholder="0" aria-label="Note minimum" aria-describedby="basic-addon1">
+        </div>
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Moyenne</span>
+          </div>
+          <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_moyenne)}} ({{devoirService.devoir.note_moyenne}})"
+            placeholder="0" aria-label="Note minimum" aria-describedby="basic-addon1">
+        </div>
+
       </ng-template>
     </ngb-panel>
   </ngb-accordion>
