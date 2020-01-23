@@ -57,7 +57,7 @@ export class ClasseService {
           // console.dir(this.classeItems);
         },
         error => {
-          console.log(error);
+          this.messageService.add(error, 'danger', 'USER');
         }
       );
   }

@@ -9,12 +9,12 @@
     <strong>Êtes-vous sûr de vouloir modifier la classe actuelle par la nouvelle classe
       <span class="text-danger">{{classeConfirm.titre}}</span> ?</strong>
   </p>
-  <div *ngIf="removedEleves.length > 0;else noRemovedEleves">
+  <div *ngIf="impactedNotations.length > 0;else noRemovedEleves">
     <p>Les élèves suivants n'existent plus dans la nouvelle classe : </p>
     <ul class="list-group">
-      <li *ngFor="let removedEleve of removedEleves" class="d-flex justify-content-between align-items-center" [ngClass]="{'list-group-item-danger': removedEleve.notation, 'list-group-item' : true}">{{removedEleve.eleve}}
-        <span *ngIf="removedEleve.notation" class="badge badge-danger badge-pill">Noté</span>
-        <span *ngIf="removedEleve.notation == false" class="badge badge-warning badge-pill">Non noté</span>
+      <li *ngFor="let impactedNotation of impactedNotations" class="d-flex justify-content-between align-items-center" [ngClass]="{'list-group-item-danger': impactedNotation.notation, 'list-group-item' : true}">{{impactedNotation.eleve}}
+        <span *ngIf="impactedNotation.notation" class="badge badge-danger badge-pill">Noté</span>
+        <span *ngIf="impactedNotation.notation == false" class="badge badge-warning badge-pill">Non noté</span>
       </li>
     </ul>
 

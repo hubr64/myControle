@@ -191,6 +191,15 @@ export class Devoir {
     return note;
   }
 
+  isEleveNote(eleve: string): boolean {
+    for (const notation of this.notations) {
+      if (notation.eleve === eleve) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   getCritere(exerciceId: string, questionId: string, critereId: string): Critere {
     if (this.exercices !== undefined) {
       for (const exe of this.exercices) {

@@ -1,12 +1,13 @@
 <div class="btn-toolbar bg-light py-1 border-top border-white" role="toolbar" aria-label="Toolbar notation">
   <div class="btn-group btn-group-sm mr-2" role="actions" aria-label="Actions">
-    <button type="button" class="btn btn-sm btn-outline-secondary" title="Lancer la notation de la classe">
+    <span class="btn btn-sm btn-primary">
+      {{devoirService.devoir.classe.titre}}
+    </span>
+
+    <button type="button" class="btn btn-sm btn-outline-primary" title="Lancer la notation de la classe" (click)="launchNotation()">
       <i class="material-icons md-dark">play_circle_outline</i>
     </button>
-    <button type="button" class="btn btn-sm btn-outline-secondary" title="Noter un nouvel élève">
-      <i class="material-icons md-dark">add_circle_outline</i>
-    </button>
-    <button type="button" class="btn btn-sm btn-outline-danger" title="Supprimer toutes les notes">
+    <button type="button" class="btn btn-sm btn-outline-danger" title="Supprimer toutes les notes" (click)="deleteAllNotations()">
       <i class="material-icons md-dark">delete_sweep</i>
     </button>
   </div>
@@ -35,7 +36,10 @@
 </div>
 
 <div class="list-group m-3 w-50 mx-auto">
-  <button type="button" class="list-group-item list-group-item-action" *ngFor='let notation of sortNotationby()' (click)="selectNotation(notation)"
+  <button class="list-group-item active p-2">
+    <h2>Elèves évalués</h2>
+  </button>
+  <button class="list-group-item list-group-item-action" *ngFor='let notation of sortNotationby()' (click)="selectNotation(notation)"
     [ngClass]="{'list-group-item-warning': notation.getNote() < devoirService.devoir.note_moyenne, 'list-group-item-danger': notation.getNote() == devoirService.devoir.note_minimum, 'list-group-item-success': notation.getNote() == devoirService.devoir.note_maximum}">
     <span>
       <h5>{{notation.eleve}}</h5>
@@ -50,4 +54,15 @@
       <span title="Note maximum ajustée (critères évalués uniquement)">{{devoirService.devoir.ajusterNote(notation.getNoteMax())}}</span>
     </span>
   </button>
+</div>
+
+<div class="list-group m-3 w-50 mx-auto">
+  <span class="list-group-item list-group-item-dark p-2">
+    <h2>Elèves non évalués</h2>
+  </span>
+  <ng-container *ngFor='let eleve of devoirService.devoir.classe.eleves'>
+    <button title="Ajouter une notation" class="list-group-item list-group-item-action list-group-item-light p-2" *ngIf='devoirService.devoir.isEleveNote(eleve) == false'
+      (click)="addNotation(eleve)">{{eleve}}
+    </button>
+  </ng-container>
 </div>

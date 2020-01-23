@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { DevoirService } from '../_services/devoir.service';
@@ -11,7 +11,7 @@ import { ModalEleveNotationComponent } from '../modal-eleve-notation/modal-eleve
   templateUrl: './devoir-notation.component.html',
   styleUrls: ['./devoir-notation.component.sass']
 })
-export class DevoirNotationComponent implements OnInit {
+export class DevoirNotationComponent implements DoCheck, OnInit {
 
   public orderList = '';
   public noteMode = '';
@@ -26,6 +26,10 @@ export class DevoirNotationComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngDoCheck() {
+    this.devoirService.doCheck();
   }
 
   sortNotationby() {
@@ -47,13 +51,28 @@ export class DevoirNotationComponent implements OnInit {
     modalRef.componentInstance.notation = notation;
     // @ts-ignore: Provide it the required notation mode
     modalRef.componentInstance.notationMode = 'single';
+  }
 
-    // Manage answer of the user
-    modalRef.result.then((result) => {
+  addNotation(eleve) {
+    // Display modal window
+    const modalRef = this.modalService.open(ModalEleveNotationComponent, { centered: true, size: 'xl', scrollable: true });
+    // @ts-ignore: Provide it the required notation mode
+    modalRef.componentInstance.notationMode = 'single';
+    // @ts-ignore: Provide it the required eleve
+    modalRef.componentInstance.eleve = eleve;
+  }
 
-    }, (reason) => {
+  launchNotation() {
+    // Display modal window
+    const modalRef = this.modalService.open(ModalEleveNotationComponent, { centered: true, size: 'xl', scrollable: true });
+    // @ts-ignore: Provide it the required notation mode
+    modalRef.componentInstance.notationMode = 'multi';
+  }
 
-    });
+  deleteAllNotations() {
+    if (confirm('Voulez-vous vraiment supprimer définitivement toutes les notations de ce devoir ? ')) {
+      this.devoirService.devoir.notations = [];
+    }
   }
 
 }

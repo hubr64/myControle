@@ -15,6 +15,7 @@ export class ModalConfirmClasseComponent implements OnInit {
 
   @Input() classeConfirm: Classe;
   public removedEleves;
+  public impactedNotations;
 
   constructor(
     private messageService: MessageService,
@@ -22,6 +23,7 @@ export class ModalConfirmClasseComponent implements OnInit {
     private classeService: ClasseService,
     public modal: NgbActiveModal) {
     this.removedEleves = [];
+    this.impactedNotations = [];
   }
 
   ngOnInit() {
@@ -33,6 +35,7 @@ export class ModalConfirmClasseComponent implements OnInit {
   updateDetails() {
     if (this.classeConfirm && this.devoirService.devoir.classe) {
       this.removedEleves = this.classeService.diffElevesInClasses(this.devoirService.devoir.classe, this.classeConfirm);
+      this.impactedNotations = this.devoirService.getImpactedNotations(this.removedEleves);
     } else {
       setTimeout(() => {
         this.updateDetails();

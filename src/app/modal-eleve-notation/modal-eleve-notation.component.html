@@ -1,11 +1,12 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-title">{{notation.eleve}}</h4>
+  <h4 class="modal-title" id="modal-title" *ngIf="notation">{{notation.eleve}}</h4>
+  <h4 class="modal-title" id="modal-title" *ngIf="notation == null">Choix de l'élève</h4>
   <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
-  <div class="list-group list-group-root well" [ngStyle]="{'font-size.px': fontSizeDisplay}">
+  <div *ngIf="notation" class="list-group list-group-root well" [ngStyle]="{'font-size.px': fontSizeDisplay}">
     <ng-container *ngFor='let exercice of devoirService.devoir.exercices'>
       <button type="button" class="list-group-item list-group-item-action list-group-item-dark" *ngIf="exercice.constructor.name == 'Exercice'">
         <span class="badge badge-pill exercice">&nbsp;</span>
@@ -38,6 +39,12 @@
       </div>
     </ng-container>
   </div>
+  <div *ngIf="notation == null" class="list-group m-3 w-50 mx-auto">
+    <button type="button" class="list-group-item list-group-item-action" *ngFor='let eleve of devoirService.devoir.classe.eleves'
+      [ngClass]="{'list-group-item-info': devoirService.devoir.isEleveNote(eleve)}" (click)="openNotation(eleve)">
+      <h6 class="p-1">{{eleve}}</h6>
+    </button>
+  </div>
 </div>
 <div class="modal-footer" *ngIf="displayCommentaire">
   <h4>Commentaire de notation</h4>
@@ -46,8 +53,7 @@
 </div>
 <div class="modal-footer">
 
-
-  <div class="btn-group mr-2" role="actions" aria-label="Note globale">
+  <div class="btn-group mr-2" role="actions" aria-label="Note globale" *ngIf="notation">
     <button type="button" class="btn btn-outline-primary" title="Résultat total brut">
       <i class="material-icons md-dark">crop_free</i>
     </button>
@@ -62,7 +68,7 @@
     </button>
   </div>
 
-  <div class="btn-group mr-2" role="actions" aria-label="Actions">
+  <div class="btn-group mr-2" role="actions" aria-label="Actions" *ngIf="notation">
     <button (click)="changeZoom(1)" type="button" class="btn btn-outline-primary" title="Plus gros">
       <i class="material-icons md-dark">zoom_in</i>
     </button>
@@ -71,8 +77,8 @@
     </button>
   </div>
 
-  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar notation">
-    <div class="btn-group mr-2" role="actions" aria-label="Actions">
+  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar notation" *ngIf="notation">
+    <div class="btn-group mr-2" role="actions" aria-label="Modifier les critères">
       <button (click)="acceptAllCriteres()" type="button" class="btn btn-outline-success" title="Tout est juste">
         <i class="material-icons md-dark">check_circle_outline</i>
       </button>
@@ -82,11 +88,16 @@
       <button (click)="deleteAllCriteres()" type="button" class="btn btn-outline-secondary" title="Tout est à définir">
         <i class="material-icons md-dark">help_outline</i>
       </button>
+    </div>
+    <div class="btn-group mr-2" role="actions" aria-label="Actions">
+      <button (click)="deleteNotation()" type="button" class="btn btn-outline-danger" title="Supprimer complètement la notation">
+        <i class="material-icons md-dark">delete</i>
+      </button>
       <button (click)="toggleCommentaire()" type="button" class="btn btn-outline-secondary" title="Commenter le travail de l'élève">
         <i class="material-icons md-dark">insert_comment</i>
       </button>
     </div>
   </div>
-  <button *ngIf="notationMode != 'single'" type="button" class="btn btn-primary" (click)="nextNotation()">Suivant</button>
+  <button *ngIf="notationMode == 'multi' && notation" type="button" class="btn btn-primary" (click)="nextNotation()">Suivant</button>
   <button type="button" class="btn btn-success" (click)="modal.close('ok')">FERMER</button>
 </div>

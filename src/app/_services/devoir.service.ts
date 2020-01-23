@@ -170,6 +170,7 @@ export class DevoirService {
     this.oldDevoir = this.oldDevoir.replace(modificationDateRegex, '');
     // If the deep copies are different then we should warn user
     if (currentDevoir !== this.oldDevoir) {
+      console.log('Modification détectée.');
       this.updateDevoir();
       this.oldDevoir = currentDevoir;
     }
@@ -380,13 +381,29 @@ export class DevoirService {
         }
       });
     }
-
     return impactedCriteres;
   }
 
+  getImpactedNotations(removedEleves) {
+    let impactedNotations = removedEleves;
+    if (removedEleves.length > 0) {
+      removedEleves.forEach((removedEleve, indexEleve) => {
+        for (const [indexNotation, notation] of this.devoir.notations.entries()) {
+          if (notation.eleve === removedEleve.eleve) {
+            removedEleve.notation = true;
+          }
+        }
+      });
+    }
+    return impactedNotations;
+  }
+
   replaceGrille(newGrille: Grille) {
+    // Definitions diverses
     let capacitesRemplaces = 0;
     let capacitesSupprimes = 0;
+
+    // On remplace les criteres qui ont le même identifiant et on annule les autres
     for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
       if (exercice.questions) {
         for (const [indexQue, question] of exercice.questions.entries()) {
@@ -419,10 +436,21 @@ export class DevoirService {
   }
 
   replaceClasse(newClasse: Classe) {
+    // Définitions diverses
     let elevesRemplaces = 0;
     let elevesSupprimes = 0;
 
-    // TODO remplacer la classe
+    // On laisse les noms d'élève qui existe toujours et on supprime les notations des éleves qui n'existe plus
+    for (const [indexNot, notation] of this.devoir.notations.entries()) {
+      // L'élève n'existe pas
+      if (newClasse.eleves.indexOf(notation.eleve) === -1) {
+        this.devoir.notations.splice(notation, 1);
+        elevesSupprimes++;
+      } else {
+        // On ne fait rien si l'élève existe toujours
+        elevesRemplaces++;
+      }
+    }
 
     // Replacement is now finished then display a confirmation
     this.messageService.add(
@@ -449,6 +477,10 @@ export class DevoirService {
         }
       });
     }
+  }
+
+  checkDevoir() {
+
   }
 
 }
