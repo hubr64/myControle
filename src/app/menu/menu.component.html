@@ -11,14 +11,14 @@
     <button type="button" (click)="toggleMode('notation')" class="btn" [ngClass]="{'btn-primary': mode == 'notation', 'btn-secondary': mode != 'notation'}"
       [disabled]="this.devoirService.devoir == null">Notation</button>
   </div>
-  <div class="input-group ">
+  <!-- <div class="input-group ">
     <input class="form-control" type="search" placeholder="Chercher" aria-label="Chercher" aria-describedby="basic-addon1">
     <div class="input-group-append">
       <button class="input-group-text" type="button" (click)="search()">
         <i class="material-icons md-18">search</i>
       </button>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <section [ngClass]="{'open': visible}">
