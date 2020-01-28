@@ -29,6 +29,7 @@ import { ModalConfirmGridComponent } from './modal-confirm-grid/modal-confirm-gr
 import { ModalConfirmClasseComponent } from './modal-confirm-classe/modal-confirm-classe.component';
 import { ModalClasseSelectionComponent } from './modal-classe-selection/modal-classe-selection.component';
 import { ModalEleveNotationComponent } from './modal-eleve-notation/modal-eleve-notation.component';
+import { ModalCheckDevoirComponent } from './modal-check-devoir/modal-check-devoir.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ModalEleveNotationComponent } from './modal-eleve-notation/modal-eleve-
     ModalConfirmGridComponent,
     ModalConfirmClasseComponent,
     ModalClasseSelectionComponent,
-    ModalEleveNotationComponent
+    ModalEleveNotationComponent,
+    ModalCheckDevoirComponent
   ],
   imports: [
     BrowserModule,
@@ -67,6 +69,7 @@ import { ModalEleveNotationComponent } from './modal-eleve-notation/modal-eleve-
     ModalGridSelectionComponent,
     ModalClasseSelectionComponent,
     ModalEleveNotationComponent,
+    ModalCheckDevoirComponent,
     ModalMoveComponent],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' }

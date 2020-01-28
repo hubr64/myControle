@@ -16,6 +16,7 @@ import { ClasseService } from './classe.service';
 import { ConfigurationService } from './configuration.service';
 
 import { ModalConfirmRestoreDevoirComponent } from '../modal-confirm-restore-devoir/modal-confirm-restore-devoir.component';
+import { ModalCheckDevoirComponent } from '../modal-check-devoir/modal-check-devoir.component';
 
 import { saveAs } from 'file-saver';
 import { environment } from '../../environments/environment';
@@ -480,6 +481,17 @@ export class DevoirService {
   }
 
   checkDevoir() {
+    // Display modal window to disaply check results
+    const modalRef = this.modalService.open(ModalCheckDevoirComponent, { centered: true, size: 'xl', scrollable: true });
+    // @ts-ignore: Provide the devoir
+    modalRef.componentInstance.devoir = this.devoir;
+
+    // Manage answer of the user
+    modalRef.result.then((result) => {
+
+    }, (reason) => {
+
+    });
 
   }
 

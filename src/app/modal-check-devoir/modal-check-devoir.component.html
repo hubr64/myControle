@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Vérification du devoir</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col" sortable="type">Type</th>
+        <th scope="col" sortable="msg">Message</th>
+        <th scope="col" sortable="level">Level</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let error of errorList; index as i">
+        <th scope="row">{{ i+1 }}</th>
+        <td>{{error.type}}</td>
+        <td>{{error.msg}}</td>
+        <td [ngClass]="{'bg-warning':error.level=='warning', 'bg-danger':error.level=='danger', 'bg-success':error.level=='success'}">{{error.level | titlecase}}</td>
+      </tr>
+  </table>
+  <img #imgCheck src="/assets/index.png" (error)="urlError(imgCheck.src)" (load)="urlSucceed(imgCheck.src)" />
+</div>
+<div class="modal-footer">
+  <button type="button" ngbAutofocus class="btn btn-success" (click)="modal.close('ok')">FERMER</button>
+</div>

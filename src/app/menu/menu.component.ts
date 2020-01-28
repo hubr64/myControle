@@ -52,6 +52,10 @@ export class MenuComponent implements OnInit {
 
   // Actions of the toolbar
   toggleMode(newMode: string) {
+    // Si on veut passer en mode notation mais qu'aucune classe n'est définie alors ce n'est pas possible
+    if (newMode === 'notation' && this.devoirService.devoir.classe === null) {
+      newMode = 'edition';
+    }
     this.mode = newMode;
     this.toggleModeDevoir.emit(this.mode);
   }
@@ -71,6 +75,10 @@ export class MenuComponent implements OnInit {
   }
   saveCurrentDevoir() {
     this.devoirService.saveDevoir();
+    this.close();
+  }
+  checkDevoir() {
+    this.devoirService.checkDevoir();
     this.close();
   }
 

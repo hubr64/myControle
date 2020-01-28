@@ -4,21 +4,13 @@
   <span *ngIf="devoirService.docIsEdited && visible==false" class="badge badge-danger">!</span>
 </button>
 
-<div class="btn-toolbar justify-content-between bg-light p-2" role="toolbar" aria-label="Toolbar with button groups">
-  <div class="btn-group" role="group" aria-label="First group">
+<div class="btn-toolbar justify-content-between bg-light p-2" role="toolbar">
+  <div class="btn-group" role="group">
     <button type="button" (click)="toggleMode('edition')" class="btn" [ngClass]="{'btn-primary': mode == 'edition', 'btn-secondary': mode != 'edition'}"
       [disabled]="this.devoirService.devoir == null">Edition</button>
     <button type="button" (click)="toggleMode('notation')" class="btn" [ngClass]="{'btn-primary': mode == 'notation', 'btn-secondary': mode != 'notation'}"
-      [disabled]="this.devoirService.devoir == null">Notation</button>
+      [disabled]="this.devoirService.devoir == null || this.devoirService.devoir.classe == null">Notation</button>
   </div>
-  <!-- <div class="input-group ">
-    <input class="form-control" type="search" placeholder="Chercher" aria-label="Chercher" aria-describedby="basic-addon1">
-    <div class="input-group-append">
-      <button class="input-group-text" type="button" (click)="search()">
-        <i class="material-icons md-18">search</i>
-      </button>
-    </div>
-  </div> -->
 </div>
 
 <section [ngClass]="{'open': visible}">
@@ -33,24 +25,28 @@
       <i class="material-icons  md-36 blueicon">folder_open</i>
       <span>Ouvrir un devoir</span>
     </div>
-    <div (click)="saveCurrentDevoir()">
+    <div (click)="this.devoirService.devoir?checkDevoir():null" [ngClass]="{'disabled':this.devoirService.devoir === undefined}">
+      <i class="material-icons  md-36 blueicon">playlist_add_check</i>
+      <span>Vérifier</span>
+    </div>
+    <div (click)="this.devoirService.devoir?saveCurrentDevoir():null" [ngClass]="{'disabled':this.devoirService.devoir === undefined}">
       <i class="material-icons md-36 blueicon">save</i>
       <span>Enregistrer&nbsp;</span>
       <span *ngIf="devoirService.docIsEdited" class="badge badge-danger">Attention !</span>
     </div>
-    <div>
+    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined}">
       <i class="material-icons md-36 greenicon">local_printshop</i>
       <span>Imprimer le devoir</span>
     </div>
-    <div>
+    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined}">
       <i class="material-icons md-36 greenicon">ballot</i>
       <span>Imprimer la correction</span>
     </div>
-    <div>
+    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}">
       <i class="material-icons md-36 greenicon">present_to_all</i>
       <span>Exporter les notes</span>
     </div>
-    <div>
+    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}">
       <i class="material-icons md-36 greenicon">outlined_flag</i>
       <span>Consulter le bilan</span>
     </div>
