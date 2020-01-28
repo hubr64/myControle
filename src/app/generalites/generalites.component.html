@@ -9,32 +9,31 @@
       <ng-template ngbPanelContent>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Titre</span>
+            <span class="input-group-text">Titre</span>
           </div>
-          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.titre" placeholder="Titre du devoir" aria-label="Titre"
-            aria-describedby="basic-addon1">
+          <input type="text" class="form-control" [(ngModel)]="devoirService.devoir.titre" placeholder="Titre du devoir">
         </div>
         <ng-template #t2>
           <button (click)="devoirService.devoir.creationDate = today" class="btn btn-sm btn-outline-primary">Aujourd'hui</button>
         </ng-template>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Date</span>
+            <span class="input-group-text">Date</span>
           </div>
           <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel" [(ngModel)]="devoirService.devoir.devoirDate"
             ngbDatepicker #d2="ngbDatepicker" [footerTemplate]="t2">
           <div class="input-group-append">
             <button class="btn btn-primary btn-sm" (click)="d2.toggle()" type="button">
-              <i class="material-icons md-18 ">calendar_today</i>
+              <i class="material-icons md-18">calendar_today</i>
             </button>
           </div>
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Arrondi</span>
+            <span class="input-group-text">Arrondi</span>
           </div>
           <input type="number" step="0.05" min="0.05" max="5" class="form-control" [(ngModel)]="devoirService.devoir.arrondi" (blur)="checkArrondi($event)"
-            placeholder="0.5" aria-label="Arrondi de notation" aria-describedby="basic-addon1">
+            placeholder="0.5">
           <div class="input-group-append">
             <ng-template #popContent>Arrondi appliqué à la note finale bulletin.
               <hr/>
@@ -48,9 +47,9 @@
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupMode">Mode</label>
+            <label class="input-group-text">Mode</label>
           </div>
-          <select class="custom-select" id="inputGroupMode" [(ngModel)]="devoirService.devoir.notationMode">
+          <select class="custom-select" [(ngModel)]="devoirService.devoir.notationMode">
             <option selected>Choose...</option>
             <option [ngValue]="notationModeNormal.id">{{notationModeNormal.titre}}</option>
             <option [ngValue]="notationModeProportionnel.id">{{notationModeProportionnel.titre}}</option>
@@ -66,10 +65,9 @@
         </div>
         <div class="input-group mb-3" *ngIf="devoirService.devoir.notationMode == 2 || devoirService.devoir.notationMode == 3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Cible</span>
+            <span class="input-group-text">Cible</span>
           </div>
-          <input type="number" class="form-control" [(ngModel)]="devoirService.devoir.notationCible" placeholder="20" aria-label="Note cible"
-            aria-describedby="basic-addon1">
+          <input type="number" class="form-control" [(ngModel)]="devoirService.devoir.notationCible" placeholder="20">
           <div class="input-group-append">
             <ng-template #popContent>Note cible obtenue après application du mode transformation.</ng-template>
             <ng-template #popTitle>Note cible</ng-template>
@@ -82,7 +80,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupGrille">Grille</label>
           </div>
-          <div class="btn-group" ngbDropdown role="group" aria-label="Liste des grilles de notation">
+          <div class="btn-group" ngbDropdown role="group">
             <button class="btn btn-outline-secondary" ngbDropdownToggle>{{devoirService.devoir.grille?.titre}}
               <span *ngIf="devoirService.devoir.grille && grilleService.isAnExistingGrille(devoirService.devoir.grille) == false">(ce devoir)</span>
             </button>
@@ -107,7 +105,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupClasse">Classe</label>
           </div>
-          <div class="btn-group" ngbDropdown role="group" aria-label="Liste des classes">
+          <div class="btn-group" ngbDropdown role="group">
             <button class="btn btn-outline-secondary" ngbDropdownToggle>{{devoirService.devoir.classe?.titre}}
               <span *ngIf="devoirService.devoir.classe && classeService.isAnExistingClasse(devoirService.devoir.classe) == false">(ce devoir)</span>
             </button>
@@ -134,64 +132,82 @@
       <ng-template ngbPanelContent>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Auteur</span>
+            <span class="input-group-text">Auteur</span>
           </div>
-          <input type="text" class="form-control" [ngModel]="devoirService.devoir.author" placeholder="Auteur du devoir" aria-label="Auteur"
-            readonly aria-describedby="basic-addon1">
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.author" placeholder="Auteur du devoir">
         </div>
-
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Créé le</span>
+            <span class="input-group-text">Créé le</span>
           </div>
-          <input type="text" class="form-control" [ngModel]="devoirService.devoir.creationDate" aria-label="Date de création" aria-describedby="basic-addon1"
-            readonly ngbDatepicker #d1="ngbDatepicker">
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.creationDate" readonly ngbDatepicker #d1="ngbDatepicker">
         </div>
-
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Modifié le</span>
+            <span class="input-group-text">Modifié le</span>
           </div>
-          <input type="text" class="form-control" [ngModel]="devoirService.devoir.modificationDate" aria-label="Date de modification"
-            aria-describedby="basic-addon1" readonly ngbDatepicker #d3="ngbDatepicker">
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.modificationDate" readonly ngbDatepicker #d3="ngbDatepicker">
         </div>
-
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Version</span>
+            <span class="input-group-text">Version</span>
           </div>
-          <input type="text" class="form-control" [ngModel]="devoirService.devoir.toolVersion" placeholder="Auteur du devoir" aria-label="Auteur"
-            readonly aria-describedby="basic-addon1">
+          <input type="text" class="form-control" [ngModel]="devoirService.devoir.toolVersion" placeholder="Auteur du devoir" readonly>
         </div>
       </ng-template>
     </ngb-panel>
 
-    <ngb-panel title="Statistiques">
+    <ngb-panel title="Statistiques" *ngIf="devoirService.devoir.notations.length > 0">
       <ng-template ngbPanelContent>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Note maximum</span>
+            <span class="input-group-text">Note maximum</span>
           </div>
           <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_maximum)}} ({{devoirService.devoir.note_maximum}})"
-            placeholder="0" aria-label="Note maximum" aria-describedby="basic-addon1">
+            placeholder="0">
+          <div class="input-group-append">
+            <ng-template #popContentMax>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" *ngFor='let eleve of devoirService.devoir.getElevesAvecNoteMaximum()'>{{eleve}}</li>
+              </ul>
+            </ng-template>
+            <ng-template #popTitleMax>Eleves(s) concerné(s)</ng-template>
+            <button class="input-group-text" type="button" [ngbPopover]="popContentMax" [popoverTitle]="popTitleMax">
+              <i class="material-icons md-18">group</i>
+            </button>
+          </div>
         </div>
-
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Note minimum</span>
+            <span class="input-group-text">Note minimum</span>
           </div>
           <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_minimum)}} ({{devoirService.devoir.note_minimum}})"
-            placeholder="0" aria-label="Note minimum" aria-describedby="basic-addon1">
+            placeholder="0">
+          <div class="input-group-append">
+            <ng-template #popContentMin>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" *ngFor='let eleve of devoirService.devoir.getElevesAvecNoteMinimum()'>{{eleve}}</li>
+              </ul>
+            </ng-template>
+            <ng-template #popTitleMin>Eleves(s) concerné(s)</ng-template>
+            <button class="input-group-text" type="button" [ngbPopover]="popContentMin" [popoverTitle]="popTitleMin">
+              <i class="material-icons md-18">group</i>
+            </button>
+          </div>
         </div>
-
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Moyenne</span>
+            <span class="input-group-text">Moyenne</span>
           </div>
           <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_moyenne)}} ({{devoirService.devoir.note_moyenne}})"
-            placeholder="0" aria-label="Note minimum" aria-describedby="basic-addon1">
+            placeholder="0">
         </div>
-
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">&lt; Moyenne</span>
+          </div>
+          <input type="text" class="form-control" value="{{devoirService.devoir.nb_inferieur_moyenne}}" placeholder="0">
+        </div>
       </ng-template>
     </ngb-panel>
   </ngb-accordion>
