@@ -191,13 +191,46 @@ export class Devoir {
     return note;
   }
 
-  isEleveNote(eleve: string): boolean {
+  get nb_inferieur_moyenne(): number {
+    let nb = 0;
+    const moyenne = this.note_moyenne;
     for (const notation of this.notations) {
-      if (notation.eleve === eleve) {
-        return true;
+      if (notation.getNote() < moyenne) {
+        nb++;
       }
     }
-    return false;
+    return nb;
+  }
+
+  getEleveNotation(eleve: string): Notation {
+    for (const notation of this.notations) {
+      if (notation.eleve === eleve) {
+        return notation;
+      }
+    }
+    return null;
+  }
+
+  getElevesAvecNoteMaximum(): string[] {
+    let eleves = [];
+    const maximum = this.note_maximum;
+    for (const notation of this.notations) {
+      if (notation.getNote() === maximum) {
+        eleves.push(notation.eleve);
+      }
+    }
+    return eleves;
+  }
+
+  getElevesAvecNoteMinimum(): string[] {
+    let eleves = [];
+    const minimum = this.note_minimum;
+    for (const notation of this.notations) {
+      if (notation.getNote() === minimum) {
+        eleves.push(notation.eleve);
+      }
+    }
+    return eleves;
   }
 
   getCritere(exerciceId: string, questionId: string, critereId: string): Critere {
