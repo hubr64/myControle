@@ -32,15 +32,41 @@ export class DevoirNotationComponent implements DoCheck, OnInit {
     this.devoirService.doCheck();
   }
 
-  sortNotationby() {
+  sortEleveBy(eleves) {
     if (this.orderList === 'nom') {
-      return this.devoirService.devoir.notations.sort((a, b) =>
-        a.eleve > b.eleve ? 1 : a.eleve === b.eleve ? 0 : -1
+      return eleves.sort((a, b) =>
+        a > b ? 1 : a === b ? 0 : -1
       );
     } else {
-      return this.devoirService.devoir.notations.sort((a, b) =>
-        a.getNote() > b.getNote() ? -1 : a.getNote() === b.getNote() ? 0 : 1
-      );
+      return eleves.sort((a, b) => {
+        if (this.devoirService.devoir.getEleveNotation(a) === null && this.devoirService.devoir.getEleveNotation(b) === null) {
+          return 0;
+        }
+        if (this.devoirService.devoir.getEleveNotation(a) === null) {
+          return 1;
+        }
+        if (this.devoirService.devoir.getEleveNotation(b) === null) {
+          return -1;
+        }
+        if (this.devoirService.devoir.getEleveNotation(a).getNote() > this.devoirService.devoir.getEleveNotation(b).getNote()) {
+          return -1;
+        }
+        if (this.devoirService.devoir.getEleveNotation(a).getNote() === this.devoirService.devoir.getEleveNotation(b).getNote()) {
+          return 0;
+        }
+        if (this.devoirService.devoir.getEleveNotation(a).getNote() < this.devoirService.devoir.getEleveNotation(b).getNote()) {
+          return 1;
+        }
+      });
+    }
+  }
+
+  selectEleve(eleve: string) {
+    const notation = this.devoirService.devoir.getEleveNotation(eleve);
+    if (notation) {
+      this.selectNotation(notation);
+    } else {
+      this.addNotation(eleve);
     }
   }
 

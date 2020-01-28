@@ -1,18 +1,17 @@
-<div class="btn-toolbar bg-light py-1 border-top border-white" role="toolbar" aria-label="Toolbar notation">
-  <div class="btn-group btn-group-sm mr-2" role="actions" aria-label="Actions">
-    <span class="btn btn-sm btn-primary">
-      {{devoirService.devoir.classe.titre}}
-    </span>
-
+<div class="btn-toolbar bg-light py-1 border-top border-white" role="toolbar">
+  <div class="btn-group btn-group-sm mr-2" role="actions">
     <button type="button" class="btn btn-sm btn-outline-primary" title="Lancer la notation de la classe" (click)="launchNotation()">
       <i class="material-icons md-dark">play_circle_outline</i>
     </button>
     <button type="button" class="btn btn-sm btn-outline-danger" title="Supprimer toutes les notes" (click)="deleteAllNotations()">
       <i class="material-icons md-dark">delete_sweep</i>
     </button>
+    <button type="button" class="btn btn-sm btn-outline-success" title="Ajouter un groupe" (click)="addGroupe()">
+      <i class="material-icons md-dark">group_add</i>
+    </button>
   </div>
-  <div class="btn-group btn-group-sm mr-2" role="configuration" aria-label="Configuration">
-    <div class="btn-group" ngbDropdown role="group" aria-label="Trier par">
+  <div class="btn-group btn-group-sm mr-2" role="configuration">
+    <div class="btn-group" ngbDropdown role="group">
       <button class="btn btn-sm btn-outline-secondary" title="Trier par" ngbDropdownToggle>
         <i class="material-icons md-dark">filter_list</i>
       </button>
@@ -21,7 +20,7 @@
         <button [ngClass]="{'active':orderList == 'note'}" (click)="orderList = 'note'" ngbDropdownItem>Note</button>
       </div>
     </div>
-    <div class="btn-group" ngbDropdown role="group" aria-label="Mode d'affichage des notes">
+    <div class="btn-group" ngbDropdown role="group">
       <button class="btn btn-sm btn-outline-secondary" title="Mode d'affichage des notes" ngbDropdownToggle>
         <i class="material-icons md-dark">flip</i>
       </button>
@@ -35,34 +34,42 @@
   </div>
 </div>
 
-<div class="list-group m-3 w-50 mx-auto">
-  <button class="list-group-item active p-2">
-    <h2>Elèves évalués</h2>
-  </button>
-  <button class="list-group-item list-group-item-action" *ngFor='let notation of sortNotationby()' (click)="selectNotation(notation)"
-    [ngClass]="{'list-group-item-warning': notation.getNote() < devoirService.devoir.note_moyenne, 'list-group-item-danger': notation.getNote() == devoirService.devoir.note_minimum, 'list-group-item-success': notation.getNote() == devoirService.devoir.note_maximum}">
-    <span>
-      <h5>{{notation.eleve}}</h5>
-      <small [innerHTML]="notation.commentaire"></small>
-    </span>
-    <span class="bg-light" *ngIf="noteMode == 'brut'">
-      <span class="h3 mb-0" title="Note brute">{{notation.getNote()}}</span>
-      <span title="Note maximum (critères évalués uniquement)">{{notation.getNoteMax()}}</span>
-    </span>
-    <span class="bg-light" *ngIf="noteMode == 'ajuste'">
-      <span class="h3 mb-0" title="Note ajustée (arrondie)">{{devoirService.devoir.ajusterNote(notation.getNote())}}</span>
-      <span title="Note maximum ajustée (critères évalués uniquement)">{{devoirService.devoir.ajusterNote(notation.getNoteMax())}}</span>
-    </span>
-  </button>
-</div>
-
-<div class="list-group m-3 w-50 mx-auto">
-  <span class="list-group-item list-group-item-dark p-2">
-    <h2>Elèves non évalués</h2>
-  </span>
-  <ng-container *ngFor='let eleve of devoirService.devoir.classe.eleves'>
-    <button title="Ajouter une notation" class="list-group-item list-group-item-action list-group-item-light p-2" *ngIf='devoirService.devoir.isEleveNote(eleve) == false'
-      (click)="addNotation(eleve)">{{eleve}}
-    </button>
-  </ng-container>
-</div>
+<div class="container my-2">
+  <div class="row">
+    <div class="col">
+      <div class="list-group" *ngIf="devoirService.devoir.classe">
+        <span class="list-group-item active p-2">
+          <h2>{{devoirService.devoir.classe?.titre}}</h2>
+        </span>
+        <button class="list-group-item list-group-item-action" *ngFor='let eleve of sortEleveBy(this.devoirService.devoir.classe.eleves)'
+          (click)="selectEleve(eleve)" [ngClass]="{'list-group-item-warning': (devoirService.devoir.getEleveNotation(eleve) != null && devoirService.devoir.getEleveNotation(eleve).getNote() < devoirService.devoir.note_moyenne), 'list-group-item-danger': devoirService.devoir.getEleveNotation(eleve)?.getNote() == devoirService.devoir.note_minimum, 'list-group-item-success': devoirService.devoir.getEleveNotation(eleve)?.getNote() == devoirService.devoir.note_maximum}">
+          <span>
+            <h5>{{eleve}}</h5>
+            <small *ngIf="devoirService.devoir.getEleveNotation(eleve)" [innerHTML]="devoirService.devoir.getEleveNotation(eleve).commentaire"></small>
+          </span>
+          <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) && noteMode == 'brut'">
+            <span class="h3 mb-0" title="Note brute">{{devoirService.devoir.getEleveNotation(eleve).getNote()}}</span>
+            <span title="Note maximum (critères évalués uniquement)">{{devoirService.devoir.getEleveNotation(eleve).getNoteMax()}}</span>
+          </span>
+          <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) && noteMode == 'ajuste'">
+            <span class="h3 mb-0" title="Note ajustée (arrondie)">{{devoirService.devoir.ajusterNote(devoirService.devoir.getEleveNotation(eleve).getNote())}}</span>
+            <span title="Note maximum ajustée (critères évalués uniquement)">{{devoirService.devoir.ajusterNote(devoirService.devoir.getEleveNotation(eleve).getNoteMax())}}</span>
+          </span>
+          <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) == null">
+            <span class="h3 mb-0">?</span>
+            <span>?</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="col" *ngFor="let groupe of devoirService.devoir.groupes">
+      <span class="list-group-item active p-2">
+        <h2>{{groupe.titre}}</h2>
+      </span>
+      <button class="list-group-item list-group-item-action" *ngFor='let eleve of sortEleveBy(groupe.eleves)' (click)="selectEleve(eleve)">
+        <span>
+          <h5>{{eleve}}</h5>
+        </span>
+      </button>
+    </div>
+  </div>
