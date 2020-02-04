@@ -16,6 +16,7 @@ export class Note implements Deserializable {
       if (structCritere.length === 3) {
         this.critere = devoir.getCritere(structCritere[0], structCritere[0] + '_' + structCritere[1], input.critere);
       }
+      this.noteCoeffs = devoir.noteCoeffs;
     }
     return this;
   }
@@ -31,7 +32,7 @@ export class Note implements Deserializable {
 
   // Get note according to status and criteria bareme
   getNote(critereFiltre?: any[]) {
-    if (this.status && this.noteCoeffs) {
+    if (this.status && this.critere && this.noteCoeffs) {
       // No filter provided thus everything is possible
       if (critereFiltre === undefined) {
         return this.critere.bareme * this.noteCoeffs[this.status];
@@ -51,7 +52,7 @@ export class Note implements Deserializable {
 
   // Get note max which mean only note on examining criterias
   getNoteMax(critereFiltre?: any[]) {
-    if (this.status) {
+    if (this.status && this.critere) {
       // No filter provided thus everything is possible
       if (critereFiltre === undefined) {
         return this.critere.bareme;

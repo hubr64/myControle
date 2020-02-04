@@ -61,7 +61,7 @@ export class Devoir {
     this.devoirDate = input.data.general.date ? new Date(input.data.general.date) : new Date();
     this.classe = input.data.general.classe ? new Classe().deserialize(input.data.general.classe) : null;
     this.grille = input.data.general.grille ? new Grille().deserialize(input.data.general.grille) : null;
-    this.groupes = input.data.groupes ? input.data.groupes : [];
+    this.groupes = [];
     this.exercices = [];
     this.notations = [];
 
@@ -75,6 +75,9 @@ export class Devoir {
     }
     for (const keyEleve of Object.keys(input.data.notations)) {
       this.notations.push(new Notation().deserialize(input.data.notations[keyEleve], this));
+    }
+    for (const keyGroupe of Object.keys(input.data.groupes)) {
+      this.groupes.push(new Groupe().deserialize(input.data.groupes[keyGroupe]));
     }
 
     return this;
@@ -107,8 +110,8 @@ export class Devoir {
     for (const exercice of this.exercices) {
       serializeDevoir.data.exercices.push(exercice.serialize());
     }
-    for (const note of this.notations) {
-      serializeDevoir.data.notations.push(note.serialize());
+    for (const notation of this.notations) {
+      serializeDevoir.data.notations.push(notation.serialize());
     }
     return serializeDevoir;
   }
@@ -156,9 +159,11 @@ export class Devoir {
   get note_maximum(): number {
     let note = 0;
     for (const notation of this.notations) {
-      const curNote = notation.getNote();
-      if (curNote > note) {
-        note = curNote;
+      if (this.isGroupe(notation.eleve) === false) {
+        const curNote = notation.getNote();
+        if (curNote > note) {
+          note = curNote;
+        }
       }
     }
     return note;
@@ -167,9 +172,11 @@ export class Devoir {
   get note_minimum(): number {
     let note = this.bareme;
     for (const notation of this.notations) {
-      const curNote = notation.getNote();
-      if (curNote < note) {
-        note = curNote;
+      if (this.isGroupe(notation.eleve) === false) {
+        const curNote = notation.getNote();
+        if (curNote < note) {
+          note = curNote;
+        }
       }
     }
     return note;
@@ -179,15 +186,19 @@ export class Devoir {
     let note = 0;
     let nbNote = 0;
     for (const notation of this.notations) {
-      note += notation.getNote();
-      nbNote++;
+      if (this.isGroupe(notation.eleve) === false) {
+        note += notation.getNote();
+        nbNote++;
+      }
     }
-    // Moyenne est la somme totale divisée par le nombre de note (on ne tient pas compte des non notés)
-    note = note / nbNote;
-    // On arrondit à 3 chiffres après la virgule
-    note = note * 1000;
-    note = Math.round(note);
-    note = note / 1000;
+    if (nbNote > 0) {
+      // Moyenne est la somme totale divisée par le nombre de note (on ne tient pas compte des non notés)
+      note = note / nbNote;
+      // On arrondit à 3 chiffres après la virgule
+      note = note * 1000;
+      note = Math.round(note);
+      note = note / 1000;
+    }
     return note;
   }
 
@@ -195,8 +206,10 @@ export class Devoir {
     let nb = 0;
     const moyenne = this.note_moyenne;
     for (const notation of this.notations) {
-      if (notation.getNote() < moyenne) {
-        nb++;
+      if (this.isGroupe(notation.eleve) === false) {
+        if (notation.getNote() < moyenne) {
+          nb++;
+        }
       }
     }
     return nb;
@@ -211,12 +224,28 @@ export class Devoir {
     return null;
   }
 
+  deleteEleveNotation(eleve: string) {
+    let indexToDelete = null;
+    for (const [indexNotation, notation] of this.notations.entries()) {
+      if (notation.eleve === eleve) {
+        indexToDelete = indexNotation;
+        break;
+      }
+    }
+    if (indexToDelete !== null) {
+      // On supprime la notation dans le devoir
+      this.notations.splice(indexToDelete, 1);
+    }
+  }
+
   getElevesAvecNoteMaximum(): string[] {
     let eleves = [];
     const maximum = this.note_maximum;
     for (const notation of this.notations) {
-      if (notation.getNote() === maximum) {
-        eleves.push(notation.eleve);
+      if (this.isGroupe(notation.eleve) === false) {
+        if (notation.getNote() === maximum) {
+          eleves.push(notation.eleve);
+        }
       }
     }
     return eleves;
@@ -226,8 +255,10 @@ export class Devoir {
     let eleves = [];
     const minimum = this.note_minimum;
     for (const notation of this.notations) {
-      if (notation.getNote() === minimum) {
-        eleves.push(notation.eleve);
+      if (this.isGroupe(notation.eleve) === false) {
+        if (notation.getNote() === minimum) {
+          eleves.push(notation.eleve);
+        }
       }
     }
     return eleves;
@@ -242,6 +273,25 @@ export class Devoir {
       }
     }
     return null;
+  }
+
+  getEleveGroupe(eleve: string): Groupe {
+    for (const groupe of this.groupes) {
+      if (groupe.eleves.indexOf(eleve) !== -1) {
+        return groupe;
+      }
+    }
+    return null;
+  }
+
+  isGroupe(nomGroupe: string): boolean {
+    let isGroupe = false;
+    for (const groupe of this.groupes) {
+      if (groupe.nom === nomGroupe) {
+        return true;
+      }
+    }
+    return isGroupe;
   }
 
 }

@@ -9,4 +9,8 @@ export class Groupe implements Deserializable {
     Object.assign(this, input);
     return this;
   }
+
+  isEleveInGroupe(eleve: string) {
+    return this.eleves.indexOf(eleve) !== -1;
+  }
 }

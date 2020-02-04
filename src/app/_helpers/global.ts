@@ -46,3 +46,4 @@ export const questionNbCritereDefaut = 1;
 export const critereTitreDefaut = 'Définition du critère...';
 export const critereBaremeDefaut = 0;
 export const critereFreeDefaut = 'Texte libre...';
+export const groupeNomDefaut = 'Groupe n° ';

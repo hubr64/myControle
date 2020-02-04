@@ -41,35 +41,44 @@
         <span class="list-group-item active p-2">
           <h2>{{devoirService.devoir.classe?.titre}}</h2>
         </span>
-        <button class="list-group-item list-group-item-action" *ngFor='let eleve of sortEleveBy(this.devoirService.devoir.classe.eleves)'
-          (click)="selectEleve(eleve)" [ngClass]="{'list-group-item-warning': (devoirService.devoir.getEleveNotation(eleve) != null && devoirService.devoir.getEleveNotation(eleve).getNote() < devoirService.devoir.note_moyenne), 'list-group-item-danger': devoirService.devoir.getEleveNotation(eleve)?.getNote() == devoirService.devoir.note_minimum, 'list-group-item-success': devoirService.devoir.getEleveNotation(eleve)?.getNote() == devoirService.devoir.note_maximum}">
-          <span>
-            <h5>{{eleve}}</h5>
-            <small *ngIf="devoirService.devoir.getEleveNotation(eleve)" [innerHTML]="devoirService.devoir.getEleveNotation(eleve).commentaire"></small>
-          </span>
-          <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) && noteMode == 'brut'">
-            <span class="h3 mb-0" title="Note brute">{{devoirService.devoir.getEleveNotation(eleve).getNote()}}</span>
-            <span title="Note maximum (critères évalués uniquement)">{{devoirService.devoir.getEleveNotation(eleve).getNoteMax()}}</span>
-          </span>
-          <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) && noteMode == 'ajuste'">
-            <span class="h3 mb-0" title="Note ajustée (arrondie)">{{devoirService.devoir.ajusterNote(devoirService.devoir.getEleveNotation(eleve).getNote())}}</span>
-            <span title="Note maximum ajustée (critères évalués uniquement)">{{devoirService.devoir.ajusterNote(devoirService.devoir.getEleveNotation(eleve).getNoteMax())}}</span>
-          </span>
-          <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) == null">
-            <span class="h3 mb-0">?</span>
-            <span>?</span>
-          </span>
-        </button>
+        <ng-container *ngFor='let selectedEleve of sortEleveBy(this.devoirService.devoir.classe.eleves)'>
+          <ng-container *ngTemplateOutlet="eleveButton; context:{eleve: selectedEleve}"></ng-container>
+        </ng-container>
       </div>
     </div>
-    <div class="col" *ngFor="let groupe of devoirService.devoir.groupes">
-      <span class="list-group-item active p-2">
-        <h2>{{groupe.titre}}</h2>
-      </span>
-      <button class="list-group-item list-group-item-action" *ngFor='let eleve of sortEleveBy(groupe.eleves)' (click)="selectEleve(eleve)">
-        <span>
-          <h5>{{eleve}}</h5>
+    <div class="col groupes" *ngIf="devoirService.devoir.groupes.length > 0">
+      <div class="list-group mb-3" *ngFor="let groupe of devoirService.devoir.groupes">
+        <span class="group-header list-group-item active p-2">
+          <h2 (click)="selectGroupe(groupe)">{{groupe.nom}}</h2>
+          <i class="material-icons" (click)="editGroupe(groupe)">edit</i>
         </span>
-      </button>
+        <span class="list-group-item p-2" *ngIf="groupe.eleves.length == 0">Aucun élève dans le groupe</span>
+        <ng-container *ngFor='let selectedEleve of sortEleveBy(groupe.eleves)'>
+          <ng-container *ngTemplateOutlet="eleveButton; context:{eleve: selectedEleve}"></ng-container>
+        </ng-container>
+      </div>
     </div>
   </div>
+</div>
+
+<ng-template #eleveButton let-eleve="eleve">
+  <button class="list-group-item list-group-item-action" (click)="selectEleve(eleve)" [ngClass]="{'list-group-item-warning': (devoirService.devoir.getEleveNotation(eleve) != null && devoirService.devoir.getEleveNotation(eleve).getNote() < devoirService.devoir.note_moyenne), 'list-group-item-danger': devoirService.devoir.getEleveNotation(eleve)?.getNote() == devoirService.devoir.note_minimum, 'list-group-item-success': devoirService.devoir.getEleveNotation(eleve)?.getNote() == devoirService.devoir.note_maximum}">
+    <span>
+      <i class="material-icons" *ngIf="devoirService.devoir.getEleveGroupe(eleve) != null" title="Appartient à {{devoirService.devoir.getEleveGroupe(eleve).nom}}">group</i>
+      <h5>{{eleve}}</h5>
+      <small *ngIf="devoirService.devoir.getEleveNotation(eleve)" [innerHTML]="devoirService.devoir.getEleveNotation(eleve).commentaire"></small>
+    </span>
+    <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) && noteMode == 'brut'">
+      <span class="h3 mb-0" title="Note brute">{{devoirService.devoir.getEleveNotation(eleve).getNote()}}</span>
+      <span title="Note maximum (critères évalués uniquement)">{{devoirService.devoir.getEleveNotation(eleve).getNoteMax()}}</span>
+    </span>
+    <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) && noteMode == 'ajuste'">
+      <span class="h3 mb-0" title="Note ajustée (arrondie)">{{devoirService.devoir.ajusterNote(devoirService.devoir.getEleveNotation(eleve).getNote())}}</span>
+      <span title="Note maximum ajustée (critères évalués uniquement)">{{devoirService.devoir.ajusterNote(devoirService.devoir.getEleveNotation(eleve).getNoteMax())}}</span>
+    </span>
+    <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) == null">
+      <span class="h3 mb-0">?</span>
+      <span>?</span>
+    </span>
+  </button>
+</ng-template>

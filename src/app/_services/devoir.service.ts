@@ -162,7 +162,7 @@ export class DevoirService {
   }
 
   doCheck() {
-    // Convert to JSON to prevent shadow copy
+    /*// Convert to JSON to prevent shadow copy
     let currentDevoir = JSON.stringify(this.devoir);
 
     // Remove the modification date that is by definition not to take into account
@@ -174,7 +174,7 @@ export class DevoirService {
       console.log('Modification détectée.');
       this.updateDevoir();
       this.oldDevoir = currentDevoir;
-    }
+    }*/
   }
 
   updateDevoir() {

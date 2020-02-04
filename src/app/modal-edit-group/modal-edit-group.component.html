@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title" *ngIf="notation == null">Edition d'un groupe de notation</h4>
+  <button type="button" class="close" (click)="modal.dismiss('close')">
+    <span>&times;</span>
+  </button>
+</div>
+<div class="modal-body" *ngIf="groupe">
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Nom du groupe</span>
+    </div>
+    <input type="text" class="form-control" [(ngModel)]="groupe.nom" placeholder="Nom du groupe" ngbAutofocus>
+  </div>
+  <div class="list-group m-3 mx-auto">
+    <span class="list-group-item list-group-item-secondary p-1">
+      <h4>Eleves du groupe</h4>
+    </span>
+    <button type="button" class="list-group-item list-group-item-action" *ngFor='let eleve of devoirService.devoir.classe.eleves'
+      [ngClass]="{'list-group-item-info': groupe.isEleveInGroupe(eleve)}" (click)="addEleveInGroupe(eleve)">
+      <span>{{eleve}}</span>
+      <i class="material-icons" *ngIf="devoirService.devoir.getEleveGroupe(eleve) != null" title="Appartient à {{devoirService.devoir.getEleveGroupe(eleve).nom}}">group</i>
+    </button>
+  </div>
+</div>
+<div class="modal-footer">
+  <button (click)="deleteGroupe()" type="button" class="btn btn-outline-danger" title="Supprimer définitivement le groupe">
+    <i class="material-icons md-dark">delete</i>
+  </button>
+  <button type="button" class="btn btn-success" (click)="modal.close('ok')">ENREGISTRER</button>
+</div>

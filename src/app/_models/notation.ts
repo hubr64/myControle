@@ -17,6 +17,9 @@ export class Notation implements Deserializable {
     for (const key of Object.keys(input.notes)) {
       this.notes.push(new Note().deserialize(input.notes[key], devoir));
     }
+    if (devoir) {
+      this.noteCoeffs = devoir.noteCoeffs;
+    }
     return this;
   }
 

@@ -10,6 +10,7 @@ import { ConfigurationService } from '../_services/configuration.service';
 import { Notation } from '../_models/notation';
 import { Critere } from '../_models/critere';
 import { Note } from '../_models/note';
+import { Groupe } from '../_models/groupe';
 
 @Component({
   selector: 'app-modal-eleve-notation',
@@ -19,6 +20,7 @@ import { Note } from '../_models/note';
 export class ModalEleveNotationComponent implements OnInit {
 
   @Input() public notation: Notation = null;
+  @Input() public groupe: Groupe = null;
   @Input() public eleve: string = null;
   @Input() public notationMode = null;
 
@@ -39,9 +41,9 @@ export class ModalEleveNotationComponent implements OnInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
 
-    // on ne capture le calvier que si on note les criteres pas avant
+    // on ne capture le clavier que si on note les criteres pas avant
     if (this.notation) {
-      // On ne capture pas le calvier si l'utilisateur est en train de rédiger le commentaire
+      // On ne capture pas le clavier si l'utilisateur est en train de rédiger le commentaire
       if (this.editorIsFocused === false) {
 
         // Capture des déplacements entre criteres
@@ -58,7 +60,7 @@ export class ModalEleveNotationComponent implements OnInit {
           this.onChangeStatut(event.key);
           document.getElementById(this.critereEvalue.id).scrollIntoView();
         }
-        // Pour eviter tout effet de bord on ne laisse pas se prpager les saisies claviers
+        // Pour eviter tout effet de bord on ne laisse pas se propager les saisies claviers
         event.stopPropagation();
         event.preventDefault();
       }
@@ -75,6 +77,7 @@ export class ModalEleveNotationComponent implements OnInit {
     private modal: NgbActiveModal) {
     this.notation = null;
     this.eleve = null;
+    this.groupe = null;
     this.noteStatusOk = this.configurationService.getValue('noteStatusOk');
     this.noteStatusEnCours = this.configurationService.getValue('noteStatusEnCours');
     this.noteStatusKo = this.configurationService.getValue('noteStatusKo');
@@ -89,7 +92,7 @@ export class ModalEleveNotationComponent implements OnInit {
 
   updateDetails() {
     if (this.notationMode) {
-      // Des que tout est pret on charge la listre des criteres concernés
+      // Des que tout est pret on charge la liste des criteres concernés
       this.criteres = [];
       for (const [indexExe, exercice] of this.devoirService.devoir.exercices.entries()) {
         if (this.devoirService.devoir.exercices[indexExe].questions) {
@@ -104,12 +107,20 @@ export class ModalEleveNotationComponent implements OnInit {
           }
         }
       }
+
+      // Si au chargement on fournit un élève alors on doit gérer en cherchant sa notation
       if (this.eleve) {
         this.openNotation(this.eleve);
-      }
-      // Si une notation est dispo dès le début alors on définit tout de suite le premier critère à évaluer
-      if (this.notation) {
-        this.setPremierCritereEvalue();
+      } else {
+        // Si au chargement on fournit un groupe alors la notation utilisée sera
+        if (this.groupe) {
+          this.openNotationForGroupe();
+        } else {
+          // Si une notation est fournit dès le début alors on définit tout de suite le premier critère à évaluer
+          if (this.notation) {
+            this.setPremierCritereEvalue();
+          }
+        }
       }
     } else {
       setTimeout(() => {
@@ -151,7 +162,7 @@ export class ModalEleveNotationComponent implements OnInit {
     this.critereEvaluePos = this.criteres.indexOf(critere);
 
     // on cherche la notation dans le devoir (car on veut modifier le devoir et pas la notation dans la fenêtre)
-    for (const notation of this.devoirService.devoir.notations) {
+    /*for (const notation of this.devoirService.devoir.notations) {
       if (notation === this.notation) {
         let critereFound = false;
         for (const note of notation.notes) {
@@ -179,6 +190,36 @@ export class ModalEleveNotationComponent implements OnInit {
           notation.notes.push(this.createNote(this.noteStatusKo, this.critereEvalue));
         }
       }
+    }*/
+    let critereFound = false;
+    for (const note of this.notation.notes) {
+      if (note.critere === this.critereEvalue) {
+        // Si trouvé on bascule la nouvelle status en fonction de l'actuel (cyclique)
+        critereFound = true;
+        switch (note.status) {
+          case null:
+            note.status = this.noteStatusKo;
+            break;
+          case this.noteStatusKo:
+            note.status = this.noteStatusEnCours;
+            break;
+          case this.noteStatusEnCours:
+            note.status = this.noteStatusOk;
+            break;
+          case this.noteStatusOk:
+            note.status = null;
+            break;
+        }
+      }
+    }
+    // Si le note n'a pas été trouvé alors on en créé une nouvelle à l'état KO (premier état en cas de clic suivant un état non défini)
+    if (critereFound === false) {
+      this.notation.notes.push(this.createNote(this.noteStatusKo, this.critereEvalue));
+    }
+
+    // Si c'est un groupe on doit réaliser l'oépration pour tous les élèves du groupe
+    if (this.groupe) {
+      this.duplicateGroupeToEleves();
     }
   }
 
@@ -202,6 +243,7 @@ export class ModalEleveNotationComponent implements OnInit {
     }
 
     // on cherche la notation dans le devoir (car on veut modifier le devoir et pas la notation dans la fenêtre)
+    /*
     for (const notation of this.devoirService.devoir.notations) {
       if (notation === this.notation) {
         let critereFound = false;
@@ -217,7 +259,25 @@ export class ModalEleveNotationComponent implements OnInit {
           notation.notes.push(this.createNote(newStatus, this.critereEvalue));
         }
       }
+    }*/
+    let critereFound = false;
+    for (const note of this.notation.notes) {
+      if (note.critere === this.critereEvalue) {
+        // Si trouvé on applique le nouveau status
+        critereFound = true;
+        note.status = newStatus;
+      }
     }
+    // SI pas trouvé on créé la ouvelle note avec le nouveau status
+    if (critereFound === false && newStatus !== null) {
+      this.notation.notes.push(this.createNote(newStatus, this.critereEvalue));
+    }
+
+    // Si c'est un groupe on doit réaliser l'oépration pour tous les élèves du groupe
+    if (this.groupe) {
+      this.duplicateGroupeToEleves();
+    }
+
     // Une fois le nouveau status appliqué on passe au critère suivant
     if (this.critereEvaluePos !== this.criteres.length - 1) {
       this.onKeyDown();
@@ -253,34 +313,58 @@ export class ModalEleveNotationComponent implements OnInit {
 
   // Tous les critères sont validés (supprime tout puis recréér tou à OK)
   acceptAllCriteres() {
-    for (const notation of this.devoirService.devoir.notations) {
+    /*for (const notation of this.devoirService.devoir.notations) {
       if (notation === this.notation) {
         notation.notes = [];
         for (const critere of this.criteres) {
           notation.notes.push(this.createNote(this.noteStatusOk, critere));
         }
       }
+    }*/
+    this.notation.notes = [];
+    for (const critere of this.criteres) {
+      this.notation.notes.push(this.createNote(this.noteStatusOk, critere));
+    }
+
+    // Si c'est un groupe il faut également faire la manipulation pour tous les élèves du groupe
+    if (this.groupe) {
+      this.duplicateGroupeToEleves();
     }
   }
 
   // Tous les critères sont refusés (supprime tout puis recréé tou à ko)
   denyAllCriteres() {
-    for (const notation of this.devoirService.devoir.notations) {
+    /*for (const notation of this.devoirService.devoir.notations) {
       if (notation === this.notation) {
         notation.notes = [];
         for (const critere of this.criteres) {
           notation.notes.push(this.createNote(this.noteStatusKo, critere));
         }
       }
+    }*/
+    this.notation.notes = [];
+    for (const critere of this.criteres) {
+      this.notation.notes.push(this.createNote(this.noteStatusKo, critere));
+    }
+
+    // Si c'est un groupe il faut également faire la manipulation pour tous les élèves du groupe
+    if (this.groupe) {
+      this.duplicateGroupeToEleves();
     }
   }
 
   // Tous les critères sont supprimés (permet de refaire la notation car tout passe à indéfini)
   deleteAllCriteres() {
-    for (const notation of this.devoirService.devoir.notations) {
+    /*for (const notation of this.devoirService.devoir.notations) {
       if (notation === this.notation) {
         notation.notes = [];
       }
+    }*/
+    this.notation.notes = [];
+
+    // Si c'est un groupe il faut également faire la manipulation pour tous les élèves du groupe
+    if (this.groupe) {
+      this.duplicateGroupeToEleves();
     }
   }
 
@@ -294,6 +378,7 @@ export class ModalEleveNotationComponent implements OnInit {
   }
   public onBlurEditor({ editor }: BlurEvent) {
     this.editorIsFocused = false;
+    this.duplicateGroupeToEleves();
   }
   public onFocusEditor({ editor }: FocusEvent) {
     this.editorIsFocused = true;
@@ -307,12 +392,8 @@ export class ModalEleveNotationComponent implements OnInit {
   // Quand un élève est choisi alors on définit la notation pour cet élève (soit elle existe soit elle doit être créé)
   openNotation(eleve: string) {
     // First check if the notation is not already existing
-    for (const notation of this.devoirService.devoir.notations) {
-      if (notation.eleve === eleve) {
-        this.notation = notation;
-        break;
-      }
-    }
+    this.notation = this.devoirService.devoir.getEleveNotation(eleve);
+
     // If not existing then create a new one and append it in the devoir
     if (this.notation === null) {
       let newNotation = new Notation();
@@ -322,17 +403,37 @@ export class ModalEleveNotationComponent implements OnInit {
       newNotation.notes_coefficients = this.devoirService.devoir.noteCoeffs;
 
       this.notation = newNotation;
-      this.devoirService.devoir.notations.push(newNotation);
-
+      this.devoirService.devoir.notations.push(this.notation);
     }
     // Begin edition
     this.setPremierCritereEvalue();
+  }
+
+  openNotationForGroupe() {
+    // On traite d'abord le cas de chaque élève du groupe
+    for (const eleve of this.groupe.eleves) {
+      const eleveNotation = this.devoirService.devoir.getEleveNotation(eleve);
+
+      // Si l'élève n'a pas de notation alors on lui en créé une et on l'ajoute au devoir
+      if (eleveNotation === null) {
+        let newNotation = new Notation();
+        newNotation.eleve = eleve;
+        newNotation.commentaire = '';
+        newNotation.notes = [];
+        newNotation.notes_coefficients = this.devoirService.devoir.noteCoeffs;
+        this.devoirService.devoir.notations.push(newNotation);
+      }
+    }
+
+    // Maintenance que les élèves sont traités, on gère le groupe (comme une notation à part entière)
+    this.openNotation(this.groupe.nom);
   }
 
   // On passe à une notation suivante qui amènera d'abord à choisir l'élève
   nextNotation() {
     // Clear the current notation
     this.eleve = null;
+    this.groupe = null;
     this.notation = null;
     this.critereEvalue = null;
     // Clear commentaire management information
@@ -341,20 +442,41 @@ export class ModalEleveNotationComponent implements OnInit {
   }
 
   deleteNotation() {
+    // On demande confirmation avant de vraiement vouloir supprimer
     if (confirm('Voulez-vous vraiment supprimer définitivement la notation de ' + this.notation.eleve + ' ?')) {
-      let indexToDelete = null;
-      for (const [indexNotation, notation] of this.devoirService.devoir.notations.entries()) {
-        if (notation === this.notation) {
-          indexToDelete = indexNotation;
-          break;
+      // On supprime la notation
+      this.devoirService.devoir.deleteEleveNotation(this.notation.eleve);
+
+      // Si c'est la notation d'un groupe alors il faut traiter le cas des élèves du groupe
+      if (this.groupe) {
+        if (confirm('Voulez-vous également supprimer les notations des élèves du groupe ?')) {
+          for (const eleve of this.groupe.eleves) {
+            this.devoirService.devoir.deleteEleveNotation(eleve);
+          }
         }
       }
-      if (indexToDelete !== null) {
+
+      // En mode single on ferme la fenêtre modale, en mode multi on passe à la notation suivante
+      if (this.notationMode === 'single') {
+        this.modal.close('ok');
+      } else {
         this.nextNotation();
-        this.devoirService.devoir.notations.splice(indexToDelete, 1);
-        if (this.notationMode === 'single') {
-          this.modal.close('ok');
-        }
+      }
+    }
+  }
+
+  duplicateGroupeToEleves() {
+    // SI un groupe est bien défini
+    if (this.groupe) {
+      // On prend chaque éleve du groupe
+      for (const eleve of this.groupe.eleves) {
+        // On supprime la notation actuelle
+        this.devoirService.devoir.deleteEleveNotation(eleve);
+        // On copie la notation du groupe dans la notation de l'élève (en remettant l'élève après)
+        const eleveNotationCopy = JSON.stringify(this.notation.serialize());
+        let eleveNotation = new Notation().deserialize(JSON.parse(eleveNotationCopy), this.devoirService.devoir);
+        eleveNotation.eleve = eleve;
+        this.devoirService.devoir.notations.push(eleveNotation);
       }
     }
   }

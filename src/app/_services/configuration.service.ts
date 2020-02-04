@@ -44,7 +44,8 @@ export class ConfigurationService {
       questionNbCritereDefaut: { modifiable: true, title: 'Question / Nb critères par défaut', value: Configuration.questionNbCritereDefaut },
       critereTitreDefaut: { modifiable: true, title: 'Critère / Titre par défaut', value: Configuration.critereTitreDefaut },
       critereBaremeDefaut: { modifiable: true, title: 'Critère / Barème par défaut', value: Configuration.critereBaremeDefaut },
-      critereFreeDefaut: { modifiable: true, title: 'Texte libre / Texte par défaut', value: Configuration.critereFreeDefaut }
+      critereFreeDefaut: { modifiable: true, title: 'Texte libre / Texte par défaut', value: Configuration.critereFreeDefaut },
+      groupeNomDefaut: { modifiable: true, title: 'Nom de groupe par défaut', value: Configuration.groupeNomDefaut }
     };
 
     // Load local storage that replace the global initial storage
