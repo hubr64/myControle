@@ -26,7 +26,7 @@ export class ModalConfirmComponent implements OnInit {
 
   updateDetails() {
     if (this.itemConfirm) {
-      switch (this.itemConfirm.constructor.name) {
+      switch (this.itemConfirm.className) {
         case 'Freetext': {
           this.itemDetails = 'un texte libre';
           this.itemContent = null;

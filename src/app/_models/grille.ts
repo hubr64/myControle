@@ -5,6 +5,12 @@ import { Capacite } from './capacite';
 export class Grille implements Deserializable {
   titre: string;
   competences: Competence[];
+  className: string;
+
+  constructor() {
+    this.className = 'Grille';
+    this.competences = [];
+  }
 
   deserialize(input: any) {
     this.titre = input.titre;

@@ -34,7 +34,7 @@ export class ModalMoveComponent implements OnInit {
 
   updateDetails() {
     if (this.item) {
-      this.itemType = this.item.constructor.name;
+      this.itemType = this.item.className;
     } else {
       setTimeout(() => {
         this.updateDetails();

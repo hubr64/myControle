@@ -8,14 +8,14 @@
 <div class="modal-body" *ngIf="displayCapacites==false">
   <div *ngIf="notation" class="list-group list-group-root well" [ngStyle]="{'font-size.px': fontSizeDisplay}">
     <ng-container *ngFor='let exercice of devoirService.devoir.exercices'>
-      <button type="button" class="list-group-item list-group-item-action list-group-item-dark" *ngIf="exercice.constructor.name == 'Exercice'">
+      <button type="button" class="list-group-item list-group-item-action list-group-item-dark" *ngIf="exercice.className == 'Exercice'">
         <span class="badge badge-pill exercice">&nbsp;</span>
         <span [innerHTML]="exercice.title"></span>
         <span>{{this.notation.getNote(exercice.criteres)}}/{{this.notation.getNoteMax(exercice.criteres)}}</span>
       </button>
       <div class="list-group">
         <ng-container *ngFor='let question of exercice.questions'>
-          <button type="button" class="list-group-item list-group-item-action list-group-item-dark" *ngIf="question.constructor.name == 'Question'">
+          <button type="button" class="list-group-item list-group-item-action list-group-item-dark" *ngIf="question.className == 'Question'">
             <span class="badge badge-pill question">&nbsp;</span>
             <span [innerHTML]="question.title"></span>
             <span>{{this.notation.getNote(question.criteres)}}/{{this.notation.getNoteMax(question.criteres)}}</span>
@@ -23,7 +23,7 @@
           <div class="list-group">
             <ng-container *ngFor='let critere of question.criteres'>
               <button [id]="critere.id" type="button" class="list-group-item list-group-item-action" [ngClass]="{'list-group-item-info': critereEvalue == critere}"
-                *ngIf="critere.constructor.name == 'Critere'" (click)="toggleCritere(critere)">
+                *ngIf="critere.className == 'Critere'" (click)="toggleCritere(critere)">
                 <span class="badge badge-pill critere">&nbsp;</span>
                 <span [innerHTML]="critere.text"></span>
                 <span [ngSwitch]="notation.getCritereStatus(critere)">

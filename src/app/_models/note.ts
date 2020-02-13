@@ -6,6 +6,12 @@ export class Note implements Deserializable {
   critere: Critere;
   status: string;
   noteCoeffs: any[];
+  className: string;
+
+  constructor() {
+    this.className = 'Note';
+    this.critere = null;
+  }
 
   // Convert from JSON
   deserialize(input: any, devoir: Devoir) {

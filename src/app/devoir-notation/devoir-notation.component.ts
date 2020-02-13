@@ -156,7 +156,7 @@ export class DevoirNotationComponent implements DoCheck, OnInit {
         for (const question of exercice.questions) {
           if (question.criteres) {
             for (const critere of question.criteres) {
-              if (critere.constructor.name === 'Critere') {
+              if (critere.className === 'Critere') {
                 progressValue++;
               }
             }

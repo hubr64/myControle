@@ -7,6 +7,12 @@ export class Critere implements Deserializable {
   text: string;
   capacite: Capacite;
   bareme: number;
+  className: string;
+
+  constructor() {
+    this.className = 'Critere';
+    this.capacite = null;
+  }
 
   // Convert from JSON
   deserialize(input: any, grille?: Grille) {

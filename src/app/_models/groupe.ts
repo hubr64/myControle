@@ -4,6 +4,11 @@ export class Groupe implements Deserializable {
   id: string;
   nom: string;
   eleves: string[];
+  className: string;
+
+  constructor() {
+    this.className = 'Groupe';
+  }
 
   deserialize(input: any) {
     Object.assign(this, input);

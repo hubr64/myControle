@@ -12,7 +12,6 @@ export class Devoir {
   creationDate: Date;
   modificationDate: Date;
   toolVersion: string;
-
   titre: string;
   devoirDate: Date;
   arrondi: number;
@@ -20,14 +19,15 @@ export class Devoir {
   notationCible: number;
   classe: Classe;
   grille: Grille;
-
   exercices: any[];
   notations: Notation[];
   groupes: Groupe[];
-
   noteCoeffs: any[];
 
+  className: string;
+
   constructor() {
+    this.className = 'Devoir';
     this.author = '';
     this.creationDate = new Date();
     this.modificationDate = new Date();

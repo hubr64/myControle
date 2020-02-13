@@ -5,6 +5,12 @@ export class Competence implements Deserializable {
   titre: string;
   couleur: string;
   capacites: Capacite[];
+  className: string;
+
+  constructor() {
+    this.className = 'Competence';
+    this.capacites = [];
+  }
 
   deserialize(input: any) {
     this.titre = input.titre;

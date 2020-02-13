@@ -8,6 +8,12 @@ export class Exercice implements Deserializable {
   id: string;
   title: string;
   questions: any[];
+  className: string;
+
+  constructor() {
+    this.className = 'Exercice';
+    this.questions = [];
+  }
 
   // Convert from JSON
   deserialize(input: any, grille?: Grille) {

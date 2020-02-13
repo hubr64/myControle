@@ -9,37 +9,37 @@
     <ng-container *ngFor='let exercice of devoirService.devoir.exercices'>
       <button [ngClass]="{'active': exercice==item, 'list-group-item-success' : exercice==selectedItem}" type="button" class="list-group-item list-group-item-action"
         [disabled]="itemType != 'Exercice' && itemType != 'Freetext'" (click)="selectItem(exercice, 'before')">
-        <span *ngIf="exercice.constructor.name == 'Freetext'">
+        <span *ngIf="exercice.className == 'Freetext'">
           <span class="badge badge-pill freetext">&nbsp;</span>{{exercice.text | stripHtml | slice:0:50}}...</span>
-        <span *ngIf="exercice.constructor.name == 'Exercice'">
+        <span *ngIf="exercice.className == 'Exercice'">
           <span class="badge badge-pill exercice">&nbsp;</span>{{exercice.title}}</span>
       </button>
       <div class="list-group">
         <ng-container *ngFor='let question of exercice.questions'>
           <button [ngClass]="{'active': question==item, 'list-group-item-success' : question==selectedItem}" type="button" class="list-group-item list-group-item-action"
             [disabled]="itemType != 'Question' && itemType != 'Freetext'" (click)="selectItem(question, 'before')">
-            <span *ngIf="question.constructor.name == 'Freetext'">
+            <span *ngIf="question.className == 'Freetext'">
               <span class="badge badge-pill freetext">&nbsp;</span>{{question.text | stripHtml | slice:0:50}}...</span>
-            <span *ngIf="question.constructor.name == 'Question'">
+            <span *ngIf="question.className == 'Question'">
               <span class="badge badge-pill question">&nbsp;</span>{{question.title}}</span>
           </button>
           <div class="list-group">
             <ng-container *ngFor='let critere of question.criteres'>
               <button type="button" [ngClass]="{'active': critere==item, 'list-group-item-success' : critere==selectedItem}" class="list-group-item list-group-item-action"
                 [disabled]="itemType != 'Critere' && itemType != 'Freetext'" (click)="selectItem(critere, 'before')">
-                <span *ngIf="critere.constructor.name == 'Freetext'">
+                <span *ngIf="critere.className == 'Freetext'">
                   <span class="badge badge-pill freetext">&nbsp;</span>{{critere.text | stripHtml | slice:0:50}}...</span>
-                <span *ngIf="critere.constructor.name == 'Critere'">
+                <span *ngIf="critere.className == 'Critere'">
                   <span class="badge badge-pill critere">&nbsp;</span>{{critere.text | stripHtml | slice:0:50}}</span>
               </button>
             </ng-container>
             <button [ngClass]="{'list-group-item-success' : question==selectedItem&&'end'==selectedPosition}" type="button" class="list-group-item list-group-item-action last"
-              *ngIf="question.constructor.name != 'Freetext' && ( itemType == 'Critere' || itemType == 'Freetext') " (click)="selectItem(question, 'end')">
+              *ngIf="question.className != 'Freetext' && ( itemType == 'Critere' || itemType == 'Freetext') " (click)="selectItem(question, 'end')">
               <span class="badge badge-pill critere">&nbsp;</span>En dernier</button>
           </div>
         </ng-container>
         <button [ngClass]="{'list-group-item-success' : exercice==selectedItem&&'end'==selectedPosition}" type="button" class="list-group-item list-group-item-action last"
-          *ngIf="exercice.constructor.name != 'Freetext' && ( itemType == 'Question' || itemType == 'Freetext') " (click)="selectItem(exercice, 'end')">
+          *ngIf="exercice.className != 'Freetext' && ( itemType == 'Question' || itemType == 'Freetext') " (click)="selectItem(exercice, 'end')">
           <span class="badge badge-pill question">&nbsp;</span>En dernier</button>
       </div>
     </ng-container>

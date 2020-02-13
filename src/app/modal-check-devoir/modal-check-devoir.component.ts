@@ -144,7 +144,7 @@ export class ModalCheckDevoirComponent implements OnInit {
         for (const [indexQue, question] of exercice.questions.entries()) {
           if (question.criteres) {
             for (const [indexCri, critere] of question.criteres.entries()) {
-              if (critere.constructor.name === 'Critere') {
+              if (critere.className === 'Critere') {
                 if (critere.bareme === 0) {
                   this.errorList.push({
                     type: 'Edition',
@@ -249,7 +249,7 @@ export class ModalCheckDevoirComponent implements OnInit {
   checkFreeText() {
     let freeTextPb = 0;
     for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
-      if (exercice.constructor.name === 'Freetext') {
+      if (exercice.className === 'Freetext') {
         if (exercice.text === '' || exercice.text === this.configurationService.getValue('critereFreeDefaut')) {
           this.errorList.push({
             type: 'Edition',
@@ -260,7 +260,7 @@ export class ModalCheckDevoirComponent implements OnInit {
         }
       } else {
         for (const [indexQue, question] of exercice.questions.entries()) {
-          if (question.constructor.name === 'Freetext') {
+          if (question.className === 'Freetext') {
             if (question.text === '' || question.text === this.configurationService.getValue('critereFreeDefaut')) {
               this.errorList.push({
                 type: 'Edition',
@@ -271,7 +271,7 @@ export class ModalCheckDevoirComponent implements OnInit {
             }
           } else {
             for (const [indexCri, critere] of question.criteres.entries()) {
-              if (critere.constructor.name === 'Freetext') {
+              if (critere.className === 'Freetext') {
                 if (critere.text === '' || critere.text === this.configurationService.getValue('critereFreeDefaut')) {
                   this.errorList.push({
                     type: 'Edition',

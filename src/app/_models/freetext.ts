@@ -3,6 +3,11 @@ import { Deserializable } from './deserializable.model';
 export class Freetext implements Deserializable {
   id: string;
   text: string;
+  className: string;
+
+  constructor() {
+    this.className = 'Freetext';
+  }
 
   // Convert from JSON
   deserialize(input: any) {

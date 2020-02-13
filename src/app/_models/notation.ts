@@ -8,6 +8,12 @@ export class Notation implements Deserializable {
   commentaire: string;
   notes: Note[];
   noteCoeffs: any[];
+  className: string;
+
+  constructor() {
+    this.className = 'Notation';
+    this.notes = [];
+  }
 
   // Convert from JSON
   deserialize(input: any, devoir: Devoir) {

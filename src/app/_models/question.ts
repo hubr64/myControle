@@ -7,6 +7,12 @@ export class Question implements Deserializable {
   id: string;
   title: string;
   criteres: any[];
+  className: string;
+
+  constructor() {
+    this.className = 'Question';
+    this.criteres = [];
+  }
 
   // Convert from JSON
   deserialize(input: any, grille?: Grille) {

@@ -102,7 +102,7 @@ export class ModalEleveNotationComponent implements OnInit {
           for (const [indexQue, question] of this.devoirService.devoir.exercices[indexExe].questions.entries()) {
             if (this.devoirService.devoir.exercices[indexExe].questions[indexQue].criteres) {
               for (const [indexCri, critere] of this.devoirService.devoir.exercices[indexExe].questions[indexQue].criteres.entries()) {
-                if (critere.constructor.name === 'Critere') {
+                if (critere.className === 'Critere') {
                   this.criteres.push(critere);
                 }
               }

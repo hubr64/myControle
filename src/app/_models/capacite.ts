@@ -6,6 +6,11 @@ export class Capacite implements Deserializable {
   id: string;
   texte: string;
   couleur: string;
+  className: string;
+
+  constructor() {
+    this.className = 'Capacite';
+  }
 
   deserialize(input: any) {
     this.id = input.id;
