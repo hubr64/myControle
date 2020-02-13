@@ -1,4 +1,4 @@
-<button id="generalitesButton" [ngClass]="{'open': visible}" title="Généralités du devoir" (click)="toggleVisibility($event)">
+<button id="generalitesButton" [ngClass]="{'open': visible}" title="Généralités du devoir" (click)="toggleVisibility()">
   <i class="material-icons md-48" *ngIf="visible == false">info</i>
   <i class="material-icons md-36" *ngIf="visible == true">close</i>
 </button>
@@ -80,7 +80,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupGrille">Grille</label>
           </div>
-          <div class="btn-group" ngbDropdown role="group">
+          <div class="btn-group" ngbDropdown>
             <button class="btn btn-outline-secondary" ngbDropdownToggle>{{devoirService.devoir.grille?.titre}}
               <span *ngIf="devoirService.devoir.grille && grilleService.isAnExistingGrille(devoirService.devoir.grille) == false">(ce devoir)</span>
             </button>
@@ -105,7 +105,7 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupClasse">Classe</label>
           </div>
-          <div class="btn-group" ngbDropdown role="group">
+          <div class="btn-group" ngbDropdown>
             <button class="btn btn-outline-secondary" ngbDropdownToggle>{{devoirService.devoir.classe?.titre}}
               <span *ngIf="devoirService.devoir.classe && classeService.isAnExistingClasse(devoirService.devoir.classe) == false">(ce devoir)</span>
             </button>
@@ -153,60 +153,6 @@
             <span class="input-group-text">Version</span>
           </div>
           <input type="text" class="form-control" [ngModel]="devoirService.devoir.toolVersion" placeholder="Auteur du devoir" readonly>
-        </div>
-      </ng-template>
-    </ngb-panel>
-
-    <ngb-panel title="Statistiques" *ngIf="devoirService.devoir.notations.length > 0">
-      <ng-template ngbPanelContent>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Note maximum</span>
-          </div>
-          <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_maximum)}} ({{devoirService.devoir.note_maximum}})"
-            placeholder="0">
-          <div class="input-group-append">
-            <ng-template #popContentMax>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item" *ngFor='let eleve of devoirService.devoir.getElevesAvecNoteMaximum()'>{{eleve}}</li>
-              </ul>
-            </ng-template>
-            <ng-template #popTitleMax>Eleves(s) concerné(s)</ng-template>
-            <button class="input-group-text" type="button" [ngbPopover]="popContentMax" [popoverTitle]="popTitleMax">
-              <i class="material-icons md-18">group</i>
-            </button>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Note minimum</span>
-          </div>
-          <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_minimum)}} ({{devoirService.devoir.note_minimum}})"
-            placeholder="0">
-          <div class="input-group-append">
-            <ng-template #popContentMin>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item" *ngFor='let eleve of devoirService.devoir.getElevesAvecNoteMinimum()'>{{eleve}}</li>
-              </ul>
-            </ng-template>
-            <ng-template #popTitleMin>Eleves(s) concerné(s)</ng-template>
-            <button class="input-group-text" type="button" [ngbPopover]="popContentMin" [popoverTitle]="popTitleMin">
-              <i class="material-icons md-18">group</i>
-            </button>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Moyenne</span>
-          </div>
-          <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_moyenne)}} ({{devoirService.devoir.note_moyenne}})"
-            placeholder="0">
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">&lt; Moyenne</span>
-          </div>
-          <input type="text" class="form-control" value="{{devoirService.devoir.nb_inferieur_moyenne}}" placeholder="0">
         </div>
       </ng-template>
     </ngb-panel>
