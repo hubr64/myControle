@@ -69,4 +69,20 @@ export class Note implements Deserializable {
       return 0;
     }
   }
+
+  getCapaciteBilan(capaciteBilan: any): any {
+    if (this.critere && this.critere.capacite && capaciteBilan[this.critere.capacite.id]) {
+      if (this.status === 'ok') {
+        capaciteBilan[this.critere.capacite.id].ok++;
+      }
+      if (this.status === 'ko') {
+        capaciteBilan[this.critere.capacite.id].ko++;
+      }
+      if (this.status === 'encours') {
+        capaciteBilan[this.critere.capacite.id].encours++;
+      }
+      capaciteBilan[this.critere.capacite.id].total++;
+    }
+  }
+
 }

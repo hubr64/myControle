@@ -1,9 +1,10 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbProgressbarConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { DevoirService } from '../_services/devoir.service';
 import { Notation } from '../_models/notation';
 import { Groupe } from '../_models/groupe';
+import { Capacite } from '../_models/capacite';
 import { ConfigurationService } from '../_services/configuration.service';
 import { ModalEleveNotationComponent } from '../modal-eleve-notation/modal-eleve-notation.component';
 import { ModalEditGroupComponent } from '../modal-edit-group/modal-edit-group.component';
@@ -19,12 +20,17 @@ export class DevoirNotationComponent implements DoCheck, OnInit {
   public noteMode = '';
 
   constructor(
-    private devoirService: DevoirService,
-    private configurationService: ConfigurationService,
-    private modalService: NgbModal
+    public devoirService: DevoirService,
+    public configurationService: ConfigurationService,
+    public modalService: NgbModal,
+    config: NgbProgressbarConfig
   ) {
     this.orderList = this.configurationService.getValue('notationDefaultOrder');
     this.noteMode = this.configurationService.getValue('notationDefaultNoteMode');
+
+    config.height = '20px';
+    config.striped = true;
+    config.animated = true;
   }
 
   ngOnInit() {
@@ -140,6 +146,54 @@ export class DevoirNotationComponent implements DoCheck, OnInit {
     modalRef.componentInstance.groupe = groupe;
     // @ts-ignore: indicate that loading is finished
     modalRef.componentInstance.selectedGroupe = true;
+  }
+
+  getGlobalProgressValue() {
+
+    let progressValue = 0;
+    for (const exercice of this.devoirService.devoir.exercices) {
+      if (exercice.questions) {
+        for (const question of exercice.questions) {
+          if (question.criteres) {
+            for (const critere of question.criteres) {
+              if (critere.constructor.name === 'Critere') {
+                progressValue++;
+              }
+            }
+          }
+        }
+      }
+    }
+    progressValue = progressValue * this.devoirService.devoir.classe.eleves.length;
+
+    let realisedValue = 0;
+    for (const notation of this.devoirService.devoir.notations) {
+      if (this.devoirService.devoir.isGroupe(notation.eleve) === false) {
+        realisedValue += notation.notes.length;
+      }
+    }
+
+    progressValue = Math.round((realisedValue / progressValue) * 100);
+    return progressValue;
+  }
+
+  getGlobalProgressStatus() {
+    const progress = this.getGlobalProgressValue();
+
+    if (progress < 25) {
+      return 'danger';
+    } else if (progress >= 25 && progress < 50) {
+      return 'warning';
+    } else if (progress >= 50 && progress < 75) {
+      return 'info';
+    } else {
+      return 'success';
+    }
+  }
+
+  getUsedCapacites(): any[] {
+    let usedCapacites = this.devoirService.devoir.getCapaciteBilan();
+    return usedCapacites;
   }
 
 }

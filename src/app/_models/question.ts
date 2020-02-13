@@ -58,4 +58,20 @@ export class Question implements Deserializable {
     }
     return null;
   }
+
+  isCapaciteUsed(capacite: any): boolean {
+    for (const critere of this.criteres) {
+      if (critere.isCapaciteUsed(capacite)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getCapaciteBilan(capaciteBilan: any): any {
+    for (const critere of this.criteres) {
+      critere.getCapaciteBilan(capaciteBilan);
+    }
+  }
+
 }

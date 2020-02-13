@@ -5,6 +5,7 @@ import { Grille } from './grille';
 export class Capacite implements Deserializable {
   id: string;
   texte: string;
+  couleur: string;
 
   deserialize(input: any) {
     this.id = input.id;

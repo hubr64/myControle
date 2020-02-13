@@ -20,4 +20,11 @@ export class Freetext implements Deserializable {
     };
     return serializeFree;
   }
+
+  isCapaciteUsed(capacite: any): boolean {
+    return false;
+  }
+
+  getCapaciteBilan(capaciteBilan: any) {
+  }
 }

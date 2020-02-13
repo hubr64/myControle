@@ -11,7 +11,9 @@ export class Competence implements Deserializable {
     this.couleur = input.couleur;
     this.capacites = [];
     for (const key of Object.keys(input.capacites)) {
-      this.capacites.push(new Capacite().deserialize(input.capacites[key]));
+      let newCapacite = new Capacite().deserialize(input.capacites[key]);
+      newCapacite.couleur = this.couleur;
+      this.capacites.push(newCapacite);
     }
     return this;
   }

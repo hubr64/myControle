@@ -1,5 +1,5 @@
-<div class="btn-toolbar bg-light py-1 border-top border-white" role="toolbar">
-  <div class="btn-group btn-group-sm mr-2" role="actions">
+<div class="btn-toolbar bg-light py-1 border-top border-white">
+  <div class="btn-group btn-group-sm mr-2">
     <button type="button" class="btn btn-sm btn-outline-primary" title="Lancer la notation de la classe" (click)="launchNotation()">
       <i class="material-icons md-dark">play_circle_outline</i>
     </button>
@@ -10,8 +10,8 @@
       <i class="material-icons md-dark">group_add</i>
     </button>
   </div>
-  <div class="btn-group btn-group-sm mr-2" role="configuration">
-    <div class="btn-group" ngbDropdown role="group">
+  <div class="btn-group btn-group-sm mr-2">
+    <div class="btn-group" ngbDropdown>
       <button class="btn btn-sm btn-outline-secondary" title="Trier par" ngbDropdownToggle>
         <i class="material-icons md-dark">filter_list</i>
       </button>
@@ -20,7 +20,7 @@
         <button [ngClass]="{'active':orderList == 'note'}" (click)="orderList = 'note'" ngbDropdownItem>Note</button>
       </div>
     </div>
-    <div class="btn-group" ngbDropdown role="group">
+    <div class="btn-group" ngbDropdown>
       <button class="btn btn-sm btn-outline-secondary" title="Mode d'affichage des notes" ngbDropdownToggle>
         <i class="material-icons md-dark">flip</i>
       </button>
@@ -31,6 +31,119 @@
           <i class="material-icons md-dark">crop_din</i>Note ajustées (arrondies et ajustées)</button>
       </div>
     </div>
+
+    <div class="btn-group" ngbDropdown>
+      <button class="btn btn-sm btn-outline-secondary" title="Statistiques" ngbDropdownToggle>
+        <i class="material-icons md-dark">data_usage</i>
+      </button>
+      <div class="dropdown-menu" ngbDropdownMenu>
+        <h4 class=" m-2">Statistisques de notation</h4>
+        <div class="list-group m-2">
+          <span class="list-group-item p-1">
+            <p class="notation-progress">
+              <ngb-progressbar showValue="true" [type]="getGlobalProgressStatus()" [value]="getGlobalProgressValue()"></ngb-progressbar>
+            </p>
+          </span>
+          <span class="list-group-item p-1">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Note maximum</span>
+              </div>
+              <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_maximum)}} ({{devoirService.devoir.note_maximum}})"
+                placeholder="0">
+              <div class="input-group-append">
+                <ng-template #popContentMax>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor='let eleve of devoirService.devoir.getElevesAvecNoteMaximum()'>{{eleve}}</li>
+                  </ul>
+                </ng-template>
+                <ng-template #popTitleMax>Eleves(s) concerné(s)</ng-template>
+                <button class="input-group-text" type="button" [ngbPopover]="popContentMax" [popoverTitle]="popTitleMax">
+                  <i class="material-icons md-18">group</i>
+                </button>
+              </div>
+            </div>
+          </span>
+          <span class="list-group-item p-1">
+            <div class="input-group ">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Note minimum</span>
+              </div>
+              <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_minimum)}} ({{devoirService.devoir.note_minimum}})"
+                placeholder="0">
+              <div class="input-group-append">
+                <ng-template #popContentMin>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor='let eleve of devoirService.devoir.getElevesAvecNoteMinimum()'>{{eleve}}</li>
+                  </ul>
+                </ng-template>
+                <ng-template #popTitleMin>Eleves(s) concerné(s)</ng-template>
+                <button class="input-group-text" type="button" [ngbPopover]="popContentMin" [popoverTitle]="popTitleMin">
+                  <i class="material-icons md-18">group</i>
+                </button>
+              </div>
+            </div>
+          </span>
+          <span class="list-group-item p-1">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Moyenne</span>
+              </div>
+              <input type="text" class="form-control" value="{{devoirService.devoir.ajusterNote(devoirService.devoir.note_moyenne)}} ({{devoirService.devoir.note_moyenne}})"
+                placeholder="0">
+            </div>
+          </span>
+          <span class="list-group-item p-1">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">&lt; Moyenne</span>
+              </div>
+              <input type="text" class="form-control" value="{{devoirService.devoir.nb_inferieur_moyenne}}" placeholder="0">
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group" ngbDropdown>
+      <button class="btn btn-sm btn-outline-secondary" title="Bilan de compétences" ngbDropdownToggle>
+        <i class="material-icons md-dark">playlist_add_check</i>
+      </button>
+      <div class="dropdown-menu p-2" ngbDropdownMenu>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Capacité</th>
+              <th scope="col">Points</th>
+              <th scope="col">Acquis</th>
+              <th scope="col">En cours</th>
+              <th scope="col">Non acquis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let capaciteUsed of getUsedCapacites() | keyvalue ">
+              <th scope="row">
+                <span class="badge badge-pill" title="{{capaciteUsed.value.capacite.texte}}" [ngStyle]="{'background-color': capaciteUsed.value.capacite.couleur}">{{capaciteUsed.key}}</span>
+              </th>
+              <td>{{capaciteUsed.value.pts}}</td>
+              <td [ngClass]="{'text-success font-weight-bolder': capaciteUsed.value.ok/capaciteUsed.value.total > 0.5}">
+                <span>{{capaciteUsed.value.ok}}</span>
+                <span class="capacitePercent"> ({{(capaciteUsed.value.ok/capaciteUsed.value.total)*100 | number:'1.0-0' }}%)</span>
+              </td>
+              <td [ngClass]="{'text-warning font-weight-bolder': capaciteUsed.value.encours/capaciteUsed.value.total > 0.5}">
+                <span>{{capaciteUsed.value.encours}}</span>
+                <span class="capacitePercent"> ({{(capaciteUsed.value.encours/capaciteUsed.value.total)*100 | number:'1.0-0' }}%)</span>
+              </td>
+              <td [ngClass]="{'text-danger font-weight-bolder': capaciteUsed.value.ko/capaciteUsed.value.total > 0.5}">
+                <span>{{capaciteUsed.value.ko}}</span>
+                <span class="capacitePercent"> ({{(capaciteUsed.value.ko/capaciteUsed.value.total)*100 | number:'1.0-0' }}%)</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div>
 

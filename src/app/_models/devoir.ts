@@ -123,6 +123,7 @@ export class Devoir {
     }
   }
 
+  // GESTION DES NOTES
   get bareme(): number {
     let bareme = 0;
     for (const exercice of this.exercices) {
@@ -264,6 +265,8 @@ export class Devoir {
     return eleves;
   }
 
+  // GESTION DES CRITERES/CAPACITES
+
   getCritere(exerciceId: string, questionId: string, critereId: string): Critere {
     if (this.exercices !== undefined) {
       for (const exe of this.exercices) {
@@ -275,6 +278,30 @@ export class Devoir {
     return null;
   }
 
+  isCapaciteUsed(capacite: any): boolean {
+    for (const exercice of this.exercices) {
+      if (exercice.isCapaciteUsed(capacite)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getCapaciteBilan(eleve?: string): any {
+    let capaciteBilan = [];
+    for (const exercice of this.exercices) {
+      exercice.getCapaciteBilan(capaciteBilan);
+    }
+    for (const notation of this.notations) {
+      if (this.isGroupe(notation.eleve) === false) {
+        notation.getCapaciteBilan(capaciteBilan, eleve);
+      }
+    }
+    return capaciteBilan;
+  }
+
+
+  // GESTION DES GROUPES
   getEleveGroupe(eleve: string): Groupe {
     for (const groupe of this.groupes) {
       if (groupe.eleves.indexOf(eleve) !== -1) {

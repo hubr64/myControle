@@ -72,4 +72,19 @@ export class Exercice implements Deserializable {
     return null;
   }
 
+  isCapaciteUsed(capacite: any): boolean {
+    for (const question of this.questions) {
+      if (question.isCapaciteUsed(capacite)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getCapaciteBilan(capaciteBilan: any): any {
+    for (const question of this.questions) {
+      question.getCapaciteBilan(capaciteBilan);
+    }
+  }
+
 }

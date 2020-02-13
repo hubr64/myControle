@@ -34,4 +34,28 @@ export class Critere implements Deserializable {
     };
     return serializeCri;
   }
+
+  isCapaciteUsed(capacite: Capacite): boolean {
+    if (this.capacite && this.capacite.id === capacite.id) {
+      return true;
+    }
+    return false;
+  }
+
+  getCapaciteBilan(capaciteBilan: any): any {
+    if (this.capacite) {
+      if (capaciteBilan[this.capacite.id]) {
+        capaciteBilan[this.capacite.id].pts += this.bareme;
+      } else {
+        capaciteBilan[this.capacite.id] = {
+          capacite: this.capacite,
+          ok: 0,
+          encours: 0,
+          ko: 0,
+          total: 0,
+          pts: this.bareme
+        };
+      }
+    }
+  }
 }

@@ -69,4 +69,12 @@ export class Notation implements Deserializable {
     }
     return null;
   }
+
+  getCapaciteBilan(capaciteBilan: any, eleve: string): any {
+    for (const note of this.notes) {
+      if ((eleve === undefined) || (eleve && this.eleve && this.eleve === eleve)) {
+        note.getCapaciteBilan(capaciteBilan);
+      }
+    }
+  }
 }
