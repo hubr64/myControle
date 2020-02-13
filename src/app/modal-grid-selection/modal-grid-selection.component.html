@@ -32,13 +32,14 @@
   <div class="row card-group">
     <div class="col-4" *ngFor="let competence of currentGrille.competences">
       <div class="card">
-        <div class="card-body">
-          <h5 class="card-title" [ngStyle]="{'color': competence.couleur}">
+        <div class="card-body p-2">
+          <h5 class="card-title font-weight-bolder" [ngStyle]="{'color': competence.couleur}">
             <span class="badge badge-pill" [ngStyle]="{'background-color': competence.couleur}">&nbsp;</span> {{competence.titre}}</h5>
           <div class="card-text">
             <div class="list-group">
-              <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" *ngFor='let capacite of competence.capacites'
-                (click)="selectCapacite(capacite)">
+              <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-2 py-1"
+                *ngFor='let capacite of competence.capacites' (click)="selectCapacite(capacite)" [ngStyle]="{'border-color':competence.couleur}"
+                [ngClass]="{'list-group-item-info': devoir?.isCapaciteUsed(capacite)}">
                 <span>{{capacite.texte}}</span>
                 <span class="badge badge-pill" [ngStyle]="{'background-color': competence.couleur}">{{capacite.id}}</span>
               </button>
