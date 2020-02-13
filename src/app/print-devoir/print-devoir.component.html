@@ -1,0 +1,31 @@
+<div id="devoir">
+  <div id="title">
+    <span>{{devoirDetails.titre}}</span>
+    <span>{{devoirDetails.devoirDate |date:'fullDate'}}</span>
+  </div>
+  <div id="classe">
+    <span>Votre classe</span>
+    <span>{{devoirDetails.classe?.titre}}</span>
+  </div>
+  <div id="pupil">
+    <span>Votre nom</span>
+    <span></span>
+  </div>
+  <ng-container *ngFor="let exercice of devoirService.devoir.exercices">
+    <div *ngIf="exercice.constructor.name == 'Freetext'" class="freetext" [innerHTML]="exercice.text | stripMycontroleLine"></div>
+    <div *ngIf="exercice.constructor.name == 'Exercice'" class="exercice">
+      <span [innerHTML]="exercice.title"></span>
+      <span>{{ exercice.bareme }} pts</span>
+    </div>
+    <ng-container *ngFor="let question of exercice.questions">
+      <div *ngIf="question.constructor.name == 'Freetext'" class="freetext" [innerHTML]="question.text | stripMycontroleLine"></div>
+      <div *ngIf="question.constructor.name == 'Question'" class="question">
+        <span [innerHTML]="question.title"></span>
+        <span>{{ question.bareme }} pts</span>
+      </div>
+      <ng-container *ngFor="let critere of question.criteres">
+        <div *ngIf="critere.constructor.name == 'Freetext'" class="freetext" [innerHTML]="critere.text | stripMycontroleLine"></div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>
