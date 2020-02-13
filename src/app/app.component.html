@@ -1,3 +1,6 @@
-<app-menu #menu (toggleModeDevoir)="devoir.toggleMode($event)"></app-menu>
-<app-devoir #devoir></app-devoir>
-<app-messages></app-messages>
+<div [class.is-printing]="printService.isPrinting">
+  <app-menu #menu (toggleModeDevoir)="devoir.toggleMode($event)"></app-menu>
+  <app-devoir #devoir></app-devoir>
+  <app-messages></app-messages>
+  <router-outlet name="print"></router-outlet>
+</div>

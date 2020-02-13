@@ -1,11 +1,11 @@
-<button id="menuButton" [ngClass]="{'open': visible}" title="Menu" (click)="toggleVisibility($event)">
+<button id="menuButton" [ngClass]="{'open': visible}" title="Menu" (click)="toggleVisibility()">
   <i class="material-icons md-dark md-36" *ngIf="visible == false">more_vert</i>
   <i class="material-icons md-dark md-36" *ngIf="visible == true">close</i>
   <span *ngIf="devoirService.docIsEdited && visible==false" class="badge badge-danger">!</span>
 </button>
 
-<div class="btn-toolbar justify-content-between bg-light p-2" role="toolbar">
-  <div class="btn-group" role="group">
+<div class="btn-toolbar justify-content-between bg-light p-2">
+  <div class="btn-group">
     <button type="button" (click)="toggleMode('edition')" class="btn" [ngClass]="{'btn-primary': mode == 'edition', 'btn-secondary': mode != 'edition'}"
       [disabled]="this.devoirService.devoir == null">Edition</button>
     <button type="button" (click)="toggleMode('notation')" class="btn" [ngClass]="{'btn-primary': mode == 'notation', 'btn-secondary': mode != 'notation'}"
@@ -34,19 +34,21 @@
       <span>Enregistrer&nbsp;</span>
       <span *ngIf="devoirService.docIsEdited" class="badge badge-danger">Attention !</span>
     </div>
-    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined}">
+    <div (click)="printDevoir()" [ngClass]="{'disabled':this.devoirService.devoir === undefined}" title="Impression à distribuer aux élèves pour un devoir">
       <i class="material-icons md-36 greenicon">local_printshop</i>
       <span>Imprimer le devoir</span>
     </div>
-    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined}">
+    <div (click)="printCorrection()" [ngClass]="{'disabled':this.devoirService.devoir === undefined}" title="Correction pour le professeur pour évaluer en directe">
       <i class="material-icons md-36 greenicon">ballot</i>
       <span>Imprimer la correction</span>
     </div>
-    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}">
+    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}"
+      title="Exporter les devoirs notés - un devoir par élève">
       <i class="material-icons md-36 greenicon">present_to_all</i>
       <span>Exporter les notes</span>
     </div>
-    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}">
+    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}"
+      title="Exporter le bilan des notes - une matrice unique globale">
       <i class="material-icons md-36 greenicon">outlined_flag</i>
       <span>Consulter le bilan</span>
     </div>

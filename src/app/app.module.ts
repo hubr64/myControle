@@ -9,6 +9,7 @@ registerLocaleData(localeFr);
 
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
@@ -31,6 +32,11 @@ import { ModalClasseSelectionComponent } from './modal-classe-selection/modal-cl
 import { ModalEleveNotationComponent } from './modal-eleve-notation/modal-eleve-notation.component';
 import { ModalCheckDevoirComponent } from './modal-check-devoir/modal-check-devoir.component';
 import { ModalEditGroupComponent } from './modal-edit-group/modal-edit-group.component';
+import { PrintDevoirComponent } from './print-devoir/print-devoir.component';
+import { PrintComponent } from './print/print.component';
+import { PrintService } from './_services/print.service';
+import { PrintCorrectionComponent } from './print-correction/print-correction.component';
+import { StripMycontroleLinePipe } from './_helpers/strip-mycontrole-line.pipe';
 
 @NgModule({
   declarations: [
@@ -49,15 +55,20 @@ import { ModalEditGroupComponent } from './modal-edit-group/modal-edit-group.com
     ModalGridSelectionComponent,
     ModalMoveComponent,
     StripHtmlPipe,
+    StripMycontroleLinePipe,
     ModalConfirmGridComponent,
     ModalConfirmClasseComponent,
     ModalClasseSelectionComponent,
     ModalEleveNotationComponent,
     ModalCheckDevoirComponent,
-    ModalEditGroupComponent
+    ModalEditGroupComponent,
+    PrintDevoirComponent,
+    PrintComponent,
+    PrintCorrectionComponent
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     CKEditorModule,
@@ -75,6 +86,7 @@ import { ModalEditGroupComponent } from './modal-edit-group/modal-edit-group.com
     ModalEditGroupComponent,
     ModalMoveComponent],
   providers: [
+    PrintService,
     { provide: LOCALE_ID, useValue: 'fr-FR' }
   ],
   bootstrap: [AppComponent]

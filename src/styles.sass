@@ -23,3 +23,9 @@ body
 
 p
   margin: 2px 0px!important
+
+@media print
+  .is-printing > *
+     display: none
+  .is-printing app-print
+    display: block
