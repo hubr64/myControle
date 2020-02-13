@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 })
 export class ConfigurationService {
 
-  private storageConfigurationPrefix = Configuration.storagePrefix + Configuration.configurationPrefix;
+  public storageConfigurationPrefix = Configuration.storagePrefix + Configuration.configurationPrefix;
   public configurationItems: any;
 
   constructor() {

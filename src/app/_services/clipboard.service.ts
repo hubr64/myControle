@@ -6,7 +6,7 @@ import { ConfigurationService } from './configuration.service';
 })
 export class ClipboardService {
 
-  private clipboardKeyName;
+  public clipboardKeyName;
 
   clipboardType = null;
   clipboardTypeConversion = {
@@ -17,7 +17,7 @@ export class ClipboardService {
   };
 
   constructor(
-    private configurationService: ConfigurationService
+    public configurationService: ConfigurationService
   ) {
     // Build clipboard identifier
     this.clipboardKeyName = this.configurationService.getValue('storagePrefix') + 'clipboard';

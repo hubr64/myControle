@@ -19,9 +19,9 @@ export class ModalEditGroupComponent implements OnInit {
   public groupeNomDefaut = '';
 
   constructor(
-    private devoirService: DevoirService,
-    private configurationService: ConfigurationService,
-    private modal: NgbActiveModal
+    public devoirService: DevoirService,
+    public configurationService: ConfigurationService,
+    public modal: NgbActiveModal
   ) {
     this.groupeNomDefaut = this.configurationService.getValue('groupeNomDefaut');
   }

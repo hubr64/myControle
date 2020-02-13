@@ -18,9 +18,9 @@ export class ModalConfirmGridComponent implements OnInit {
   public impactedCriteres;
 
   constructor(
-    private messageService: MessageService,
-    private devoirService: DevoirService,
-    private grilleService: GrilleService,
+    public messageService: MessageService,
+    public devoirService: DevoirService,
+    public grilleService: GrilleService,
     public modal: NgbActiveModal) {
     this.removedCapacites = [];
     this.impactedCriteres = [];

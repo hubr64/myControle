@@ -5,6 +5,7 @@ import { DevoirService } from '../_services/devoir.service';
 import { ClasseService } from '../_services/classe.service';
 import { MessageService } from '../_services/message.service';
 import { GrilleService } from '../_services/grille.service';
+import { PrintService } from '../_services/print.service';
 import { ConfigurationService } from '../_services/configuration.service';
 
 @Component({
@@ -17,18 +18,18 @@ export class MenuComponent implements OnInit {
   @Output() toggleModeDevoir = new EventEmitter<string>();
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
 
-  private visible = true;
-  private appVersionMenu = environment.appVersion;
-  private appNameMenu = environment.appName;
+  public visible = true;
+  public appVersionMenu = environment.appVersion;
+  public appNameMenu = environment.appName;
   public mode = '';
 
   constructor(
-    private devoirService: DevoirService,
-    private classeService: ClasseService,
-    private messageService: MessageService,
-    private configurationService: ConfigurationService,
-    private grilleService: GrilleService
-  ) {
+    public devoirService: DevoirService,
+    public classeService: ClasseService,
+    public messageService: MessageService,
+    public configurationService: ConfigurationService,
+    public grilleService: GrilleService,
+    public printService: PrintService) {
     this.mode = this.configurationService.getValue('defaultMode');
   }
 
@@ -64,22 +65,34 @@ export class MenuComponent implements OnInit {
   openFile($event): void {
     this.devoirService.loadLocalFile($event.target);
   }
+
   openNewDevoir() {
     this.devoirService.clearDevoir();
     this.close();
   }
+
   openExistingDevoir() {
     const event = new MouseEvent('click', { bubbles: true });
     this.fileInput.nativeElement.dispatchEvent(event);
     this.close();
   }
+
   saveCurrentDevoir() {
     this.devoirService.saveDevoir();
     this.close();
   }
+
   checkDevoir() {
     this.devoirService.checkDevoir();
     this.close();
+  }
+
+  printDevoir() {
+    this.printService.printDocument('devoir');
+  }
+
+  printCorrection() {
+    this.printService.printDocument('correction');
   }
 
 }

@@ -18,9 +18,9 @@ export class ModalConfirmClasseComponent implements OnInit {
   public impactedNotations;
 
   constructor(
-    private messageService: MessageService,
-    private devoirService: DevoirService,
-    private classeService: ClasseService,
+    public messageService: MessageService,
+    public devoirService: DevoirService,
+    public classeService: ClasseService,
     public modal: NgbActiveModal) {
     this.removedEleves = [];
     this.impactedNotations = [];

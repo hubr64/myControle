@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageService } from './message.service';
 import { ConfigurationService } from './configuration.service';
 
+import { Devoir } from '../_models/devoir';
 import { Grille } from '../_models/grille';
 import { Competence } from '../_models/competence';
 import { Capacite } from '../_models/capacite';
@@ -19,13 +20,13 @@ import { ModalGridSelectionComponent } from '../modal-grid-selection/modal-grid-
 export class GrilleService {
 
   public grilleItems: any;
-  private grilleStoragePrefix: string;
+  public grilleStoragePrefix: string;
   public selectedCapaciteSub;
 
   constructor(
-    private messageService: MessageService,
-    private configurationService: ConfigurationService,
-    private modalService: NgbModal
+    public messageService: MessageService,
+    public configurationService: ConfigurationService,
+    public modalService: NgbModal
   ) {
     // Compute local storage id that may store local configuration of grids
     this.grilleStoragePrefix = this.configurationService.getValue('storagePrefix') + 'grille-';
@@ -77,7 +78,7 @@ export class GrilleService {
     }
   }
 
-  showGrille(selectedGrille?: Grille, canChooseCapacite?: boolean) {
+  showGrille(selectedGrille?: Grille, canChooseCapacite?: boolean, devoir?: Devoir) {
 
     this.selectedCapaciteSub = new Subject<any>();
 
@@ -89,6 +90,10 @@ export class GrilleService {
     modalRef.componentInstance.canChooseCapacite = canChooseCapacite;
     // @ts-ignore: Provide this full list of grilles
     modalRef.componentInstance.grilles = this.grilleItems;
+    if (devoir !== undefined) {
+      // @ts-ignore: Provide this full list of grilles
+      modalRef.componentInstance.devoir = devoir;
+    }
 
     // Manage answer of the user
     modalRef.result.then((result) => {

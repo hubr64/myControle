@@ -25,9 +25,9 @@ export class DevoirComponent implements OnInit {
   }
 
   constructor(
-    private devoirService: DevoirService,
-    private configurationService: ConfigurationService,
-    private messageService: MessageService
+    public devoirService: DevoirService,
+    public configurationService: ConfigurationService,
+    public messageService: MessageService
   ) {
     this.mode = this.configurationService.getValue('defaultMode');
   }

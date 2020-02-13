@@ -30,10 +30,10 @@ export class DevoirEditionToolboxComponent implements OnInit {
   };
 
   constructor(
-    private devoirService: DevoirService,
-    private clipboardService: ClipboardService,
-    private messageService: MessageService,
-    private configurationService: ConfigurationService) { }
+    public devoirService: DevoirService,
+    public clipboardService: ClipboardService,
+    public messageService: MessageService,
+    public configurationService: ConfigurationService) { }
 
   ngOnInit() {
   }

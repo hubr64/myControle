@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
 
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+// import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import * as InlineEditor from '../_helpers/ckeditor-mycontrole/build/ckeditor.js';
 import { BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 import { DevoirService } from '../_services/devoir.service';
@@ -16,7 +17,7 @@ export class DevoirEditionComponent implements DoCheck, OnInit {
   public itemEdited = null;
 
   constructor(
-    private devoirService: DevoirService
+    public devoirService: DevoirService
   ) { }
 
   ngOnInit() {

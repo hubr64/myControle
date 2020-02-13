@@ -21,7 +21,7 @@ export class ModalCheckDevoirComponent implements OnInit {
 
   constructor(
     public modal: NgbActiveModal,
-    private configurationService: ConfigurationService
+    public configurationService: ConfigurationService
   ) {
     this.errorList = [];
     this.urlList = [];
@@ -133,7 +133,6 @@ export class ModalCheckDevoirComponent implements OnInit {
   nextURL() {
     if (this.urlListPos < this.urlList.length - 1) {
       this.urlListPos++;
-      console.log(this.urlListPos);
       this.imgCheck.nativeElement.src = this.urlList[this.urlListPos];
     }
   }

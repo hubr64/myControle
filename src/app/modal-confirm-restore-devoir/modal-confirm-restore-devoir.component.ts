@@ -15,7 +15,7 @@ export class ModalConfirmRestoreDevoirComponent implements OnInit {
   public devoirDetails = '';
 
   constructor(
-    private messageService: MessageService,
+    public messageService: MessageService,
     public modal: NgbActiveModal) {
   }
   ngOnInit() {

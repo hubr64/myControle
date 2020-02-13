@@ -15,7 +15,7 @@ export class ModalConfirmComponent implements OnInit {
   public itemContent = null;
 
   constructor(
-    private messageService: MessageService,
+    public messageService: MessageService,
     public modal: NgbActiveModal) {
   }
   ngOnInit() {

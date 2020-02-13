@@ -16,14 +16,14 @@ import { ModalClasseSelectionComponent } from '../modal-classe-selection/modal-c
 export class ClasseService {
 
   public classeItems: any;
-  private classeStoragePrefix: string;
+  public classeStoragePrefix: string;
   public selectedEleveSub;
 
   constructor(
-    private messageService: MessageService,
-    private configurationService: ConfigurationService,
-    private modalService: NgbModal,
-    private http: HttpClient
+    public messageService: MessageService,
+    public configurationService: ConfigurationService,
+    public modalService: NgbModal,
+    public http: HttpClient
   ) {
     // Compute local storage id that may store local configuration of classes
     this.classeStoragePrefix = this.configurationService.getValue('storagePrefix') + 'classe-';

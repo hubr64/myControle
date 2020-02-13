@@ -26,8 +26,8 @@ import { environment } from '../../environments/environment';
 })
 export class DevoirService {
 
-  private currentFileName = '';
-  private toolVersion = environment.appVersion;
+  public currentFileName = '';
+  public toolVersion = environment.appVersion;
 
   public docIsEdited = false;
   public oldDevoir = '';
@@ -37,11 +37,11 @@ export class DevoirService {
   public loadNewDevoirSub = new Subject<boolean>();
 
   constructor(
-    private messageService: MessageService,
-    private grilleService: GrilleService,
-    private classeService: ClasseService,
-    private configurationService: ConfigurationService,
-    private modalService: NgbModal) {
+    public messageService: MessageService,
+    public grilleService: GrilleService,
+    public classeService: ClasseService,
+    public configurationService: ConfigurationService,
+    public modalService: NgbModal) {
 
     const noteStatusOkCoeff = this.configurationService.getValue('noteStatusOkCoeff');
     const noteStatusEnCoursCoeff = this.configurationService.getValue('noteStatusEnCoursCoeff');
@@ -468,7 +468,7 @@ export class DevoirService {
     if (this.devoir.grille === null) {
       this.messageService.add('Aucune grille de compétences n\'est asscoiée au devoir. Impossible de choisir un capacité.', 'warning', 'USER');
     } else {
-      this.grilleService.showGrille(this.devoir.grille, true);
+      this.grilleService.showGrille(this.devoir.grille, true, this.devoir);
       this.grilleService.selectedCapaciteSub.subscribe((selectedCapacite) => {
         if (selectedCapacite !== null) {
           critere.capacite = selectedCapacite;

@@ -22,7 +22,7 @@ import { NgbDateCustomParserFormatter } from '../_helpers/dateformat';
 })
 export class GeneralitesComponent implements OnInit {
 
-  private visible = false;
+  public visible = false;
 
   public notationModeNormal;
   public notationModeProportionnel;
@@ -31,13 +31,13 @@ export class GeneralitesComponent implements OnInit {
   public notationModeNormalContent = 'Transformation de la note pour arriver à la note finale :';
 
   constructor(
-    private devoirService: DevoirService,
-    private grilleService: GrilleService,
-    private classeService: ClasseService,
-    private messageService: MessageService,
-    private modalService: NgbModal,
-    config: NgbDropdownConfig,
-    private configurationService: ConfigurationService) {
+    public devoirService: DevoirService,
+    public grilleService: GrilleService,
+    public classeService: ClasseService,
+    public messageService: MessageService,
+    public modalService: NgbModal,
+    public config: NgbDropdownConfig,
+    public configurationService: ConfigurationService) {
     this.notationModeNormal = this.configurationService.getValue('notationModeNormal');
     this.notationModeProportionnel = this.configurationService.getValue('notationModeProportionnel');
     this.notationModeRapporte = this.configurationService.getValue('notationModeRapporte');
@@ -93,7 +93,7 @@ export class GeneralitesComponent implements OnInit {
   }
 
   toggleGrilleSelection() {
-    this.grilleService.showGrille(this.devoirService.devoir.grille, false);
+    this.grilleService.showGrille(this.devoirService.devoir.grille, false, this.devoirService.devoir);
   }
 
   classeChanged(newClasse) {

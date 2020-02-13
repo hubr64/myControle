@@ -9,12 +9,12 @@ import { ConfigurationService } from './configuration.service';
 })
 export class MessageService {
 
-  private messageDuration;
+  public messageDuration;
   messagesUser: any[] = [];
   messagesDev: any[] = [];
 
   constructor(
-    private configurationService: ConfigurationService
+    public configurationService: ConfigurationService
   ) {
     this.messageDuration = parseInt(this.configurationService.getValue('messageDuration'), 10);
   }

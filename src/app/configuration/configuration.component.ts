@@ -8,10 +8,10 @@ import { ConfigurationService } from '../_services/configuration.service';
 })
 export class ConfigurationComponent implements OnInit {
 
-  private visible = false;
+  public visible = false;
 
   constructor(
-    private configurationService: ConfigurationService
+    public configurationService: ConfigurationService
   ) { }
 
   ngOnInit() {

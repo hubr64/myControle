@@ -13,6 +13,7 @@ import { Capacite } from '../_models/capacite';
 export class ModalGridSelectionComponent implements OnInit {
 
   @Input() grilles;
+  @Input() devoir;
   @Input() selectedgrille;
   @Input() canChooseCapacite;
 

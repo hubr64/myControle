@@ -23,10 +23,10 @@ export class DevoirEditionOptionboxComponent implements OnInit {
   @Input() public item;
 
   constructor(
-    private devoirService: DevoirService,
-    private messageService: MessageService,
-    private clipboardService: ClipboardService,
-    private modalService: NgbModal) { }
+    public devoirService: DevoirService,
+    public messageService: MessageService,
+    public clipboardService: ClipboardService,
+    public modalService: NgbModal) { }
 
   ngOnInit() {
   }

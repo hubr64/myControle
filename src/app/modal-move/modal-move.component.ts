@@ -17,8 +17,8 @@ export class ModalMoveComponent implements OnInit {
   public returnValue;
 
   constructor(
-    private devoirService: DevoirService,
-    private modal: NgbActiveModal) {
+    public devoirService: DevoirService,
+    public modal: NgbActiveModal) {
     this.item = null;
     this.itemType = '';
     this.selectedItem = null;
