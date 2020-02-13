@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal, NgbProgressbarConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { DevoirService } from '../_services/devoir.service';
@@ -14,7 +14,7 @@ import { ModalEditGroupComponent } from '../modal-edit-group/modal-edit-group.co
   templateUrl: './devoir-notation.component.html',
   styleUrls: ['./devoir-notation.component.sass']
 })
-export class DevoirNotationComponent implements DoCheck, OnInit {
+export class DevoirNotationComponent implements OnInit {
 
   public orderList = '';
   public noteMode = '';
@@ -34,10 +34,6 @@ export class DevoirNotationComponent implements DoCheck, OnInit {
   }
 
   ngOnInit() {
-  }
-
-  ngDoCheck() {
-    this.devoirService.doCheck();
   }
 
   sortEleveBy(eleves) {

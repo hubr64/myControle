@@ -29,6 +29,7 @@ export class ConfigurationService {
       notationModeArr: { modifiable: false, value: Configuration.notationModeArr },
 
       messageDuration: { modifiable: true, title: 'Durée affichage messages', value: Configuration.messageDuration },
+      autosaveDuration: { modifiable: true, title: 'Enregistrement automatique (secondes)', value: Configuration.autosaveDuration },
       defaultMode: { modifiable: true, title: 'Mode par défaut [edition,notation]', value: Configuration.defaultMode },
       notationDefaultOrder: { modifiable: true, title: 'Ordre affichage par défaut [nom,note]', value: Configuration.notationDefaultOrder },
       notationDefaultNoteMode: { modifiable: true, title: 'Affichage des notes par défaut [brut,ajuste]', value: Configuration.notationDefaultNoteMode },

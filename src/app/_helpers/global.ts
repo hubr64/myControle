@@ -30,6 +30,7 @@ export const notationModeRapporte = {
 export const notationModeArr = [notationModeNormal, notationModeProportionnel, notationModeRapporte];
 
 export const messageDuration = 5000;
+export const autosaveDuration = 60;
 export const defaultMode = 'edition';
 export const notationDefaultOrder = 'nom';
 export const notationDefaultNoteMode = 'brut';

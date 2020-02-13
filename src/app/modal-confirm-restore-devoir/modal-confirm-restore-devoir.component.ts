@@ -12,6 +12,7 @@ import { Devoir } from '../_models/devoir';
 export class ModalConfirmRestoreDevoirComponent implements OnInit {
 
   @Input() devoir;
+  @Input() devoirDate;
   public devoirDetails = '';
 
   constructor(
@@ -27,7 +28,8 @@ export class ModalConfirmRestoreDevoirComponent implements OnInit {
   updateDetails() {
     if (this.devoir) {
       const tmp = JSON.parse(this.devoir);
-      this.devoirDetails = tmp.data.general.titre + ' (Créé le : ' + new Date(tmp.meta.date_creation).toLocaleDateString() + ')';
+      const tmpDate = new Date(JSON.parse(this.devoirDate));
+      this.devoirDetails = '<p><strong>' + tmp.data.general.titre + '</strong></p><p>Enregistré automatiquement à <b>' + tmpDate.toLocaleString() + '</b></p>';
     } else {
       setTimeout(() => {
         this.updateDetails();

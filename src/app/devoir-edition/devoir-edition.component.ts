@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, DoCheck } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 // import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import * as InlineEditor from '../_helpers/ckeditor-mycontrole/build/ckeditor.js';
@@ -11,7 +11,7 @@ import { DevoirService } from '../_services/devoir.service';
   templateUrl: './devoir-edition.component.html',
   styleUrls: ['./devoir-edition.component.sass']
 })
-export class DevoirEditionComponent implements DoCheck, OnInit {
+export class DevoirEditionComponent implements OnInit {
 
   public editor = InlineEditor;
   public itemEdited = null;
@@ -21,10 +21,6 @@ export class DevoirEditionComponent implements DoCheck, OnInit {
   ) { }
 
   ngOnInit() {
-  }
-
-  ngDoCheck() {
-    this.devoirService.doCheck();
   }
 
   trackByItems(index: number, item: any): string {

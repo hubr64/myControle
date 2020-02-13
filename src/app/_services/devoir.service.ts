@@ -34,6 +34,9 @@ export class DevoirService {
   public devoir;
   public noteCoeffs = [];
 
+  public devoirStoragePrefix: string;
+  public devoirDateStoragePrefix: string;
+
   public loadNewDevoirSub = new Subject<boolean>();
 
   constructor(
@@ -43,6 +46,7 @@ export class DevoirService {
     public configurationService: ConfigurationService,
     public modalService: NgbModal) {
 
+    const autosaveDuration = this.configurationService.getValue('autosaveDuration');
     const noteStatusOkCoeff = this.configurationService.getValue('noteStatusOkCoeff');
     const noteStatusEnCoursCoeff = this.configurationService.getValue('noteStatusEnCoursCoeff');
     const noteStatusKoCoeff = this.configurationService.getValue('noteStatusKoCoeff');
@@ -54,13 +58,19 @@ export class DevoirService {
     this.noteCoeffs[noteStatusEnCours] = noteStatusEnCoursCoeff;
     this.noteCoeffs[noteStatusKo] = noteStatusKoCoeff;
 
-    const tmpDevoir = localStorage.getItem('devoir');
+    this.devoirStoragePrefix = this.configurationService.getValue('storagePrefix') + 'devoir-';
+    this.devoirDateStoragePrefix = this.configurationService.getValue('storagePrefix') + 'devoir-date-';
+
+    const tmpDevoir = localStorage.getItem(this.devoirStoragePrefix);
+    const tmpDevoirDate = localStorage.getItem(this.devoirDateStoragePrefix);
     if (this.devoir === undefined && tmpDevoir) {
 
       // Display modal window to ask user for confirmation
       const modalRef = this.modalService.open(ModalConfirmRestoreDevoirComponent, { centered: true });
-      // @ts-ignore: Provide it the required item to delete (to display more information)
+      // @ts-ignore: Provide it the devoir to restore
       modalRef.componentInstance.devoir = tmpDevoir;
+      // @ts-ignore: Provide it the devoir to restore
+      modalRef.componentInstance.devoirDate = tmpDevoirDate;
 
       // Manage answer of the user
       modalRef.result.then((result) => {
@@ -73,6 +83,10 @@ export class DevoirService {
         this.messageService.add('Restauration non demandée', 'warning', 'USER');
       });
     }
+
+    // Lance le processus de surveillance de modifications sur le devoir
+    setInterval(() => this.doCheck(), autosaveDuration * 1000);
+
   }
 
   loadLocalFile(inputFile: any): void {
@@ -162,9 +176,8 @@ export class DevoirService {
   }
 
   doCheck() {
-    /*// Convert to JSON to prevent shadow copy
+    // Convert to JSON to prevent shadow copy
     let currentDevoir = JSON.stringify(this.devoir);
-
     // Remove the modification date that is by definition not to take into account
     const modificationDateRegex = /,"modificationDate":"[^"]*"/gi; // ,"modificationDate":"2020-01-15T17:05:12.362Z",
     currentDevoir = currentDevoir.replace(modificationDateRegex, '');
@@ -174,18 +187,19 @@ export class DevoirService {
       console.log('Modification détectée.');
       this.updateDevoir();
       this.oldDevoir = currentDevoir;
-    }*/
+    }
   }
 
   updateDevoir() {
-    // State that the devoir is edtited and should be saved
+    // State that the devoir is edited and should be saved
     setTimeout(() => {
       this.docIsEdited = true;
     });
 
     // Store it in local storage to avoid lost
     let tmpContent = this.devoir.serialize();
-    localStorage.setItem('devoir', JSON.stringify(tmpContent));
+    localStorage.setItem(this.devoirStoragePrefix, JSON.stringify(tmpContent));
+    localStorage.setItem(this.devoirDateStoragePrefix, JSON.stringify(new Date()));
   }
 
   saveDevoir() {
@@ -217,7 +231,8 @@ export class DevoirService {
 
     // File do not need anymore to be saved
     this.docIsEdited = false;
-    localStorage.removeItem('devoir');
+    localStorage.removeItem(this.devoirStoragePrefix);
+    localStorage.removeItem(this.devoirDateStoragePrefix);
 
     // Display a succeed message
     this.messageService.add('Devoir sauvegardé avec succès !', 'success', 'USER');
