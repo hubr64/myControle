@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HostListener } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+// import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import * as InlineEditor from '../_helpers/ckeditor-mycontrole/build/ckeditor.js';
 import { BlurEvent, FocusEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 import { DevoirService } from '../_services/devoir.service';
@@ -34,6 +35,7 @@ export class ModalEleveNotationComponent implements OnInit {
 
   public fontSizeDisplay = 12;
 
+  public displayCapacites = false;
   public displayCommentaire = false;
   public editor = InlineEditor;
   public editorIsFocused = false;
@@ -72,9 +74,9 @@ export class ModalEleveNotationComponent implements OnInit {
   }
 
   constructor(
-    private devoirService: DevoirService,
-    private configurationService: ConfigurationService,
-    private modal: NgbActiveModal) {
+    public devoirService: DevoirService,
+    public configurationService: ConfigurationService,
+    public modal: NgbActiveModal) {
     this.notation = null;
     this.eleve = null;
     this.groupe = null;
@@ -82,6 +84,7 @@ export class ModalEleveNotationComponent implements OnInit {
     this.noteStatusEnCours = this.configurationService.getValue('noteStatusEnCours');
     this.noteStatusKo = this.configurationService.getValue('noteStatusKo');
     this.displayCommentaire = false;
+    this.displayCapacites = false;
   }
 
   ngOnInit() {
@@ -384,6 +387,10 @@ export class ModalEleveNotationComponent implements OnInit {
     this.editorIsFocused = true;
   }
 
+  toggleCapacites() {
+    this.displayCapacites = !this.displayCapacites;
+  }
+
   // On change le zoom en agissant sur la police d'affichage
   changeZoom(offset: number) {
     this.fontSizeDisplay = this.fontSizeDisplay + offset;
@@ -438,6 +445,7 @@ export class ModalEleveNotationComponent implements OnInit {
     this.critereEvalue = null;
     // Clear commentaire management information
     this.displayCommentaire = false;
+    this.displayCapacites = false;
     this.editorIsFocused = false;
   }
 
@@ -479,6 +487,11 @@ export class ModalEleveNotationComponent implements OnInit {
         this.devoirService.devoir.notations.push(eleveNotation);
       }
     }
+  }
+
+  getUsedCapacites(): any[] {
+    let usedCapacites = this.devoirService.devoir.getCapaciteBilan(this.notation.eleve);
+    return usedCapacites;
   }
 
 }

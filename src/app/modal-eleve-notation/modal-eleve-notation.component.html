@@ -5,7 +5,7 @@
     <span>&times;</span>
   </button>
 </div>
-<div class="modal-body">
+<div class="modal-body" *ngIf="displayCapacites==false">
   <div *ngIf="notation" class="list-group list-group-root well" [ngStyle]="{'font-size.px': fontSizeDisplay}">
     <ng-container *ngFor='let exercice of devoirService.devoir.exercices'>
       <button type="button" class="list-group-item list-group-item-action list-group-item-dark" *ngIf="exercice.constructor.name == 'Exercice'">
@@ -46,13 +46,43 @@
     </button>
   </div>
 </div>
+<div class="modal-body" *ngIf="displayCapacites">
+  <table class="table table-striped m-2">
+    <thead>
+      <tr>
+        <th scope="col">Capacité</th>
+        <th scope="col">Détails</th>
+        <th scope="col">Points</th>
+        <th scope="col">Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let capaciteUsed of getUsedCapacites() | keyvalue ">
+        <th class="py-1" scope="row">
+          <span class="badge badge-pill" [ngStyle]="{'background-color': capaciteUsed.value.capacite.couleur}">{{capaciteUsed.key}}</span>
+        </th>
+        <td class="py-1">
+          {{capaciteUsed.value.capacite.texte}}
+        </td>
+        <td class="py-1">
+          {{capaciteUsed.value.pts}}
+        </td>
+        <td class="py-1 font-weight-bolder" [ngClass]="{'text-success': capaciteUsed.value.ok==capaciteUsed.value.total, 'text-warning': capaciteUsed.value.ok < capaciteUsed.value.total, 'text-danger': capaciteUsed.value.ok+capaciteUsed.value.encours==0}">
+          <span *ngIf="capaciteUsed.value.ok==capaciteUsed.value.total && capaciteUsed.value.total!=0">Acquis</span>
+          <span *ngIf="capaciteUsed.value.ok+capaciteUsed.value.encours < capaciteUsed.value.total && capaciteUsed.value.total!=0">En cours</span>
+          <span *ngIf="capaciteUsed.value.ok+capaciteUsed.value.encours == 0 && capaciteUsed.value.total!=0">Non acquis</span>
+          <span> ({{capaciteUsed.value.ok+(capaciteUsed.value.encours*0.5)}}/{{capaciteUsed.value.total}})</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <div class="modal-footer" *ngIf="displayCommentaire">
   <h4>Commentaire de notation</h4>
   <ckeditor [editor]="editor" [(ngModel)]="notation.commentaire" (blur)="onBlurEditor($event)" (focus)="onFocusEditor($event)"
     (ready)="onReadyEditor($event)"></ckeditor>
 </div>
 <div class="modal-footer">
-
   <div class="btn-group mr-2" *ngIf="notation">
     <button type="button" class="btn btn-outline-primary" title="Résultat total brut">
       <i class="material-icons md-dark">crop_free</i>
@@ -95,6 +125,9 @@
       </button>
       <button (click)="toggleCommentaire()" type="button" class="btn btn-outline-secondary" title="Commenter le travail de l'élève">
         <i class="material-icons md-dark">insert_comment</i>
+      </button>
+      <button (click)="toggleCapacites()" type="button" class="btn btn-outline-secondary" title="Voir le bilan de capacites">
+        <i class="material-icons md-dark">playlist_add_check</i>
       </button>
     </div>
   </div>
