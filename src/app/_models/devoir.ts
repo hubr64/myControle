@@ -300,6 +300,45 @@ export class Devoir {
     return capaciteBilan;
   }
 
+  getCompetenceBilan(eleve?: string): any {
+    // On recupere d'abord le bilan de capacites (par eleve ou au global selon le parametre)
+    const capaciteBilan = this.getCapaciteBilan(eleve);
+
+    // On construit ensuite un bilan de compentence en parcourant toutes les competences
+    let competenceBilan = [];
+    for (const currentCompetence of this.grille.competences) {
+      // On créé un bilan vierge de la competence en cours de traitement
+      let newCompetence = {
+        competence: currentCompetence,
+        ok: 0,
+        encours: 0,
+        ko: 0,
+        total: 0,
+        pts: 0,
+        bareme: 0,
+        capacites: []
+      };
+      // On parcours toutes les capacites de cette competence
+      for (const capacite of currentCompetence.capacites) {
+        // Si cette capacite existe bien dans le bilan de capcite alors elle vient enrichir le bilan de compétences
+        if (capaciteBilan[capacite.id]) {
+          newCompetence.ok += capaciteBilan[capacite.id].ok;
+          newCompetence.encours += capaciteBilan[capacite.id].encours;
+          newCompetence.ko += capaciteBilan[capacite.id].ko;
+          newCompetence.total += capaciteBilan[capacite.id].total;
+          newCompetence.pts += capaciteBilan[capacite.id].pts;
+          newCompetence.bareme += capaciteBilan[capacite.id].bareme;
+          newCompetence.capacites.push(capaciteBilan[capacite.id]);
+        }
+      }
+      // J'ai finit mon parcours je viens enrichir mon bilan de compétences uniquement s'il est utilisé
+      if (newCompetence.bareme > 0) {
+        competenceBilan.push(newCompetence);
+      }
+    }
+    return competenceBilan;
+  }
+
 
   // GESTION DES GROUPES
   getEleveGroupe(eleve: string): Groupe {
@@ -319,6 +358,16 @@ export class Devoir {
       }
     }
     return isGroupe;
+  }
+
+  get nb_notations(): number {
+    let nbNotations = 0;
+    for (const notation of this.notations) {
+      if (this.isGroupe(notation.eleve) === false) {
+        nbNotations++;
+      }
+    }
+    return nbNotations;
   }
 
 }

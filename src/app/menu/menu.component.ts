@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { environment } from '../../environments/environment';
 import { DevoirService } from '../_services/devoir.service';
@@ -7,6 +8,7 @@ import { MessageService } from '../_services/message.service';
 import { GrilleService } from '../_services/grille.service';
 import { PrintService } from '../_services/print.service';
 import { ConfigurationService } from '../_services/configuration.service';
+import { ModalPrintNotationsComponent } from '../modal-print-notations/modal-print-notations.component';
 
 @Component({
   selector: 'app-menu',
@@ -29,7 +31,8 @@ export class MenuComponent implements OnInit {
     public messageService: MessageService,
     public configurationService: ConfigurationService,
     public grilleService: GrilleService,
-    public printService: PrintService) {
+    public printService: PrintService,
+    public modalService: NgbModal) {
     this.mode = this.configurationService.getValue('defaultMode');
   }
 
@@ -95,4 +98,15 @@ export class MenuComponent implements OnInit {
     this.printService.printDocument('correction');
   }
 
+  printNotations() {
+    // Display modal window to display print notations configuration
+    const modalRef = this.modalService.open(ModalPrintNotationsComponent, { centered: true });
+    // Manage answer of the user
+    modalRef.result.then((result) => {
+
+    }, (reason) => {
+
+    });
+  }
 }
+

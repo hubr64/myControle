@@ -51,7 +51,7 @@ export class Critere implements Deserializable {
   getCapaciteBilan(capaciteBilan: any): any {
     if (this.capacite) {
       if (capaciteBilan[this.capacite.id]) {
-        capaciteBilan[this.capacite.id].pts += this.bareme;
+        capaciteBilan[this.capacite.id].bareme += this.bareme;
       } else {
         capaciteBilan[this.capacite.id] = {
           capacite: this.capacite,
@@ -59,7 +59,8 @@ export class Critere implements Deserializable {
           encours: 0,
           ko: 0,
           total: 0,
-          pts: this.bareme
+          pts: 0,
+          bareme: this.bareme
         };
       }
     }

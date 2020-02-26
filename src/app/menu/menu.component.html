@@ -42,7 +42,7 @@
       <i class="material-icons md-36 greenicon">ballot</i>
       <span>Imprimer la correction</span>
     </div>
-    <div [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}"
+    <div (click)="printNotations()" [ngClass]="{'disabled':this.devoirService.devoir === undefined || this.devoirService.devoir.notations.length == 0}"
       title="Exporter les devoirs notés - un devoir par élève">
       <i class="material-icons md-36 greenicon">present_to_all</i>
       <span>Exporter les notes</span>

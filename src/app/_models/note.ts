@@ -87,6 +87,7 @@ export class Note implements Deserializable {
       if (this.status === 'encours') {
         capaciteBilan[this.critere.capacite.id].encours++;
       }
+      capaciteBilan[this.critere.capacite.id].pts += this.getNote();
       capaciteBilan[this.critere.capacite.id].total++;
     }
   }

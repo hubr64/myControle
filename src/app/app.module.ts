@@ -37,6 +37,8 @@ import { PrintComponent } from './print/print.component';
 import { PrintService } from './_services/print.service';
 import { PrintCorrectionComponent } from './print-correction/print-correction.component';
 import { StripMycontroleLinePipe } from './_helpers/strip-mycontrole-line.pipe';
+import { PrintNotationsComponent } from './print-notations/print-notations.component';
+import { ModalPrintNotationsComponent } from './modal-print-notations/modal-print-notations.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +66,9 @@ import { StripMycontroleLinePipe } from './_helpers/strip-mycontrole-line.pipe';
     ModalEditGroupComponent,
     PrintDevoirComponent,
     PrintComponent,
-    PrintCorrectionComponent
+    PrintCorrectionComponent,
+    PrintNotationsComponent,
+    ModalPrintNotationsComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +88,8 @@ import { StripMycontroleLinePipe } from './_helpers/strip-mycontrole-line.pipe';
     ModalEleveNotationComponent,
     ModalCheckDevoirComponent,
     ModalEditGroupComponent,
-    ModalMoveComponent],
+    ModalMoveComponent,
+    ModalPrintNotationsComponent],
   providers: [
     PrintService,
     { provide: LOCALE_ID, useValue: 'fr-FR' }

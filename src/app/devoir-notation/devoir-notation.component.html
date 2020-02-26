@@ -125,7 +125,7 @@
               <th scope="row">
                 <span class="badge badge-pill" title="{{capaciteUsed.value.capacite.texte}}" [ngStyle]="{'background-color': capaciteUsed.value.capacite.couleur}">{{capaciteUsed.key}}</span>
               </th>
-              <td>{{capaciteUsed.value.pts}}</td>
+              <td>{{capaciteUsed.value.bareme}}</td>
               <td [ngClass]="{'text-success font-weight-bolder': capaciteUsed.value.ok/capaciteUsed.value.total > 0.5}">
                 <span>{{capaciteUsed.value.ok}}</span>
                 <span class="capacitePercent"> ({{(capaciteUsed.value.ok/capaciteUsed.value.total)*100 | number:'1.0-0' }}%)</span>

@@ -11,12 +11,12 @@ export class PrintService {
 
   constructor(public router: Router) { }
 
-  printDocument(documentName: string) {
+  printDocument(documentName: string, options?: any[]) {
     this.isPrinting = true;
     this.router.navigate(['/',
       {
         outlets: {
-          print: ['print', documentName]
+          print: ['print', documentName, options.join()]
         }
       }]);
   }
