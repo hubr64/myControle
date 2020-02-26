@@ -65,12 +65,12 @@
           {{capaciteUsed.value.capacite.texte}}
         </td>
         <td class="py-1">
-          {{capaciteUsed.value.pts}}
+          {{capaciteUsed.value.bareme}}
         </td>
         <td class="py-1 font-weight-bolder" [ngClass]="{'text-success': capaciteUsed.value.ok==capaciteUsed.value.total, 'text-warning': capaciteUsed.value.ok < capaciteUsed.value.total, 'text-danger': capaciteUsed.value.ok+capaciteUsed.value.encours==0}">
           <span *ngIf="capaciteUsed.value.ok==capaciteUsed.value.total && capaciteUsed.value.total!=0">Acquis</span>
-          <span *ngIf="capaciteUsed.value.ok+capaciteUsed.value.encours < capaciteUsed.value.total && capaciteUsed.value.total!=0">En cours</span>
-          <span *ngIf="capaciteUsed.value.ok+capaciteUsed.value.encours == 0 && capaciteUsed.value.total!=0">Non acquis</span>
+          <span *ngIf="capaciteUsed.value.ko==capaciteUsed.value.total && capaciteUsed.value.total!=0">Non acquis</span>
+          <span *ngIf="capaciteUsed.value.ok!=capaciteUsed.value.total && capaciteUsed.value.ko!=capaciteUsed.value.total && capaciteUsed.value.total!=0">En cours</span>
           <span> ({{capaciteUsed.value.ok+(capaciteUsed.value.encours*0.5)}}/{{capaciteUsed.value.total}})</span>
         </td>
       </tr>
