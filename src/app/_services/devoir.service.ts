@@ -176,17 +176,20 @@ export class DevoirService {
   }
 
   doCheck() {
-    // Convert to JSON to prevent shadow copy
-    let currentDevoir = JSON.stringify(this.devoir);
-    // Remove the modification date that is by definition not to take into account
-    const modificationDateRegex = /,"modificationDate":"[^"]*"/gi; // ,"modificationDate":"2020-01-15T17:05:12.362Z",
-    currentDevoir = currentDevoir.replace(modificationDateRegex, '');
-    this.oldDevoir = this.oldDevoir.replace(modificationDateRegex, '');
-    // If the deep copies are different then we should warn user
-    if (currentDevoir !== this.oldDevoir) {
-      console.log('Modification détectée.');
-      this.updateDevoir();
-      this.oldDevoir = currentDevoir;
+    if (this.devoir) {
+      // Convert to JSON to prevent shadow copy
+      let currentDevoir = JSON.stringify(this.devoir);
+
+      // Remove the modification date that is by definition not to take into account
+      const modificationDateRegex = /,"modificationDate":"[^"]*"/gi; // ,"modificationDate":"2020-01-15T17:05:12.362Z",
+      currentDevoir = currentDevoir.replace(modificationDateRegex, '');
+      this.oldDevoir = this.oldDevoir.replace(modificationDateRegex, '');
+      // If the deep copies are different then we should warn user
+      if (currentDevoir !== this.oldDevoir) {
+        console.log('Modification détectée.');
+        this.updateDevoir();
+        this.oldDevoir = currentDevoir;
+      }
     }
   }
 
