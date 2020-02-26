@@ -57,7 +57,7 @@ export class ModalEleveNotationComponent implements OnInit {
           this.onKeyDown();
           document.getElementById(this.critereEvalue.id).scrollIntoView();
         }
-        // C apture des notations de criteres
+        // Capture des notations de criteres
         if (event.key === '0' || event.key === '1' || event.key === '2' || event.key === '3') {
           this.onChangeStatut(event.key);
           document.getElementById(this.critereEvalue.id).scrollIntoView();
@@ -164,36 +164,6 @@ export class ModalEleveNotationComponent implements OnInit {
     this.critereEvalue = critere;
     this.critereEvaluePos = this.criteres.indexOf(critere);
 
-    // on cherche la notation dans le devoir (car on veut modifier le devoir et pas la notation dans la fenêtre)
-    /*for (const notation of this.devoirService.devoir.notations) {
-      if (notation === this.notation) {
-        let critereFound = false;
-        for (const note of notation.notes) {
-          if (note.critere === this.critereEvalue) {
-            // Si trouvé on bascule la nouvelle status en fonction de l'actuel (cyclique)
-            critereFound = true;
-            switch (note.status) {
-              case null:
-                note.status = this.noteStatusKo;
-                break;
-              case this.noteStatusKo:
-                note.status = this.noteStatusEnCours;
-                break;
-              case this.noteStatusEnCours:
-                note.status = this.noteStatusOk;
-                break;
-              case this.noteStatusOk:
-                note.status = null;
-                break;
-            }
-          }
-        }
-        // Si le note n'a pas été trouvé alors on en créé une nouvelle à l'état KO (premier état en cas de clic suivant un état non défini)
-        if (critereFound === false) {
-          notation.notes.push(this.createNote(this.noteStatusKo, this.critereEvalue));
-        }
-      }
-    }*/
     let critereFound = false;
     for (const note of this.notation.notes) {
       if (note.critere === this.critereEvalue) {
@@ -246,23 +216,6 @@ export class ModalEleveNotationComponent implements OnInit {
     }
 
     // on cherche la notation dans le devoir (car on veut modifier le devoir et pas la notation dans la fenêtre)
-    /*
-    for (const notation of this.devoirService.devoir.notations) {
-      if (notation === this.notation) {
-        let critereFound = false;
-        for (const note of notation.notes) {
-          if (note.critere === this.critereEvalue) {
-            // Si trouvé on applique le nouveau status
-            critereFound = true;
-            note.status = newStatus;
-          }
-        }
-        // SI pas trouvé on créé la ouvelle note avec le nouveau status
-        if (critereFound === false && newStatus !== null) {
-          notation.notes.push(this.createNote(newStatus, this.critereEvalue));
-        }
-      }
-    }*/
     let critereFound = false;
     for (const note of this.notation.notes) {
       if (note.critere === this.critereEvalue) {
@@ -316,14 +269,6 @@ export class ModalEleveNotationComponent implements OnInit {
 
   // Tous les critères sont validés (supprime tout puis recréér tou à OK)
   acceptAllCriteres() {
-    /*for (const notation of this.devoirService.devoir.notations) {
-      if (notation === this.notation) {
-        notation.notes = [];
-        for (const critere of this.criteres) {
-          notation.notes.push(this.createNote(this.noteStatusOk, critere));
-        }
-      }
-    }*/
     this.notation.notes = [];
     for (const critere of this.criteres) {
       this.notation.notes.push(this.createNote(this.noteStatusOk, critere));
@@ -337,14 +282,6 @@ export class ModalEleveNotationComponent implements OnInit {
 
   // Tous les critères sont refusés (supprime tout puis recréé tou à ko)
   denyAllCriteres() {
-    /*for (const notation of this.devoirService.devoir.notations) {
-      if (notation === this.notation) {
-        notation.notes = [];
-        for (const critere of this.criteres) {
-          notation.notes.push(this.createNote(this.noteStatusKo, critere));
-        }
-      }
-    }*/
     this.notation.notes = [];
     for (const critere of this.criteres) {
       this.notation.notes.push(this.createNote(this.noteStatusKo, critere));
@@ -358,11 +295,6 @@ export class ModalEleveNotationComponent implements OnInit {
 
   // Tous les critères sont supprimés (permet de refaire la notation car tout passe à indéfini)
   deleteAllCriteres() {
-    /*for (const notation of this.devoirService.devoir.notations) {
-      if (notation === this.notation) {
-        notation.notes = [];
-      }
-    }*/
     this.notation.notes = [];
 
     // Si c'est un groupe il faut également faire la manipulation pour tous les élèves du groupe
