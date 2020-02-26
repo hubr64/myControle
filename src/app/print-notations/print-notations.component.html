@@ -1,0 +1,159 @@
+<div id="devoirs" *ngIf="devoirDetails != undefined">
+  <div class="devoir" *ngFor="let eleve of filterEleveBy(devoirDetails.classe.eleves)">
+    <div class="title">
+      <span>{{devoirDetails.titre}}</span>
+      <span>{{devoirDetails.devoirDate |date:'fullDate'}}</span>
+    </div>
+    <div class="pupil">
+      <span>Elève</span>
+      <span>{{eleve}}</span>
+    </div>
+    <div class="note">
+      <ng-container *ngIf="eleveNotations[eleve]; else noNotationBlockNote">
+        <div *ngIf="printNotesBrutes">
+          <span>
+            <ng-container *ngIf="printNotesBulletin">Note exacte</ng-container>
+            <ng-container *ngIf="printNotesBulletin==false">Note</ng-container>
+          </span>
+          <span>{{eleveNotations[eleve].getNote()}}/{{printNotesNotValidated?devoirDetails.bareme:eleveNotations[eleve].getNoteMax()}}</span>
+        </div>
+        <div *ngIf="printNotesBulletin">
+          <span>
+            <ng-container *ngIf="printNotesBrutes">Note bulletin</ng-container>
+            <ng-container *ngIf="printNotesBrutes==false">Note</ng-container>
+          </span>
+          <span>{{devoirDetails.ajusterNote(eleveNotations[eleve].getNote())}}/{{printNotesNotValidated?devoirDetails.bareme:devoirDetails.ajusterNote(eleveNotations[eleve].getNoteMax())}}</span>
+        </div>
+      </ng-container>
+      <ng-template #noNotationBlockNote>
+        <div>
+          <span>Non évalué</span>
+        </div>
+      </ng-template>
+    </div>
+    <div class="commentaire" *ngIf="printCommentaire">
+      <span *ngIf="eleveNotations[eleve]; else noNotationBlockCommentaire" [innerHTML]="eleveNotations[eleve].commentaire!=null || eleveNotations[eleve].commentaire!=''
+        ? eleveNotations[eleve].commentaire : 'Non commenté'"></span>
+      <ng-template #noNotationBlockCommentaire>
+        Vous n'avez pas été évalué sur ce devoir.
+      </ng-template>
+    </div>
+
+    <table class="statistiques" *ngIf="printDevoirStatistiques">
+      <thead>
+        <tr>
+          <th colspan="4">Bilan général de la classe</th>
+        </tr>
+        <tr>
+          <th>Moyenne</th>
+          <th>Minimum</th>
+          <th>Maximum</th>
+          <th>Inférieur Moyenne</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{devoirDetails.note_moyenne}}</td>
+          <td>{{devoirDetails.note_minimum}}</td>
+          <td>{{devoirDetails.note_maximum}}</td>
+          <td>{{devoirDetails.nb_inferieur_moyenne}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="summary" *ngIf="printExerciceSummary && eleveNotations[eleve]">
+      <thead>
+        <tr>
+          <th colspan="3">Bilan personnel par exercice</th>
+        </tr>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Votre Note</th>
+          <th>Moyenne Classe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let exercice of devoirService.devoir.exercices">
+          <tr *ngIf="exercice.className == 'Exercice'">
+            <td>{{exercice.title}}</td>
+            <td>{{eleveNotations[eleve].getNote(exercice.criteres)}}/{{printNotesNotValidated? exercice.bareme : eleveNotations[eleve].getNoteMax(exercice.criteres)}}</td>
+            <td>{{classeNotation[exercice.id] | number:'1.0-2' }}/{{exercice.bareme}}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <table class="competences" *ngIf="printCompetencesSummary && eleveNotations[eleve]">
+      <thead>
+        <tr>
+          <th colspan="5">Bilan personnel de compétences</th>
+        </tr>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Etat</th>
+          <th>Votre Note</th>
+          <th>Moyenne Classe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let competenceUsed of devoirDetails.getCompetenceBilan(eleve) | keyvalue; index as i ">
+          <tr>
+            <td>
+              {{competenceUsed.value.competence.titre}}
+            </td>
+            <td>
+              <span *ngIf="competenceUsed.value.ok==competenceUsed.value.total && competenceUsed.value.total!=0">Acquis</span>
+              <span *ngIf="competenceUsed.value.ko==competenceUsed.value.total && competenceUsed.value.total!=0">Non acquis</span>
+              <span *ngIf="competenceUsed.value.ok!=competenceUsed.value.total && competenceUsed.value.ko!=competenceUsed.value.total && competenceUsed.value.total!=0">En cours</span>
+            </td>
+            <td>
+              {{competenceUsed.value.pts}}/{{competenceUsed.value.bareme}}
+            </td>
+            <td>
+              {{ (bilanCompetencesClasse[i].pts/devoirDetails.nb_notations) | number:'1.0-2' }}/{{bilanCompetencesClasse[i].bareme}}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <ng-container>
+      <ng-container *ngFor="let exercice of devoirService.devoir.exercices">
+        <div *ngIf="exercice.className == 'Freetext'" class="freetext" [innerHTML]="exercice.text | stripMycontroleLine"></div>
+        <div *ngIf="exercice.className == 'Exercice'" class="exercice">
+          <span [innerHTML]="exercice.title"></span>
+          <span *ngIf="eleveNotations[eleve]">{{eleveNotations[eleve].getNote(exercice.criteres)}}/{{printNotesNotValidated? exercice.bareme : eleveNotations[eleve].getNoteMax(exercice.criteres)}}
+            pts
+          </span>
+        </div>
+        <ng-container *ngFor="let question of exercice.questions">
+          <div *ngIf="question.className == 'Freetext'" class="freetext" [innerHTML]="question.text | stripMycontroleLine"></div>
+          <div *ngIf="question.className == 'Question'" class="question">
+            <span [innerHTML]="question.title"></span>
+            <span *ngIf="eleveNotations[eleve]">{{eleveNotations[eleve].getNote(question.criteres)}}/{{printNotesNotValidated? question.bareme : eleveNotations[eleve].getNoteMax(question.criteres)}}
+              pts
+            </span>
+          </div>
+          <ng-container *ngFor="let critere of question.criteres">
+            <div *ngIf="critere.className == 'Freetext'" class="freetext" [innerHTML]="critere.text | stripMycontroleLine"></div>
+            <div *ngIf="critere.className == 'Critere' && ( eleveNotations[eleve] || (eleveNotations[eleve]==null && printNotesNotValidated) )"
+              class="critere">
+              <span *ngIf="critere.capacite">
+                <span [ngStyle]="{'background-color': critere.capacite?.couleur}">{{critere.capacite.id}}</span>
+              </span>
+              <span *ngIf="critere.capacite == null">
+                <span [ngStyle]="{'background-color': '#CCC'}">Aucune</span>
+              </span>
+              <span *ngIf="critere.text && critere.text!=''" [innerHTML]="critere.text"></span>
+              <span *ngIf="critere.text == null || critere.text==''">{{critere.capacite?.texte}}</span>
+              <span *ngIf="eleveNotations[eleve] && eleveNotations[eleve].getCritereStatus(critere)!=null">{{eleveNotations[eleve].getNote([critere])}}/{{eleveNotations[eleve].getNoteMax([critere])}}</span>
+              <span *ngIf="printNotesNotValidated && eleveNotations[eleve] && eleveNotations[eleve].getCritereStatus(critere)==null">-/{{critere.bareme}}</span>
+              <span *ngIf="printNotesNotValidated && eleveNotations[eleve]==null">-/{{critere.bareme}}</span>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+
+</div>
