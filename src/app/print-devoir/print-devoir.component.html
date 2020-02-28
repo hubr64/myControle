@@ -12,19 +12,19 @@
     <span></span>
   </div>
   <ng-container *ngFor="let exercice of devoirService.devoir.exercices">
-    <div *ngIf="exercice.className == 'Freetext'" class="freetext" [innerHTML]="exercice.text | stripMycontroleLine"></div>
+    <div *ngIf="exercice.className == 'Freetext'" class="freetext" [innerHTML]="exercice.text | stripMycontroleLine | safeHtml"></div>
     <div *ngIf="exercice.className == 'Exercice'" class="exercice">
-      <span [innerHTML]="exercice.title"></span>
+      <span [innerHTML]="exercice.title | safeHtml"></span>
       <span>{{ exercice.bareme }} pts</span>
     </div>
     <ng-container *ngFor="let question of exercice.questions">
-      <div *ngIf="question.className == 'Freetext'" class="freetext" [innerHTML]="question.text | stripMycontroleLine"></div>
+      <div *ngIf="question.className == 'Freetext'" class="freetext" [innerHTML]="question.text | stripMycontroleLine | safeHtml"></div>
       <div *ngIf="question.className == 'Question'" class="question">
-        <span [innerHTML]="question.title"></span>
+        <span [innerHTML]="question.title | safeHtml"></span>
         <span>{{ question.bareme }} pts</span>
       </div>
       <ng-container *ngFor="let critere of question.criteres">
-        <div *ngIf="critere.className == 'Freetext'" class="freetext" [innerHTML]="critere.text | stripMycontroleLine"></div>
+        <div *ngIf="critere.className == 'Freetext'" class="freetext" [innerHTML]="critere.text | stripMycontroleLine | safeHtml"></div>
       </ng-container>
     </ng-container>
   </ng-container>

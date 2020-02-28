@@ -179,7 +179,7 @@
     <span>
       <i class="material-icons" *ngIf="devoirService.devoir.getEleveGroupe(eleve) != null" title="Appartient à {{devoirService.devoir.getEleveGroupe(eleve).nom}}">group</i>
       <h5>{{eleve}}</h5>
-      <small *ngIf="devoirService.devoir.getEleveNotation(eleve)" [innerHTML]="devoirService.devoir.getEleveNotation(eleve).commentaire"></small>
+      <small *ngIf="devoirService.devoir.getEleveNotation(eleve)" [innerHTML]="devoirService.devoir.getEleveNotation(eleve).commentaire | safeHtml"></small>
     </span>
     <span class="bg-light" *ngIf="devoirService.devoir.getEleveNotation(eleve) && noteMode == 'brut'">
       <span class="h3 mb-0" title="Note brute">{{devoirService.devoir.getEleveNotation(eleve).getNote()}}</span>
