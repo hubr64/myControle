@@ -159,28 +159,32 @@ export class Devoir {
 
   get note_maximum(): number {
     let note = 0;
+    let foundMax = false;
     for (const notation of this.notations) {
       if (this.isGroupe(notation.eleve) === false) {
         const curNote = notation.getNote();
         if (curNote > note) {
           note = curNote;
+          foundMax = true;
         }
       }
     }
-    return note;
+    return foundMax ? note : 0;
   }
 
   get note_minimum(): number {
     let note = this.bareme;
+    let foundMin = false;
     for (const notation of this.notations) {
       if (this.isGroupe(notation.eleve) === false) {
         const curNote = notation.getNote();
         if (curNote < note) {
           note = curNote;
+          foundMin = true;
         }
       }
     }
-    return note;
+    return foundMin ? note : 0;
   }
 
   get note_moyenne(): number {
