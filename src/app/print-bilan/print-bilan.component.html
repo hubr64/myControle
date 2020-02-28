@@ -1,0 +1,78 @@
+<div class="devoir">
+  <div class="title">
+    <span>{{devoirDetails.titre}}</span>
+    <span>{{devoirDetails.devoirDate |date:'fullDate'}}</span>
+  </div>
+  <table class="statistiques" *ngIf="printDevoirStatistiques">
+    <thead>
+      <tr>
+        <th colspan="4">Bilan général de la classe</th>
+      </tr>
+      <tr>
+        <th>Moyenne</th>
+        <th>Minimum</th>
+        <th>Maximum</th>
+        <th>Inférieur Moyenne</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{devoirDetails.note_moyenne}}</td>
+        <td>{{devoirDetails.note_minimum}}</td>
+        <td>{{devoirDetails.note_maximum}}</td>
+        <td>{{devoirDetails.nb_inferieur_moyenne}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="competences" *ngIf="printCompetencesSummary">
+    <thead>
+      <tr>
+        <th colspan="2">Bilan de compétences</th>
+      </tr>
+      <tr>
+        <th>Intitulé</th>
+        <th>Moyenne Classe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let competenceUsed of devoirDetails.getCompetenceBilan() | keyvalue; index as i ">
+        <tr>
+          <td>
+            {{competenceUsed.value.competence.titre}}
+          </td>
+          <td>
+            {{ (bilanCompetencesClasse[i].pts/devoirDetails.nb_notations) | number:'1.0-2' }}/{{bilanCompetencesClasse[i].bareme}}
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <table class="bilan">
+    <thead>
+      <tr>
+        <th [attr.colspan]="nbColBilan">Bilan des notes</th>
+      </tr>
+      <tr>
+        <th>Elève</th>
+        <th>Classement</th>
+        <th *ngIf="printNotesBrutes">Note réelle</th>
+        <th *ngIf="printNotesBulletin">Note bulletin</th>
+        <th *ngIf="printCommentaire">Commentaire</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let eleve of filterEleveBy(devoirDetails.classe.eleves)">
+        <td>{{eleve}}</td>
+        <td *ngIf="eleveNotations[eleve]">{{getNotePosition(eleve)}}</td>
+        <td *ngIf="printNotesBrutes && eleveNotations[eleve]">{{eleveNotations[eleve].getNote()}}/{{printNotesNotValidated?devoirDetails.bareme:eleveNotations[eleve].getNoteMax()}}</td>
+        <td *ngIf="printNotesBulletin && eleveNotations[eleve]">{{devoirDetails.ajusterNote(eleveNotations[eleve].getNote())}}/{{printNotesNotValidated?devoirDetails.bareme:devoirDetails.ajusterNote(eleveNotations[eleve].getNoteMax())}}</td>
+        <td *ngIf="printCommentaire && eleveNotations[eleve]" [innerHTML]="(eleveNotations[eleve].commentaire!=null || eleveNotations[eleve].commentaire!=''
+        ? eleveNotations[eleve].commentaire : 'Non commenté') | safeHtml"></td>
+        <td *ngIf="nbColBilan>2 && printNotesNotValidated && eleveNotations[eleve]==null" [attr.colspan]="nbColBilan-1">Non évalué</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+</div>

@@ -9,6 +9,7 @@ import { GrilleService } from '../_services/grille.service';
 import { PrintService } from '../_services/print.service';
 import { ConfigurationService } from '../_services/configuration.service';
 import { ModalPrintNotationsComponent } from '../modal-print-notations/modal-print-notations.component';
+import { ModalPrintBilanComponent } from '../modal-print-bilan/modal-print-bilan.component';
 
 @Component({
   selector: 'app-menu',
@@ -101,6 +102,17 @@ export class MenuComponent implements OnInit {
   printNotations() {
     // Display modal window to display print notations configuration
     const modalRef = this.modalService.open(ModalPrintNotationsComponent, { centered: true });
+    // Manage answer of the user
+    modalRef.result.then((result) => {
+
+    }, (reason) => {
+
+    });
+  }
+
+  printBilan() {
+    // Display modal window to display print notations configuration
+    const modalRef = this.modalService.open(ModalPrintBilanComponent, { centered: true });
     // Manage answer of the user
     modalRef.result.then((result) => {
 

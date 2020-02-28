@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">Configuration du bilan des notes</h4>
+  <button type="button" class="close" aria-label="Fermer" aria-describedby="modal-title" (click)="modal.dismiss('close')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="funkyradio">
+    <div class="funkyradio-primary">
+      <input type="checkbox" name="printNotesNotValidated" id="printNotesNotValidated" [(ngModel)]="printNotesNotValidated" />
+      <ng-template #popContent1>Les élèves et critères non évalués seront également au bilan (normallement pas utile sauf pour éventuellement avoir
+        un export plus exhaustif).</ng-template>
+      <label for="printNotesNotValidated" [ngbPopover]="popContent1" triggers="hover">Inclure les élèves et critères non évalués</label>
+    </div>
+    <div class="funkyradio-primary">
+      <input type="checkbox" name="printNotesBrutes" id="printNotesBrutes" [(ngModel)]="printNotesBrutes" />
+      <ng-template #popContent2>Le bilan contiendra la note brute (sans application de l'arrondi et du mode de notation).</ng-template>
+      <label for="printNotesBrutes" [ngbPopover]="popContent2" triggers="hover">Afficher les notes réelles</label>
+    </div>
+    <div class="funkyradio-primary">
+      <input type="checkbox" name="printNotesBulletin" id="printNotesBulletin" [(ngModel)]="printNotesBulletin" />
+      <ng-template #popContent3>Le bilan contiendra la note bulletin (avec application de l'arrondi et du mode de notation).</ng-template>
+      <label for="printNotesBulletin" [ngbPopover]="popContent3" triggers="hover">Afficher les notes bulletin</label>
+    </div>
+    <div class="funkyradio-primary">
+      <input type="checkbox" name="printCommentaire" id="printCommentaire" [(ngModel)]="printCommentaire" />
+      <ng-template #popContent7>Le bilan contiendra le commentaire de notation individualisé pour chaque élève.</ng-template>
+      <label for="printCommentaire" [ngbPopover]="popContent7" triggers="hover">Afficher les commentaires de notation</label>
+    </div>
+    <div class="funkyradio-primary">
+      <input type="checkbox" name="printDevoirStatistiques" id="printDevoirStatistiques" [(ngModel)]="printDevoirStatistiques"
+      />
+      <ng-template #popContent6>Le bilan contiendra une matrice que indique les statistiques de la classe.</ng-template>
+      <label for="printDevoirStatistiques" [ngbPopover]="popContent6" triggers="hover">Insérer les statistiques générales</label>
+    </div>
+    <div class="funkyradio-primary">
+      <input type="checkbox" name="printCompetencesSummary" id="printCompetencesSummary" [(ngModel)]="printCompetencesSummary"
+      />
+      <ng-template #popContent8>Le bilan contiendra une matrice de compétences que résume l'acquisition de chaque compétence.</ng-template>
+      <label for="printCompetencesSummary" [ngbPopover]="popContent8" triggers="hover">Insérer la matrice de compétences</label>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel')">Annuler</button>
+  <button type="button" ngbAutofocus class="btn btn-success" (click)="printBilan()">CONSULTER</button>
+</div>

@@ -12,6 +12,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
+import { StripHtmlPipe } from './_helpers/strip-html.pipe';
+import { SafeHtmlPipe } from './_helpers/safe-html.pipe';
+import { StripMycontroleLinePipe } from './_helpers/strip-mycontrole-line.pipe';
 import { MenuComponent } from './menu/menu.component';
 import { DevoirComponent } from './devoir/devoir.component';
 import { DevoirEditionComponent } from './devoir-edition/devoir-edition.component';
@@ -25,7 +28,6 @@ import { ModalConfirmRestoreDevoirComponent } from './modal-confirm-restore-devo
 import { ConfigurationComponent } from './configuration/configuration.component';
 import { ModalGridSelectionComponent } from './modal-grid-selection/modal-grid-selection.component';
 import { ModalMoveComponent } from './modal-move/modal-move.component';
-import { StripHtmlPipe } from './_helpers/strip-html.pipe';
 import { ModalConfirmGridComponent } from './modal-confirm-grid/modal-confirm-grid.component';
 import { ModalConfirmClasseComponent } from './modal-confirm-classe/modal-confirm-classe.component';
 import { ModalClasseSelectionComponent } from './modal-classe-selection/modal-classe-selection.component';
@@ -36,9 +38,10 @@ import { PrintDevoirComponent } from './print-devoir/print-devoir.component';
 import { PrintComponent } from './print/print.component';
 import { PrintService } from './_services/print.service';
 import { PrintCorrectionComponent } from './print-correction/print-correction.component';
-import { StripMycontroleLinePipe } from './_helpers/strip-mycontrole-line.pipe';
 import { PrintNotationsComponent } from './print-notations/print-notations.component';
 import { ModalPrintNotationsComponent } from './modal-print-notations/modal-print-notations.component';
+import { PrintBilanComponent } from './print-bilan/print-bilan.component';
+import { ModalPrintBilanComponent } from './modal-print-bilan/modal-print-bilan.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +60,7 @@ import { ModalPrintNotationsComponent } from './modal-print-notations/modal-prin
     ModalGridSelectionComponent,
     ModalMoveComponent,
     StripHtmlPipe,
+    SafeHtmlPipe,
     StripMycontroleLinePipe,
     ModalConfirmGridComponent,
     ModalConfirmClasseComponent,
@@ -68,7 +72,9 @@ import { ModalPrintNotationsComponent } from './modal-print-notations/modal-prin
     PrintComponent,
     PrintCorrectionComponent,
     PrintNotationsComponent,
-    ModalPrintNotationsComponent
+    ModalPrintNotationsComponent,
+    PrintBilanComponent,
+    ModalPrintBilanComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +95,8 @@ import { ModalPrintNotationsComponent } from './modal-print-notations/modal-prin
     ModalCheckDevoirComponent,
     ModalEditGroupComponent,
     ModalMoveComponent,
-    ModalPrintNotationsComponent],
+    ModalPrintNotationsComponent,
+    ModalPrintBilanComponent],
   providers: [
     PrintService,
     { provide: LOCALE_ID, useValue: 'fr-FR' }
