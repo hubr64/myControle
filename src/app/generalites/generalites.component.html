@@ -4,8 +4,12 @@
 </button>
 
 <section id="generalitesMenu" [ngClass]="{'open': visible}">
-  <ngb-accordion #acc="ngbAccordion" [closeOthers]="true" activeIds="ngb-panel-0">
-    <ngb-panel title="Informations">
+  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0,ngb-panel-1">
+    <ngb-panel>
+      <ng-template ngbPanelTitle>
+        <i class="material-icons md-48">tune</i>
+        <span>Configuration du devoir</span>
+      </ng-template>
       <ng-template ngbPanelContent>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
@@ -128,7 +132,11 @@
         </div>
       </ng-template>
     </ngb-panel>
-    <ngb-panel title="Généralités">
+    <ngb-panel>
+      <ng-template ngbPanelTitle>
+        <i class="material-icons md-48">more</i>
+        <span>Propriétés du devoir</span>
+      </ng-template>
       <ng-template ngbPanelContent>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
