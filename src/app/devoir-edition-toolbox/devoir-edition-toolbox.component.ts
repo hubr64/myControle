@@ -105,6 +105,10 @@ export class DevoirEditionToolboxComponent implements OnInit {
       });
     }
 
+    const nbFree = parseInt(this.configurationService.getValue('questionNbFreetextDefaut'), 10);
+    for (let i = 0; i < nbFree; i++) {
+      this.additemFreetext(idExe, newQuestion.id, 'end');
+    }
     const nbCri = parseInt(this.configurationService.getValue('questionNbCritereDefaut'), 10);
     for (let i = 0; i < nbCri; i++) {
       this.additemCritere(idExe, newQuestion.id, 'end');

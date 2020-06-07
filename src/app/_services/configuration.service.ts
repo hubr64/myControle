@@ -42,6 +42,7 @@ export class ConfigurationService {
       exerciceTitreDefaut: { modifiable: true, title: 'Exercice / Titre par défaut', value: Configuration.exerciceTitreDefaut },
       exerciceNbQuestionDefaut: { modifiable: true, title: 'Exercice / Nb questions par défaut', value: Configuration.exerciceNbQuestionDefaut },
       questionTitreDefaut: { modifiable: true, title: 'Question / Titre par défaut', value: Configuration.questionTitreDefaut },
+      questionNbFreetextDefaut: { modifiable: true, title: 'Question / Nb texte par défaut', value: Configuration.questionNbFreetextDefaut },
       questionNbCritereDefaut: { modifiable: true, title: 'Question / Nb critères par défaut', value: Configuration.questionNbCritereDefaut },
       critereTitreDefaut: { modifiable: true, title: 'Critère / Titre par défaut', value: Configuration.critereTitreDefaut },
       critereBaremeDefaut: { modifiable: true, title: 'Critère / Barème par défaut', value: Configuration.critereBaremeDefaut },
