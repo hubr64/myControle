@@ -32,7 +32,8 @@
     <div (click)="this.devoirService.devoir?saveCurrentDevoir():null" [ngClass]="{'disabled':this.devoirService.devoir === undefined}">
       <i class="material-icons md-36 blueicon">save</i>
       <span>Enregistrer&nbsp;</span>
-      <span *ngIf="devoirService.docIsEdited" class="badge badge-danger">Attention !</span>
+      <span *ngIf="devoirService.docIsEdited" class="badge badge-danger" ngbPopover="Il existe des modifications non sauvegardées. Vous devriez enregistrer votre devoir !"
+        triggers="mouseenter:mouseleave" popoverTitle="Attention !">Attention !</span>
     </div>
     <div (click)="printDevoir()" [ngClass]="{'disabled':this.devoirService.devoir === undefined}" title="Impression à distribuer aux élèves pour un devoir">
       <i class="material-icons md-36 greenicon">local_printshop</i>
@@ -59,7 +60,7 @@
     </div>
     <div (click)="classeService.showClasse()">
       <i class="material-icons md-36">group</i>
-      <span>Configurer les classes</span>
+      <span>Consulter les classes</span>
     </div>
     <div (click)="grilleService.showGrille()">
       <i class="material-icons md-36">emoji_events</i>
