@@ -23,7 +23,11 @@
         </div>
         <div *ngIf="question.className == 'Question'" class="question">
           <app-devoir-edition-optionbox [itemType]='"question"' [item]='question'></app-devoir-edition-optionbox>
-          <input [(ngModel)]="question.title" placeholder="Intitulé de la question" />
+          <!-- <input [(ngModel)]="question.title" placeholder="Intitulé de la question" /> -->
+
+          <span *ngIf="itemEdited!==question" (click)="convertToEditor(question,$event)" [innerHTML]="question.title | safeHtml"></span>
+          <ckeditor *ngIf="itemEdited===question" [editor]="editor" [(ngModel)]="question.title" (blur)="onBlurEditor($event)" (ready)="onReadyEditor($event)"></ckeditor>
+
           <span>({{ question.bareme }} pts)</span>
           <div *ngFor="let critere of question.criteres; trackBy: trackByItems">
             <app-devoir-edition-toolbox [itemType]='"critere"' [exeId]="exercice.id" [queId]='question.id' [criId]='critere.id'></app-devoir-edition-toolbox>

@@ -36,13 +36,25 @@ section > h1 > span:last-child
   border: 1px solid #D0D0D0
   border-left: 8px solid $freetext-color
   position: relative
-  padding: 0px
+  padding: 4px 0px
   position: relative
   min-height: 38px
 
 .freetext > span:nth-child(2)
   margin-right: 20px
   display: block
+  padding: 3px
+  border: 1px solid transparent
+
+.freetext > span:nth-child(2):hover
+  background-color:#FFF
+  border: 1px solid #E5E5E5
+
+.freetext > ckeditor
+  background-color:#FFF
+  border: 1px solid #E5E5E5
+  width: 100%
+  display: inline-block
 
 .exercicefreetext
   border-left-width: 8px
@@ -101,7 +113,7 @@ section > h1 > span:last-child
   border-left: 5px solid $question-color
   position: relative
 
-.question > input
+.question > span
   font-size: 1.1em
   font-weight: 400
   width: 88%
@@ -112,7 +124,7 @@ section > h1 > span:last-child
   transition: all 200ms
   background-color: transparent
 
-.question > input:hover
+.question > span:hover
   border: 1px solid #E5E5E5
   background-color:#FFF
 
@@ -126,6 +138,13 @@ section > h1 > span:last-child
   font-family: 'Segoe UI'
   font-weight: 700
   color:#999
+
+.question > ckeditor
+  width: 88%
+  background-color:#FFF
+  border: 1px solid #E5E5E5
+  display: inline-block
+  margin: 3px
 
 .critere
   margin: 1px 7px 1px 7px
@@ -189,3 +208,46 @@ section > h1 > span:last-child
 .critere > span:last-child > input:hover
   background-color:#FFF
   border: 1px solid #E5E5E5
+
+:host ::ng-deep .image
+  position: relative
+  clear: both
+  text-align: center
+  margin: 1em auto
+
+:host ::ng-deep .image.image_resized
+  max-width: 100%
+  display: block
+  box-sizing: border-box
+
+:host ::ng-deep .image.image-style-side
+  float: right
+  margin-left: 1.5em
+
+:host ::ng-deep .image>img
+  display: block
+  margin: 0 auto
+  max-width: 100%
+  min-width: 50px
+
+:host ::ng-deep .image.image_resized img
+  width: 100%
+
+:host ::ng-deep .image>figcaption
+  display: table-caption
+  caption-side: bottom
+  word-break: break-word
+  color: #333
+  background-color: #f7f7f7
+  padding: .6em
+  font-size: .75em
+  outline-offset: -1px
+
+:host ::ng-deep .image.image_resized>figcaption
+  display: block
+
+:host ::ng-deep code
+  background-color: hsla(0,0%,78%,.3)
+  padding: .15em
+  border-radius: 2px
+
