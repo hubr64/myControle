@@ -365,6 +365,29 @@ export class DevoirService {
       delete devoirContent.data.notes;
       devoirContent.data.notations = tmpNotations;
 
+      for (const keyExe of Object.keys(devoirContent.data.exercices)) {
+        if (devoirContent.data.exercices[keyExe].questions) {
+          devoirContent.data.exercices[keyExe].title =
+            devoirContent.data.exercices[keyExe].title.replace(/<div class="mycontrole-lines.+Bloc de <strong>(\d+)<\/strong> lignes<\/div>/, this.migrateMyControleLines);
+          for (const keyQue of Object.keys(devoirContent.data.exercices[keyExe].questions)) {
+            if (devoirContent.data.exercices[keyExe].questions[keyQue].criteres) {
+              devoirContent.data.exercices[keyExe].questions[keyQue].title =
+                devoirContent.data.exercices[keyExe].questions[keyQue].title.replace(/<div class="mycontrole-lines.+Bloc de <strong>(\d+)<\/strong> lignes<\/div>/, this.migrateMyControleLines);
+              for (const keyCri of Object.keys(devoirContent.data.exercices[keyExe].questions[keyQue].criteres)) {
+                devoirContent.data.exercices[keyExe].questions[keyQue].criteres[keyCri].text =
+                  devoirContent.data.exercices[keyExe].questions[keyQue].criteres[keyCri].text.replace(/<div class="mycontrole-lines.+Bloc de <strong>(\d+)<\/strong> lignes<\/div>/, this.migrateMyControleLines);
+              }
+            } else {
+              devoirContent.data.exercices[keyExe].questions[keyQue].text =
+                devoirContent.data.exercices[keyExe].questions[keyQue].text.replace(/<div class="mycontrole-lines.+Bloc de <strong>(\d+)<\/strong> lignes<\/div>/, this.migrateMyControleLines);
+            }
+          }
+        } else {
+          devoirContent.data.exercices[keyExe].text =
+            devoirContent.data.exercices[keyExe].text.replace(/<div class="mycontrole-lines.+Bloc de <strong>(\d+)<\/strong> lignes<\/div>/, this.migrateMyControleLines);
+        }
+      }
+
       // Memorize migration operations
       hasMigration = true;
     }
@@ -378,6 +401,11 @@ export class DevoirService {
     }
 
     return devoirContent;
+  }
+
+  migrateMyControleLines(correspondance, nb, decalage, chaine) {
+    let newString = '<div class="mycontrole-lines"><span class="mycontrole-lines__label">Bloc de ' + nb + ' lignes</span></div>';
+    return newString;
   }
 
   getImpactedCriteres(removedCapacites) {

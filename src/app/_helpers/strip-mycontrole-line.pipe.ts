@@ -14,7 +14,7 @@ export class StripMycontroleLinePipe implements PipeTransform {
   }
 
   transform(value: string): any {
-    let nouvellevalue = value.replace(/<div class="mycontrole-lines.+Bloc de <strong>(\d+)<\/strong> lignes<\/div>/, this.replaceMyControleLines);
+    let nouvellevalue = value.replace(/<div class="mycontrole-lines.+Bloc de (\d+) lignes<\/span>.*<\/div>/, this.replaceMyControleLines);
     nouvellevalue = nouvellevalue.replace(/<span class="cke_reset.*<\/span>/, '');
     nouvellevalue = nouvellevalue.replace(/<div data-cke-hidden-sel.*<\/div>/, '');
     return nouvellevalue;

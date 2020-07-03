@@ -32,7 +32,7 @@ export class DevoirEditionComponent implements OnInit {
   }
 
   public onBlurEditor({ editor }: BlurEvent) {
-    this.itemEdited = null;
+    // this.itemEdited = null;
   }
 
   public onReadyEditor(editor) {
