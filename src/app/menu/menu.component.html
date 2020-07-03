@@ -7,9 +7,9 @@
 <div class="btn-toolbar justify-content-between bg-light p-2">
   <div class="btn-group">
     <button type="button" (click)="toggleMode('edition')" class="btn" [ngClass]="{'btn-primary': mode == 'edition', 'btn-secondary': mode != 'edition'}"
-      [disabled]="this.devoirService.devoir == null">Edition</button>
+      [disabled]="this.devoirService.devoir == null" [title]="this.devoirService.devoir == null ? 'Aucun devoir ouvert' : 'Editer le contenu du devoir'">Edition</button>
     <button type="button" (click)="toggleMode('notation')" class="btn" [ngClass]="{'btn-primary': mode == 'notation', 'btn-secondary': mode != 'notation'}"
-      [disabled]="this.devoirService.devoir == null || this.devoirService.devoir.classe == null">Notation</button>
+      [disabled]="this.devoirService.devoir == null || this.devoirService.devoir.classe == null" [title]="this.devoirService.devoir?.classe == null ? 'Aucune classe définie' : 'Noter la classe'">Notation</button>
   </div>
 </div>
 
