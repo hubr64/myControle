@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HostListener } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-// import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import * as InlineEditor from '../_helpers/ckeditor/ckeditor.js';
 import { BlurEvent, FocusEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
