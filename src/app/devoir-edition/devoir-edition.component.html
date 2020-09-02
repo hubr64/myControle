@@ -10,8 +10,11 @@
       <span *ngIf="itemEdited!==exercice" (click)="convertToEditor(exercice,$event)" [innerHTML]="exercice.text | safeHtml"></span>
       <ckeditor *ngIf="itemEdited===exercice" [editor]="editor" [(ngModel)]="exercice.text" (blur)="onBlurEditor($event)" (ready)="onReadyEditor($event)"></ckeditor>
     </div>
-    <div *ngIf="exercice.className == 'Exercice'" class="exercice">
+    <div *ngIf="exercice.className == 'Exercice'" [ngClass]="{'exercice': true, 'hidden': exercice.visible==false}">
       <app-devoir-edition-optionbox [itemType]='"exercice"' [item]='exercice'></app-devoir-edition-optionbox>
+      <button type="button" class="btn btn-sm" (click)="toggleItem(exercice)" title="Afficher/Masquer">
+        <i [ngClass]="['material-icons', 'md-24']"></i>
+      </button>
       <input [(ngModel)]="exercice.title" placeholder="Titre de l'exercice" />
       <span>({{ exercice.bareme }} pts)</span>
       <div *ngFor="let question of exercice.questions; trackBy: trackByItems">

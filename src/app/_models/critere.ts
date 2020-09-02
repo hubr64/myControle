@@ -21,7 +21,7 @@ export class Critere implements Deserializable {
     this.bareme = parseFloat(input.bareme);
     this.capacite = null;
 
-    if (grille !== undefined) {
+    if (grille) {
       if (input.capacite) {
         this.capacite = grille.getCapacite(input.capacite);
       }

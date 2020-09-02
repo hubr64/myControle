@@ -62,6 +62,7 @@ export class DevoirEditionToolboxComponent implements OnInit {
     newExercice.id = itemValue ? itemValue.id : uuid();
     newExercice.title = itemValue ? itemValue.title : this.configurationService.getValue('exerciceTitreDefaut');
     newExercice.questions = itemValue ? itemValue.questions : [];
+    newExercice.visible = true;
 
     if (idExe !== 'end') {
       let idPos = 0;
@@ -75,9 +76,12 @@ export class DevoirEditionToolboxComponent implements OnInit {
       this.devoirService.devoir.exercices.push(newExercice);
     }
 
-    const nbQue = parseInt(this.configurationService.getValue('exerciceNbQuestionDefaut'), 10);
-    for (let i = 0; i < nbQue; i++) {
-      this.additemQuestion(newExercice.id, 'end');
+    // We add more items if there is not a default value
+    if (itemValue === undefined) {
+      const nbQue = parseInt(this.configurationService.getValue('exerciceNbQuestionDefaut'), 10);
+      for (let i = 0; i < nbQue; i++) {
+        this.additemQuestion(newExercice.id, 'end');
+      }
     }
   }
 
@@ -105,13 +109,16 @@ export class DevoirEditionToolboxComponent implements OnInit {
       });
     }
 
-    const nbFree = parseInt(this.configurationService.getValue('questionNbFreetextDefaut'), 10);
-    for (let i = 0; i < nbFree; i++) {
-      this.additemFreetext(idExe, newQuestion.id, 'end');
-    }
-    const nbCri = parseInt(this.configurationService.getValue('questionNbCritereDefaut'), 10);
-    for (let i = 0; i < nbCri; i++) {
-      this.additemCritere(idExe, newQuestion.id, 'end');
+    // We add more items if there is not a default value
+    if (itemValue === undefined) {
+      const nbFree = parseInt(this.configurationService.getValue('questionNbFreetextDefaut'), 10);
+      for (let i = 0; i < nbFree; i++) {
+        this.additemFreetext(idExe, newQuestion.id, 'end');
+      }
+      const nbCri = parseInt(this.configurationService.getValue('questionNbCritereDefaut'), 10);
+      for (let i = 0; i < nbCri; i++) {
+        this.additemCritere(idExe, newQuestion.id, 'end');
+      }
     }
   }
 
@@ -203,21 +210,24 @@ export class DevoirEditionToolboxComponent implements OnInit {
   pasteItem(idExe: string, idQue: string, idCri: string) {
     let item = null;
     const tmpItem = this.clipboardService.paste();
+
+    // Get current grid to provide it if defined
+    const devoirGrille = this.devoirService.devoir.grille;
     if (tmpItem) {
       if (tmpItem.type === 'free') {
         item = new Freetext().deserialize(tmpItem);
         this.addItem('freetext', idExe, idQue, idCri, item);
       }
       if (tmpItem.type === 'exe') {
-        item = new Exercice().deserialize(tmpItem);
+        item = new Exercice().deserialize(tmpItem, devoirGrille);
         this.addItem('exercice', idExe, idQue, idCri, item);
       }
       if (tmpItem.type === 'que') {
-        item = new Question().deserialize(tmpItem);
+        item = new Question().deserialize(tmpItem, devoirGrille);
         this.addItem('question', idExe, idQue, idCri, item);
       }
       if (tmpItem.type === 'cri') {
-        item = new Critere().deserialize(tmpItem);
+        item = new Critere().deserialize(tmpItem, devoirGrille);
         this.addItem('critere', idExe, idQue, idCri, item);
       }
     }

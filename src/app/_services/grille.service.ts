@@ -53,8 +53,6 @@ export class GrilleService {
 
     // Load local storage that replace the global initial storage
     this.load();
-
-    // console.dir(this.grilleItems);
   }
 
   load() {

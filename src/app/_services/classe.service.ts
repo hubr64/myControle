@@ -54,7 +54,6 @@ export class ClasseService {
           }
           // Load local storage that replace the global initial storage
           this.load();
-          // console.dir(this.classeItems);
         },
         error => {
           this.messageService.add(error, 'danger', 'USER');

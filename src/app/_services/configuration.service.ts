@@ -52,8 +52,6 @@ export class ConfigurationService {
 
     // Load local storage that replace the global initial storage
     this.load();
-
-    // console.dir(this.configurationItems);
   }
 
   load() {

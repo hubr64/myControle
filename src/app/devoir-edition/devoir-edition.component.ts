@@ -38,4 +38,12 @@ export class DevoirEditionComponent implements OnInit {
     editor.editing.view.focus();
   }
 
+  public toggleItem(item) {
+    const itemId = item.id;
+    if (itemId) {
+      item.visible = !item.visible;
+    }
+
+  }
+
 }

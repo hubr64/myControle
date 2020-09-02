@@ -9,10 +9,12 @@ export class Exercice implements Deserializable {
   title: string;
   questions: any[];
   className: string;
+  visible: boolean;
 
   constructor() {
     this.className = 'Exercice';
     this.questions = [];
+    this.visible = false;
   }
 
   // Convert from JSON

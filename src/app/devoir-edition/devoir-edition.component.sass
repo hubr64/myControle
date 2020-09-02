@@ -27,7 +27,6 @@ section > h1
   margin-bottom: 10px
   font-family: 'Segoe UI'
   font-weight: 700
-  margin-top: 30px
 
 section > h1 > span:last-child
   float: right
@@ -80,10 +79,18 @@ section > h1 > span:last-child
   position: relative
   padding: 0px
 
+.exercice > button
+  padding: 0
+  line-height: 1
+  margin-top: -10px
+
+.exercice > button > i
+  opacity: 0.6
+
 .exercice > input
   font-size: 1.4em
   font-weight: 400
-  width: 89%
+  width: 87%
   box-sizing: border-box
   display: inline-block
   margin: 3px
@@ -95,7 +102,7 @@ section > h1 > span:last-child
   border: 1px solid #E5E5E5
   background-color: #FFF
 
-.exercice > span:nth-child(3)
+.exercice > span:nth-child(4)
   font-size: 1.4em
   width: 9%
   box-sizing: border-box
@@ -105,6 +112,16 @@ section > h1 > span:last-child
   font-family: 'Segoe UI'
   font-weight: 700
   color:#999
+
+.hidden > div,
+.hidden > app-devoir-edition-toolbox
+  display: none
+
+.exercice > button > i.material-icons::before
+  content: "arrow_drop_up"
+
+.hidden > button > i.material-icons::before
+  content: "arrow_drop_down"
 
 .question
   margin: 1px 7px 1px 7px
