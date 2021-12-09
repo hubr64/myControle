@@ -13,13 +13,13 @@
   </div>
   <ng-container *ngFor="let exercice of devoirService.devoir.exercices">
     <div *ngIf="exercice.className == 'Freetext'" class="freetext" [innerHTML]="exercice.text | stripMycontroleLine | safeHtml"></div>
-    <div *ngIf="exercice.className == 'Exercice'" class="exercice">
+    <div *ngIf="exercice.className == 'Exercice'" class="exercice" [ngStyle]="{'margin-top': impressionMargeExercice+'px'}">
       <span [innerHTML]="exercice.title | safeHtml"></span>
       <span>{{ exercice.bareme }} pts</span>
     </div>
     <ng-container *ngFor="let question of exercice.questions">
       <div *ngIf="question.className == 'Freetext'" class="freetext" [innerHTML]="question.text | stripMycontroleLine | safeHtml"></div>
-      <div *ngIf="question.className == 'Question'" class="question">
+      <div *ngIf="question.className == 'Question'" class="question" [ngStyle]="{'margin-top': impressionMargeQuestion+'px'}">
         <span [innerHTML]="question.title | safeHtml"></span>
         <span>{{ question.bareme }} pts</span>
       </div>

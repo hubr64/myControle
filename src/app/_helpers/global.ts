@@ -49,3 +49,6 @@ export const critereBaremeDefaut = 0;
 export const critereFreeDefaut = 'Texte libre...';
 export const questionNbFreetextDefaut = 1;
 export const groupeNomDefaut = 'Groupe n° ';
+
+export const impressionMargeExercice = 50;
+export const impressionMargeQuestion = 10;
