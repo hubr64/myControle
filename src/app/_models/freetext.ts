@@ -1,4 +1,7 @@
+import { v4 as uuid } from 'uuid';
+
 import { Deserializable } from './deserializable.model';
+import { Critere } from './critere';
 
 export class Freetext implements Deserializable {
   id: string;
@@ -10,8 +13,8 @@ export class Freetext implements Deserializable {
   }
 
   // Convert from JSON
-  deserialize(input: any) {
-    this.id = input.id;
+  deserialize(input: any, newId: boolean = false) {
+    this.id = newId ? uuid() :  input.id;
     this.text = input.text;
     return this;
   }
@@ -31,5 +34,12 @@ export class Freetext implements Deserializable {
   }
 
   getCapaciteBilan(capaciteBilan: any) {
+  }
+
+  getCritere(critereId: string): Critere {
+    return null;
+  }
+  getCritereDeep(critereId: string): Critere {
+    return null;
   }
 }

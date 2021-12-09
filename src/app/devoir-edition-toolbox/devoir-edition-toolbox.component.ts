@@ -215,22 +215,24 @@ export class DevoirEditionToolboxComponent implements OnInit {
     const devoirGrille = this.devoirService.devoir.grille;
     if (tmpItem) {
       if (tmpItem.type === 'free') {
-        item = new Freetext().deserialize(tmpItem);
+        item = new Freetext().deserialize(tmpItem, true);
         this.addItem('freetext', idExe, idQue, idCri, item);
       }
       if (tmpItem.type === 'exe') {
-        item = new Exercice().deserialize(tmpItem, devoirGrille);
+        item = new Exercice().deserialize(tmpItem, devoirGrille, true);
         this.addItem('exercice', idExe, idQue, idCri, item);
       }
       if (tmpItem.type === 'que') {
-        item = new Question().deserialize(tmpItem, devoirGrille);
+        item = new Question().deserialize(tmpItem, devoirGrille, true);
         this.addItem('question', idExe, idQue, idCri, item);
       }
       if (tmpItem.type === 'cri') {
-        item = new Critere().deserialize(tmpItem, devoirGrille);
+        item = new Critere().deserialize(tmpItem, devoirGrille, true);
         this.addItem('critere', idExe, idQue, idCri, item);
       }
     }
+
+    console.dir(this.devoirService.devoir);
   }
 
 }

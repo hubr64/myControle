@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { Deserializable } from './deserializable.model';
 import { Capacite } from './capacite';
 import { Grille } from './grille';
@@ -15,8 +17,8 @@ export class Critere implements Deserializable {
   }
 
   // Convert from JSON
-  deserialize(input: any, grille?: Grille) {
-    this.id = input.id;
+  deserialize(input: any, grille?: Grille, newId: boolean = false) {
+    this.id = newId ? uuid() : input.id;
     this.text = input.text;
     this.bareme = parseFloat(input.bareme);
     this.capacite = null;

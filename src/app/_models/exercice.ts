@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { Deserializable } from './deserializable.model';
 import { Grille } from './grille';
 import { Question } from './question';
@@ -18,16 +20,16 @@ export class Exercice implements Deserializable {
   }
 
   // Convert from JSON
-  deserialize(input: any, grille?: Grille) {
-    this.id = input.id;
+  deserialize(input: any, grille?: Grille, newId: boolean = false) {
+    this.id = newId ? uuid() : input.id;
     this.title = input.title;
     this.questions = [];
     for (const key of Object.keys(input.questions)) {
       if (input.questions[key].type === 'que') {
-        this.questions.push(new Question().deserialize(input.questions[key], grille));
+        this.questions.push(new Question().deserialize(input.questions[key], grille, newId));
       }
       if (input.questions[key].type === 'free') {
-        this.questions.push(new Freetext().deserialize(input.questions[key]));
+        this.questions.push(new Freetext().deserialize(input.questions[key], newId));
       }
     }
     return this;
@@ -74,6 +76,18 @@ export class Exercice implements Deserializable {
       for (const que of this.questions) {
         if (que.id === questionId) {
           return que.getCritere(critereId);
+        }
+      }
+    }
+    return null;
+  }
+
+  getCritereDeep(critereId: string): Critere {
+    if (this.questions !== undefined) {
+      for (const question of this.questions) {
+        const critereFound = question.getCritere(critereId);
+        if (critereFound !== null) {
+          return critereFound;
         }
       }
     }

@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { Deserializable } from './deserializable.model';
 import { Grille } from './grille';
 import { Critere } from './critere';
@@ -15,16 +17,16 @@ export class Question implements Deserializable {
   }
 
   // Convert from JSON
-  deserialize(input: any, grille?: Grille) {
-    this.id = input.id;
+  deserialize(input: any, grille?: Grille, newId: boolean = false) {
+    this.id = newId ? uuid() : input.id;
     this.title = input.title;
     this.criteres = [];
     for (const key of Object.keys(input.criteres)) {
       if (input.criteres[key].type === 'cri') {
-        this.criteres.push(new Critere().deserialize(input.criteres[key], grille));
+        this.criteres.push(new Critere().deserialize(input.criteres[key], grille, newId));
       }
       if (input.criteres[key].type === 'free') {
-        this.criteres.push(new Freetext().deserialize(input.criteres[key]));
+        this.criteres.push(new Freetext().deserialize(input.criteres[key], newId));
       }
     }
     return this;

@@ -26,4 +26,5 @@
 </div>
 <div class="modal-footer">
   <button type="button" ngbAutofocus class="btn btn-success" (click)="modal.close('ok')">FERMER</button>
+  <button *ngIf="fixList.length > 0" type="button" class="btn btn-warning" (click)="modal.close(fixList)">CORRIGER</button>
 </div>

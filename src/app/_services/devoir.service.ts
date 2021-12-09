@@ -18,6 +18,7 @@ import { ConfigurationService } from './configuration.service';
 import { ModalConfirmRestoreDevoirComponent } from '../modal-confirm-restore-devoir/modal-confirm-restore-devoir.component';
 import { ModalCheckDevoirComponent } from '../modal-check-devoir/modal-check-devoir.component';
 
+import { v4 as uuid } from 'uuid';
 import { saveAs } from 'file-saver';
 import { environment } from '../../environments/environment';
 
@@ -534,9 +535,42 @@ export class DevoirService {
 
     // Manage answer of the user
     modalRef.result.then((result) => {
-
+      if(Array.isArray(result)){
+        this.fixDevoir(result);
+      }
     }, (reason) => {
 
+    });
+
+  }
+
+  fixDevoir(fixList: string[]) {
+
+    fixList.forEach( fixItem => {
+      if(fixItem === 'auteur'){
+        this.devoir.author = this.configurationService.getValue('author');
+        this.messageService.add('Correction de l\'auteur terminée.', 'success', 'USER');
+      }
+      if(fixItem === 'ids'){
+        if(this.devoir.notations.length > 0){
+          this.messageService.add('Impossible de corriger les identifiants car la notation a commencé','danger', 'USER');
+        }else{
+          for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+            exercice.id = uuid();
+            if (exercice.questions) {
+              for (const [indexQue, question] of exercice.questions.entries()) {
+                question.id = uuid();
+                if (question.criteres) {
+                  for (const [indexCri, critere] of question.criteres.entries()) {
+                    critere.id = uuid();
+                  }
+                }
+              }
+            }
+          }
+          this.messageService.add('Correction des identifiants terminée.', 'success', 'USER');
+        }
+      }
     });
 
   }

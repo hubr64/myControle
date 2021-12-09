@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StripHtmlPipe } from './_helpers/strip-html.pipe';
 import { SafeHtmlPipe } from './_helpers/safe-html.pipe';
+import { FilterConfigurationPipe } from './_helpers/filter-configuration.pipe';
 import { StripMycontroleLinePipe } from './_helpers/strip-mycontrole-line.pipe';
 import { MenuComponent } from './menu/menu.component';
 import { DevoirComponent } from './devoir/devoir.component';
@@ -61,6 +62,7 @@ import { ModalPrintBilanComponent } from './modal-print-bilan/modal-print-bilan.
     ModalMoveComponent,
     StripHtmlPipe,
     SafeHtmlPipe,
+    FilterConfigurationPipe,
     StripMycontroleLinePipe,
     ModalConfirmGridComponent,
     ModalConfirmClasseComponent,

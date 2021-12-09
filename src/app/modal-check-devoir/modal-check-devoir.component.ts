@@ -19,11 +19,14 @@ export class ModalCheckDevoirComponent implements OnInit {
 
   public errorList;
 
+  public fixList;
+
   constructor(
     public modal: NgbActiveModal,
     public configurationService: ConfigurationService
   ) {
     this.errorList = [];
+    this.fixList = [];
     this.urlList = [];
     this.urlListPos = 0;
   }
@@ -36,7 +39,10 @@ export class ModalCheckDevoirComponent implements OnInit {
 
   updateDetails() {
     if (this.devoir) {
+      // L'outil vérifie la configuration générale
       this.checkGeneral();
+      // L'outil vérifie tous les identifiants
+      this.checkIds();
       // L'outil vérifie que tous les exercices contiennent des questions. Sinon erreur.
       // L'outil vérifie que tous les exercices contiennent un intitulé. Sinon erreur.
       this.checkExercices();
@@ -78,8 +84,9 @@ export class ModalCheckDevoirComponent implements OnInit {
       this.errorList.push({
         type: 'Général',
         msg: 'L\'auteur du devoir n\'est pas renseigné.',
-        level: 'danger'
+        level: 'warning'
       });
+      this.fixList.push('auteur');
       generalPb++;
     }
     if (this.devoir.devoirDate === null) {
@@ -99,19 +106,21 @@ export class ModalCheckDevoirComponent implements OnInit {
     const regex = /src=\\"http[^"]+"/g;
     const foundHttps = devoirString.match(regex);
 
-    // ON parcours tous les résultats de recherche
-    for (const foundHttp of foundHttps.entries()) {
-      // ON ne retiuent que l'URL sans les décorations autour
-      const url = foundHttp[1].slice(6, -2);
-      // On ne garde pas les URL qui fabriquent les formules en LATEX (trop gourmand en mémoire)
-      if (url.indexOf('latex.codecogs.com') === -1) {
-        this.urlList.push(url);
+    if(foundHttps){
+      // ON parcours tous les résultats de recherche
+      for (const foundHttp of foundHttps.entries()) {
+        // ON ne retiuent que l'URL sans les décorations autour
+        const url = foundHttp[1].slice(6, -2);
+        // On ne garde pas les URL qui fabriquent les formules en LATEX (trop gourmand en mémoire)
+        if (url.indexOf('latex.codecogs.com') === -1) {
+          this.urlList.push(url);
+        }
       }
-    }
-    // Si on a au moins une URL alors on la charge dans l'image de test
-    if (this.urlList.length > 0) {
-      this.urlListPos = 0;
-      this.imgCheck.nativeElement.src = this.urlList[this.urlListPos];
+      // Si on a au moins une URL alors on la charge dans l'image de test
+      if (this.urlList.length > 0) {
+        this.urlListPos = 0;
+        this.imgCheck.nativeElement.src = this.urlList[this.urlListPos];
+      }
     }
   }
   urlError(url) {
@@ -123,11 +132,14 @@ export class ModalCheckDevoirComponent implements OnInit {
     this.nextURL();
   }
   urlSucceed(url) {
-    this.errorList.push({
-      type: 'Images',
-      msg: 'L\'URL de l\'image ' + url + ' est  valide.',
-      level: 'success'
-    });
+    //On ignore le premier qui est juste pour lancer l'algo
+    if(url.indexOf('/assets/') === -1){
+      this.errorList.push({
+        type: 'Images',
+        msg: 'L\'URL de l\'image ' + url + ' est  valide.',
+        level: 'success'
+      });
+    }
     this.nextURL();
   }
   nextURL() {
@@ -330,6 +342,61 @@ export class ModalCheckDevoirComponent implements OnInit {
         msg: 'Toute la notation est correcte.',
         level: 'success'
       });
+    }
+  }
+
+  checkIds() {
+    let idPb = 0;
+    let idList: string[] = [];
+
+    for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+      if( idList.lastIndexOf(exercice.id) >= 0 ){
+        this.errorList.push({
+          type: 'Edition',
+          msg: 'L\'objet n°' + (indexExe + 1) + ' utilise un identifiant en double ('+exercice.id+').',
+          level: 'danger'
+        });
+        idPb++;
+      }else{
+        idList.push(exercice.id);
+      }
+      if (exercice.questions) {
+        for (const [indexQue, question] of exercice.questions.entries()) {
+          if( idList.lastIndexOf(question.id) >= 0 ){
+            this.errorList.push({
+              type: 'Edition',
+              msg: 'L\'objet n°' + (indexQue + 1) + '.' + (indexExe + 1) + ' utilise un identifiant en double ('+question.id+').',
+              level: 'danger'
+            });
+            idPb++;
+          }else{
+            idList.push(question.id);
+          }
+          if (question.criteres) {
+            for (const [indexCri, critere] of question.criteres.entries()) {
+              if( idList.lastIndexOf(critere.id) >= 0 ){
+                this.errorList.push({
+                  type: 'Edition',
+                  msg: 'L\'objet n°' + (indexExe + 1) + '.' + (indexQue + 1) + '.' + (indexCri + 1) + ' utilise un identifiant en double ('+critere.id+').',
+                  level: 'danger'
+                });
+                idPb++;
+              }else{
+                idList.push(critere.id);
+              }
+            }
+          }
+        }
+      }
+    }
+    if (idPb === 0) {
+      this.errorList.push({
+        type: 'Edition',
+        msg: 'Tous les identifiants sont uniques.',
+        level: 'success'
+      });
+    }else{
+      this.fixList.push('ids');
     }
   }
 

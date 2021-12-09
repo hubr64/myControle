@@ -282,6 +282,18 @@ export class Devoir {
     return null;
   }
 
+  getCritereDeep(critereId: string): Critere {
+    if (this.exercices !== undefined) {
+      for (const exercice of this.exercices) {
+        const critereFound = exercice.getCritereDeep(critereId);
+        if (critereFound !== null) {
+          return critereFound;
+        }
+      }
+    }
+    return null;
+  }
+
   isCapaciteUsed(capacite: any): boolean {
     for (const exercice of this.exercices) {
       if (exercice.isCapaciteUsed(capacite)) {

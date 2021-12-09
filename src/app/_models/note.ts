@@ -18,10 +18,9 @@ export class Note implements Deserializable {
     this.status = input.status;
     this.critere = null;
     if (devoir !== undefined) {
-      const structCritere = input.critere.split('_');
-      if (structCritere.length === 3) {
-        this.critere = devoir.getCritere(structCritere[0], structCritere[0] + '_' + structCritere[1], input.critere);
-      }
+      // Get critere for this note
+      this.critere = devoir.getCritereDeep(input.critere);
+      // Associate the notation coefficients
       this.noteCoeffs = devoir.noteCoeffs;
     }
     return this;
