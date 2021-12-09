@@ -3,17 +3,29 @@
     <i class="material-icons md-dark md-36">close</i>
   </button>
   <h1>Configuration</h1>
-  <div *ngFor='let configItem of configurationService.configurationItems | keyvalue'>
-    <div class="input-group mb-3" *ngIf="configItem.value.modifiable">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">{{configItem.value.title}}</span>
-      </div>
-      <input (change)="setValue(configItem.key, $event)" class="form-control" [(ngModel)]="configItem.value.value">
-      <div class="input-group-append">
-        <button class="btn btn-danger" (click)="reset(configItem.key)" type="button" title="Revenir à la valeur par défaut">
-          <i class="material-icons">cancel</i>
-        </button>
-      </div>
-    </div>
-  </div>
+
+  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+    <ngb-panel *ngFor='let configCategories of configurationService.categories'>
+      <ng-template ngbPanelTitle>
+        <i class="material-icons md-48">category</i>
+        <span class="configuration-category">{{configCategories}}</span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+          <div *ngFor='let configItem of configurationService.configurationItems | filterConfiguration:true:configCategories'>
+              <div class="input-group mb-3" *ngIf="configItem.modifiable">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1" title="{{configItem.id}}">{{configItem.title}}</span>
+                </div>
+                <input (change)="setValue(configItem.id, $event)" class="form-control" [(ngModel)]="configItem.value">
+                <div class="input-group-append">
+                  <button class="btn btn-danger" (click)="reset(configItem.id)" type="button" title="Revenir à la valeur par défaut">
+                    <i class="material-icons">cancel</i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
 </section>
