@@ -1,7 +1,5 @@
-import { name, version } from '../../package.json';
-
 export const environment = {
   production: true,
-  appVersion: version,
-  appName: name
+  appVersion: '2.0.3',
+  appName: 'my-controle'
 };

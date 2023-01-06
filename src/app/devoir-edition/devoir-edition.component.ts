@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-//import * as InlineEditor from '../_helpers/ckeditor/ckeditor.js';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import * as InlineEditor from '../_helpers/ckeditor/ckeditor.js';
+//import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 import { DevoirService } from '../_services/devoir.service';

@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HostListener } from '@angular/core';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-//import * as InlineEditor from '../_helpers/ckeditor/ckeditor.js';
-import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
+import * as InlineEditor from '../_helpers/ckeditor/ckeditor.js';
+//import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { BlurEvent, FocusEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 import { DevoirService } from '../_services/devoir.service';
@@ -48,6 +48,7 @@ export class ModalEleveNotationComponent implements OnInit {
       // On ne capture pas le clavier si l'utilisateur est en train de rédiger le commentaire
       if (this.editorIsFocused === false) {
 
+        console.dir(event.key);
         // Capture des déplacements entre criteres
         if (event.key === 'ArrowUp') {
           this.onKeyUp();

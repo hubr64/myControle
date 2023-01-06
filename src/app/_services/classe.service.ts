@@ -88,18 +88,18 @@ export class ClasseService {
 
     // Display modal window to ask user for confirmation
     const modalRef = this.modalService.open(ModalClasseSelectionComponent, { centered: true, scrollable: true });
-    // @ts-ignore: Provide a classe if a devoir is configured with a classe
+    //Provide a classe if a devoir is configured with a classe
     modalRef.componentInstance.selectedClasse = selectedClasse;
-    // @ts-ignore: Provide the ability to choose a capcity or not
+    //Provide the ability to choose a capcity or not
     modalRef.componentInstance.canChooseEleve = canChooseEleve;
-    // @ts-ignore: Provide this full list of classe
+    //Provide this full list of classe
     modalRef.componentInstance.classes = this.classeItems;
 
     // Manage answer of the user
     modalRef.result.then((result) => {
       this.selectedEleveSub.next(result);
       this.selectedEleveSub.complete();
-    }, (reason) => {
+    }, () => {
       // Remove is cancelled
       if (canChooseEleve) {
         this.messageService.add('Aucun élève sélectionnée.', 'warning', 'USER');
