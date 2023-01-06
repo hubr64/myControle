@@ -1,0 +1,370 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>myControle</title>
+		<meta itemprop="image" content="./style/images/index.ico">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="./style/css/index.css" />
+		<link rel="stylesheet" type="text/css" href="./style/css/suivi.css" />
+		<link rel="stylesheet" type="text/css" href="./js/jquery-ui-1.12.1.custom/jquery-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="./js/tablesorter/css/theme.blue.css"/>
+		<script type="text/javascript" src="./js/jquery-2.1.0.min.js"></script>
+		<script type="text/javascript" src="./js/ckeditor/ckeditor.js"></script>
+		<script type="text/javascript" src="./js/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="./js/jquery-ui-1.12.1.custom/ui/i18n/jquery.ui.datepicker-fr.js"></script>
+		<script type="text/javascript" src="./js/tablesorter/jquery.tablesorter.min.js"></script>
+		<script type="text/javascript" src="./js/tablesorter/jquery.tablesorter.widgets.js"></script>
+		<script type="text/javascript" src="./js/chart/Chart.min.js"></script>
+		<script type="text/javascript" src="./js/index.js"></script>
+		<script type="text/javascript" src="./js/notes.js"></script>
+		<script type="text/javascript" src="./js/comment.js"></script>
+		<script type="text/javascript" src="./js/competences.js"></script>
+		<script type="text/javascript" src="./js/edition.js"></script>
+		<script type="text/javascript" src="./js/suivi.js"></script>
+		<script type="text/javascript" src="./js/print.js"></script>
+		<script type="text/javascript" src="./js/classes.js"></script>
+		<script type="text/javascript" src="./js/configuration.js"></script>
+		<script src="./js/grilles.js"></script>
+	</head>
+	<body onload="loadindex()" onkeyup="manage_key_up(event)">
+		<header>
+			<div id="header_menu">Menu</div>
+			<div id="head_title">myControle</div>
+			<h3>Gestion des devoirs</h3>
+			<div class="head_action" id="head_new">Nouveau devoir</div>
+			<div class="head_action" id="head_edit">Ouvrir un devoir</div>
+			<div class="head_action" id="head_print">Imprimer le devoir</div>
+			<div class="head_action" id="head_print_correction">Imprimer la correction</div>
+			<div class="head_action" id="head_export">Exporter les notes</div>
+			<div class="head_action" id="head_print_bilan">Consulter le bilan</div>
+			<div class="head_action" id="head_configurer">Configurer</div>
+			<h3>Gestion des suivis</h3>
+			<div class="head_action" id="head_new_suivi">Nouveau suivi</div>
+			<div class="head_action" id="head_edit_suivi">Ouvrir un suivi</div>
+			<div class="head_action" id="head_import_suivi">Importer un devoir</div>
+			<div class="head_action" id="head_export_global">Exporter le suivi global</div>
+			<div class="head_action" id="head_export_eleves">Exporter le suivi élèves</div>
+			<h3>Sauvegarde</h3>
+			<div>
+				<div class="head_action" id="head_save"><span>Enregistrer</span></div>
+				<span id="head_nosave">&nbsp;</span>
+				<span id="head_saveinfo">&nbsp;</span>
+				<input type="file" id="head_edit_file" hidden="hidden"/>
+			</div>
+
+			<section id="head_copy">&copy; 2015 - Copyright HubR Design - Tous droits réservés</section>
+		</header>
+
+		<section id="s0">
+			<div id="s0_bar"><div id="s0_label">Chargement...</div></div>
+		</section>
+
+		<!-- Zone de devoir principal -->
+		<section id="s1">
+			<section id="s1_actions">
+				<span id="s1_menu">Menu</span>
+				<span id="s1_mode">&nbsp;</span>
+			</section>
+			<section id="s1_gen">
+				<h3>Généralités</h3>
+				<div id="s1_gen_info">
+					<div id="gen_title"><span>Titre</span><span contenteditable="true">Titre du devoir</span></div>
+					<div id="gen_date"><span>Date</span><span></span></div>
+					<div id="gen_classe"><span>Classe</span><span contextmenu="classe_menu">Aucune classe</span></div>
+					<div id="gen_competence"><span>Grille</span><span contextmenu="grille_menu">Aucune grille de compétences</span><span>Voir</span></div>
+				</div>
+				<h3>Notation</h3>
+				<div id="s1_gen_notation">
+					<div id="gen_note_arrondi"><span>Arrondi</span><span contenteditable="true">0.5</span></div>
+					<div id="gen_note_final_mode"><span>Mode</span><span contextmenu="note_final_mode_menu">Normal</span></div>
+					<div id="gen_note_final_cible" hidden><span>Cible</span><span contenteditable="true">0</span>pts</div>
+				</div>
+				<h3>Statistiques</h3>
+				<div id="s1_gen_stat">
+					<div id="gen_mean"><span>Moyenne</span><span>Non évalué</span></div>
+					<div id="gen_maximum"><span>Maximum</span><span>Non évalué</span></div>
+					<div id="gen_minimum"><span>Minimum</span><span>Non évalué</span></div>
+					<div id="gen_inf_moyenne"><span>&lt; Moyenne</span><span>Non évalué</span></div>
+				</div>
+				<h3>Compétences</h3>
+				<div id="s1_gen_competence">
+					<table class="tablesorter">
+						<thead>
+							<tr>
+								<th>Compétence</th><th>Acquis</th><th>En cours</th><th>Non acquis</th><th>Moyenne</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</section>
+			<section id="s1_det">
+				<div id="s1_det_title"><span>Votre devoir</span>(<span>0</span>&nbsp;pts)</div>
+				<div id="s1_det_pup"></div>
+				<div id="s1_det_que" class="exercices"></div>
+				<div id="s1_det_actions">
+					<input type="button" id="s1_det_new_exe" title="Ajouter un nouvel exercice" value="&nbsp;"/>
+					<input type="button" id="s1_det_new_free" title="Ajouter un nouveau texte libre" value="&nbsp;"/>
+					<input type="button" id="s1_det_paste_exe" title="Coller un exercice ou un texte" value="&nbsp;"/>
+				</div>
+
+				<div id="s1_det_info">
+					<div>
+						<h2 class="ui-state-default">Note</h2>
+						<div id="s1_det_info_note">
+							<div id="s1_det_info_note_exacte"><span>Note exacte</span><span>0</span></div>
+							<div id="s1_det_info_note_finale"><span>Note bulletin</span><span>0</span></div>
+						</div>
+					</div>
+					<div>
+						<h2 class="ui-state-default">Commentaire</h2>
+						<div id="s1_det_comment" contenteditable="true"></div>
+						<div id="s1_det_comment_gen_text" hidden></div>
+						<button id="s1_det_comment_gen" type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Générer un commentaire</span></button>
+					</div>
+					<div>
+						<h2 class="ui-state-default">Compétences acquises par l'élève dans le devoir</h2>
+						<div id="s1_det_competence"></div>
+					</div>
+					<input id="s1_det_info_pupil" type="hidden" value=""/>
+				</div>
+				<div id="s1_det_templates" hidden>
+					<div id="s1_det_freetext_template" class="s1_det_freetext">
+						<span class="free_menu"><span class="free_del">&nbsp;</span><span class="free_move" level="">&nbsp;</span></span>
+						<span class="free_text"><div contenteditable="true"><p></p></div></span>
+					</div>
+					<div id="s1_det_exercice_template" class="s1_det_exercice">
+						<span class="exe_menu"><span class="exe_del">&nbsp;</span><span class="exe_move">&nbsp;</span><span class="exe_minimize">&nbsp;</span><span class="exe_copy">&nbsp;</span></span>
+						<span class="exe_title"><span contenteditable="true">Titre de l'exercice</span></span>
+						<span class="exe_bareme">(<span>0</span>&nbsp;pts)</span>
+						<span class="exe_notes"></span>
+						<span class="exe_questions"></span>
+						<span class="exe_actions"><input class="new_que" type="button" title="Ajouter une nouvelle question" value="&nbsp;"/><input class="new_free" type="button" title="Ajouter un nouveau texte libre" value="&nbsp;"/></span>
+					</div>
+					<div id="s1_det_question_template" class="s1_det_question">
+						<span class="que_menu"><span class="que_del">&nbsp;</span><span class="que_move">&nbsp;</span><span class="que_minimize">&nbsp;</span></span>
+						<span class="que_title"><span contenteditable="true">Intitulé de la question...</span></span>
+						<span class="que_bareme">(<span>0</span>&nbsp;pts)</span>
+						<span class="que_notes"></span>
+						<span class="que_criteres"></span>
+						<span class="que_actions"><input class="new_cri" type="button" title="Ajouter un nouveau critère" value="&nbsp;"/><input class="new_free" type="button" title="Ajouter un nouveau texte libre" value="&nbsp;"/></span>
+					</div>
+					<div id="s1_det_critere_template" class="s1_det_critere">
+						<span class="cri_menu"><span class="cri_del">&nbsp;</span><span class="cri_move">&nbsp;</span></span>
+						<span class="cri_competence"><span>Aucune</span></span>
+						<span class="cri_text"><div contenteditable="true"><p></p></div></span>
+						<span class="cri_bareme"><span old_bareme="0" contenteditable="true">0</span><span>&nbsp;pts</span></span>
+						<span class="cri_notes"></span>
+					</div>
+					<div id="s1_det_pupil_template" class="s1_det_pupil">
+						<div class="pup_name"></div>
+						<span class="pup_comment">&nbsp;</span>
+						<span class="pup_competence">&nbsp;</span>
+						<span class="pup_note">0</span>
+					</div>
+					<div id="s1_det_note_template" class="s1_det_note">
+						<div class="note_value">0</div>
+					</div>
+					<div id="s1_det_notation_template" class="s1_det_notation">
+						<div class="note_state"><span>&nbsp;</span></div>
+					</div>
+					<menu type="context" id="classe_menu">
+					</menu>
+					<menu type="context" id="grille_menu">
+					</menu>
+					<menu type="context" id="note_final_mode_menu">
+					</menu>
+					<menu type="context" id="groupe_menu">
+						<menuitem id="delete_groupe" label="Supprimer le groupe" icon="./style/images/trash.png"></menuitem>
+					</menu>
+				</div>
+			</section>
+			<section id="s1_note">
+				<table>
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				<div id="s1_det_actions">
+					<input id="s1_note_add_groupe" title="Ajouter un groupe" value="&nbsp;"/>
+				</div>
+			</section>
+		</section>
+
+
+		<!-- Zone de suivi principal -->
+		<section id="s5">
+			<section id="s5_actions">
+				<span id="s5_menu">Menu</span>
+			</section>
+			<section id="s5_gen">
+				<h3>Généralités</h3>
+				<div id="s1_gen_info">
+					<div id="s5_gen_title"><span>Intitulé</span><span>Titre du suivi</span></div>
+					<div id="s5_gen_classe"><span>Classe suivie</span><span>Aucune classe</span></div>
+					<div id="s5_gen_competence"><span>Grille choisie</span><span>Aucune grille de compétences</span><span>Voir</span></div>
+				</div>
+			</section>
+			<section id="s5_global">
+				<div class="s5_title ui-dialog-titlebar ui-widget-header ui-corner-all">
+					<span class="ui-dialog-title">Liste des devoirs</span>
+				</div>
+				<table class="tablesorter">
+					<thead>
+						<tr>
+							<th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Fichier</th><th>Titre</th><th>Barême</th><th data-sorter="false">Capacités</th><th>Coefficient</th><th>Moyenne</th><th>Min</th><th>Max</th><th>&lt; Moyenne</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				<menu type="context" id="devoir_menu">
+					<menuitem label="Supprimer le devoir" icon="./style/images/trash.png"></menuitem>
+				</menu>
+			</section>
+			<section id="s5_stat">
+				<h3>Statistiques Générales</h3>
+				<div id="s5_gen_stat">
+					<div id="s5_gen_nb"><span>Nombre de devoirs</span><span>0</span></div>
+					<div id="s5_gen_mean"><span>Moyenne annuelle</span><span>0</span></div>
+					<div id="s5_gen_min"><span>Minimum</span><span>0</span></div>
+					<div id="s5_gen_max"><span>Maximum</span><span>0</span></div>
+				</div>
+				<h3>Evolution annuelle des notes de la classe</h3>
+				<div id="s5_stat_evol_notes">
+					<table class="tablesorter">
+						<thead>
+							<tr>
+								<th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Devoir</th><th>Moyenne</th><th>Min</th><th>Max</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<div class="s5_det_graph_l"><canvas id="s5_stat_evol_notes_graph" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+				<h3>Evolution annuelle de la répartition des notes de la classe</h3>
+				<div id="s5_stat_rep_notes">
+					<table class="tablesorter">
+						<thead>
+							<tr>
+								<th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Devoir</th><th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<div class="s5_det_graph_l"><canvas id="s5_stat_rep_notes_graph" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+				<h3>Evolution annuelle des compétences</h3>
+				<div id="s5_stat_evol_comp">
+					<div class="s5_det_graph_l"><canvas id="s5_stat_evol_comp_graph" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+				<h3>Moyenne d'acquisition des compétences</h3>
+				<div id="s5_stat_bilan_comp">
+					<div class="s5_det_graph_l"><canvas id="s5_stat_bilan_comp_graph" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+				<h3>Bilan d'utilisation des capacités</h3>
+				<div id="s5_stat_bilan_capa">
+					<table class="tablesorter">
+						<thead>
+							<tr>
+								<th>Capacité</th><th>Acquisition Moyenne</th><th>Volume</th><th>Taux</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<div class="s5_det_graph_l"><canvas id="s5_stat_bilan_capa_graph" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+			</section>
+			<section id="s5_pupil">
+				<div class="s5_title ui-dialog-titlebar ui-widget-header ui-corner-all">
+					<span class="ui-dialog-title">Liste des élèves</span>
+				</div>
+				<table class="tablesorter">
+					<thead>
+						<tr>
+							<th data-sortinitialorder="asc">Nom</th><th>Nombre de devoirs</th><th>Moyenne générale</th><th>Classement</th><th>Min</th><th>Max</th><th>&lt; Moyenne</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</section>
+			<section id="s5_details">
+				<h3>Généralités</h3>
+				<div>
+					<div id="s5_det_title"><span>Titre</span><span></span></div>
+					<div id="s5_det_date"><span>Date</span><span></span></div>
+					<div id="s5_det_bareme"><span>Barême</span><span></span></div>
+					<div id="s5_det_coeff"><span>Coefficient</span><span></span></div>
+				</div>
+				<h3>Statistiques</h3>
+				<div>
+					<div id="s5_det_mean"><span>Moyenne</span><span>0</span></div>
+					<div id="s5_det_maximum"><span>Maximum</span><span>0</span></div>
+					<div id="s5_det_minimum"><span>Minimum</span><span>0</span></div>
+					<div id="s5_det_inf_moyenne"><span>&lt; Moyenne</span><span>0</span></div>
+				</div>
+				<h3>Bilan par élève</h3>
+				<div>
+					<table class="tablesorter" id="s5_det_notes"><thead><tr><th>Elève</th><th>Note</th><th>Capacités</th><th>Commentaire</th></tr></thead><tbody></tbody></table>
+				</div>
+				<h3>Bilan par capacité</h3>
+				<div>
+					<table class="tablesorter" id="s5_det_competences"><thead><tr><th>Capacité</th><th>Détails</th><th>Acquis</th><th>En cours</th><th>Non acquis</th><th>Moyenne</th></tr></thead><tbody></tbody></table>
+				</div>
+				<h3>Courbes</h3>
+				<div>
+					<div class="s5_det_graph"><canvas id="s5_det_graph_inf_moy" style="display: block; width: 480px; height: 300px;" width="480" height="300"></canvas></div>
+					<div class="s5_det_graph"><canvas id="s5_det_graph_comp_radar" style="display: block; width: 480px; height: 300px;" width="480" height="300"></canvas></div>
+					<div class="s5_det_graph"><canvas id="s5_det_graph_comp_bar" style="display: block; width: 480px; height: 300px;" width="480" height="300"></canvas></div>
+					<div class="s5_det_graph"><canvas id="s5_det_graph_comp_bar2" style="display: block; width: 480px; height: 300px;" width="480" height="300"></canvas></div>
+					<div class="s5_det_graph"><canvas id="s5_det_graph_comp_bar3" style="display: block; width: 480px; height: 300px;" width="480" height="300"></canvas></div>
+				</div>
+			</section>
+			<section id="s5_pupil_details">
+				<h3>Généralités</h3>
+				<div>
+					<div id="s5_det_pup_name"><span>Nom</span><span></span></div>
+				</div>
+				<h3>Statistiques</h3>
+				<div>
+					<div id="s5_det_pup_nb"><span>Nombre de devoirs</span><span></span></div>
+					<div id="s5_det_pup_classement"><span>Classement général</span><span></span></div>
+					<div id="s5_det_pup_moyenne"><span>Moyenne Générale</span><span></span></div>
+					<div id="s5_det_pup_maximum"><span>Maximum</span><span>0</span></div>
+					<div id="s5_det_pup_minimum"><span>Minimum</span><span>0</span></div>
+					<div id="s5_det_pup_inf_moyenne"><span>&lt; Moyenne</span><span>0</span></div>
+				</div>
+				<h3>Evolution annuelle</h3>
+				<div>
+					<table class="tablesorter" id="s5_det_pup_notes"><thead><tr><th data-date-format="ddmmyyyy" data-sorter="shortDate" data-sortinitialorder="desc">Date</th><th>Titre</th><th>Note</th><th>Moyenne</th><th>Capacités</th><th>Coefficient</th><th>Commentaire</th></tr></thead><tbody></tbody></table>
+					<div class="s5_det_graph_l"><canvas id="s5_det_pup_graph_evol_notes" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+				<h3>Bilan par compétence</h3>
+				<div>
+					<table class="tablesorter" id="s5_det_pup_competences"><thead></thead><tbody></tbody></table>
+					<div class="s5_det_graph_l"><canvas id="s5_det_pup_graph_evol_comp" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+				<h3>Bilan par capacité</h3>
+				<div>
+					<table class="tablesorter" id="s5_det_pup_capacites"><thead><tr><th>Capacité</th><th>Titre</th><th>Bilan</th></tr></thead><tbody></tbody></table>
+					<div class="s5_det_graph_l"><canvas id="s5_det_pup_graph_cap" style="display: block; width: 980px; height: 460px;" width="980" height="460"></canvas></div>
+				</div>
+			</section>
+		</section>
+
+		<!-- Zone temporaire pour impression ou autre -->
+		<section id="s2"></section>
+
+		<!-- Zone de message affiché à l'utilisateur -->
+		<section id="s3"></section>
+
+		<!-- Zone d'affichage des compétences -->
+		<section id="s4"></section>
+	</body>
+</html>
