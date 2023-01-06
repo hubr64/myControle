@@ -1,0 +1,40 @@
+/*
+ * Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+.ck-content .mycontrole-lines {
+    position: relative;
+    clear: both;
+    padding: 2px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.ck-content .mycontrole-lines:after {
+    content: "";
+    position: absolute;
+    border-bottom: 2px dashed #c4c4c4;
+    width: 100%
+}
+
+.ck-content .mycontrole-lines__label {
+    position: relative;
+    z-index: 1;
+    padding: 0 .6em;
+    display: block;
+    text-transform: uppercase;
+    border: 1px solid #c4c4c4;
+    border-radius: 2px;
+    font-family: Helvetica, Arial, Tahoma, Verdana, Sans-Serif;
+    font-size: .75em;
+    font-weight: 700;
+    color: #333;
+    background: #fff;
+    box-shadow: 2px 2px 1px rgba(0, 0, 0, .15);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
