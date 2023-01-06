@@ -5,14 +5,14 @@
   </button>
 </div>
 <div class="modal-body">
-  <ngb-tabset *ngIf="selectedClasse==null">
-    <ngb-tab *ngFor='let classe of classes | keyvalue'>
-      <ng-template ngbTabTitle>{{classe.value.titre}}</ng-template>
-      <ng-template ngbTabContent>
+  <ul ngbNav *ngIf="selectedClasse==null" class="nav-tabs">
+    <li *ngFor='let classe of classes | keyvalue'>
+      <a ngbNavLink>{{classe.value.titre}}</a>
+      <ng-template ngbNavContent>
         <ng-container *ngTemplateOutlet="classeListe; context:{currentClasse: classe.value}"></ng-container>
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </li>
+  </ul>
   <div *ngIf="selectedClasse">
     <ng-container *ngTemplateOutlet="classeListe; context:{currentClasse: selectedClasse}"></ng-container>
   </div>

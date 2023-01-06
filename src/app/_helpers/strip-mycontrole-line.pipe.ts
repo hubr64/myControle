@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class StripMycontroleLinePipe implements PipeTransform {
 
-  replaceMyControleLines(correspondance, nb, decalage, chaine) {
+  replaceMyControleLines(correspondance: string, nb: number, decalage: number, chaine: string) {
     let newString = '';
     for (let i = 0; i < nb; i++) {
       newString += '<div class="mycontrole-line">&nbsp;</div>';

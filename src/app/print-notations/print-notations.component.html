@@ -1,4 +1,4 @@
-<div id="devoirs" *ngIf="devoirDetails != undefined">
+<div id="devoirs" *ngIf="devoirDetails != undefined && devoirDetails.classe">
   <div class="devoir" *ngFor="let eleve of filterEleveBy(devoirDetails.classe.eleves)">
     <div class="title">
       <span>{{devoirDetails.titre}}</span>
@@ -99,15 +99,15 @@
         <ng-container *ngFor="let competenceUsed of devoirDetails.getCompetenceBilan(eleve) | keyvalue; index as i ">
           <tr>
             <td>
-              {{competenceUsed.value.competence.titre}}
+              {{$any(competenceUsed.value).competence.titre}}
             </td>
             <td>
-              <span *ngIf="competenceUsed.value.ok==competenceUsed.value.total && competenceUsed.value.total!=0">Acquis</span>
-              <span *ngIf="competenceUsed.value.ko==competenceUsed.value.total && competenceUsed.value.total!=0">Non acquis</span>
-              <span *ngIf="competenceUsed.value.ok!=competenceUsed.value.total && competenceUsed.value.ko!=competenceUsed.value.total && competenceUsed.value.total!=0">En cours</span>
+              <span *ngIf="$any(competenceUsed.value).ok==$any(competenceUsed.value).total && $any(competenceUsed.value).total!=0">Acquis</span>
+              <span *ngIf="$any(competenceUsed.value).ko==$any(competenceUsed.value).total && $any(competenceUsed.value).total!=0">Non acquis</span>
+              <span *ngIf="$any(competenceUsed.value).ok!=$any(competenceUsed.value).total && $any(competenceUsed.value).ko!=$any(competenceUsed.value).total && $any(competenceUsed.value).total!=0">En cours</span>
             </td>
             <td>
-              {{competenceUsed.value.pts}}/{{competenceUsed.value.bareme}}
+              {{$any(competenceUsed.value).pts}}/{{$any(competenceUsed.value).bareme}}
             </td>
             <td>
               {{ (bilanCompetencesClasse[i].pts/devoirDetails.nb_notations) | number:'1.0-2' }}/{{bilanCompetencesClasse[i].bareme}}

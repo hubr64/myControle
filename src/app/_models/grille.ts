@@ -9,6 +9,7 @@ export class Grille implements Deserializable {
 
   constructor() {
     this.className = 'Grille';
+    this.titre = '';
     this.competences = [];
   }
 
@@ -21,7 +22,7 @@ export class Grille implements Deserializable {
     return this;
   }
 
-  getCapacite(capacite: string): Capacite {
+  getCapacite(capacite: string): Capacite|null {
 
     for (const comp of this.competences) {
       for (const cap of comp.capacites) {

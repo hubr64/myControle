@@ -10,10 +10,10 @@ import { DevoirService } from '../_services/devoir.service';
 })
 export class ModalMoveComponent implements OnInit {
 
-  @Input() public item;
+  @Input() public item: any;
   public itemType;
-  public selectedItem;
-  public selectedPosition;
+  public selectedItem: any;
+  public selectedPosition: any;
   public returnValue;
 
   constructor(
@@ -42,7 +42,7 @@ export class ModalMoveComponent implements OnInit {
     }
   }
 
-  selectItem(item, position) {
+  selectItem(item: any, position: any) {
     this.selectedItem = item;
     this.selectedPosition = position;
     this.returnValue = {

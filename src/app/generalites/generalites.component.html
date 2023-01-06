@@ -90,8 +90,8 @@
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
               <h6 class="dropdown-header">Grilles configurées dans l'outil</h6>
-              <button *ngFor='let grille of grilleService.grilleItems | keyvalue' [ngClass]="{'active':grilleService.compareGrille(grille.value,devoirService.devoir.grille)}"
-                ngbDropdownItem (click)="grilleChanged(grille.value)">{{grille.value.titre}}</button>
+              <button *ngFor='let grille of grilleService.grilleItems | keyvalue' [ngClass]="{'active':grilleService.compareGrille($any(grille.value),devoirService.devoir.grille)}"
+                ngbDropdownItem (click)="grilleChanged(grille.value)">{{$any(grille.value).titre}}</button>
               <ng-container *ngIf="devoirService.devoir.grille && grilleService.isAnExistingGrille(devoirService.devoir.grille) == false">
                 <div class="dropdown-divider"></div>
                 <h6 class="dropdown-header">Grille intégrée dans le devoir</h6>
@@ -115,8 +115,8 @@
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
               <h6 class="dropdown-header">Classes configurées dans l'outil</h6>
-              <button *ngFor='let classe of classeService.classeItems | keyvalue' [ngClass]="{'active':classeService.compareClasse(classe.value,devoirService.devoir.classe)}"
-                ngbDropdownItem (click)="classeChanged(classe.value)">{{classe.value.titre}}</button>
+              <button *ngFor='let classe of classeService.classeItems | keyvalue' [ngClass]="{'active':classeService.compareClasse($any(classe.value),devoirService.devoir.classe)}"
+                ngbDropdownItem (click)="classeChanged(classe.value)">{{$any(classe.value).titre}}</button>
               <ng-container *ngIf="devoirService.devoir.classe && classeService.isAnExistingClasse(devoirService.devoir.classe) == false">
                 <div class="dropdown-divider"></div>
                 <h6 class="dropdown-header">Classe intégrée dans le devoir</h6>

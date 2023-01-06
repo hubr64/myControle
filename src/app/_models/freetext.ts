@@ -10,6 +10,8 @@ export class Freetext implements Deserializable {
 
   constructor() {
     this.className = 'Freetext';
+    this.id = '';
+    this.text = '';
   }
 
   // Convert from JSON
@@ -36,10 +38,10 @@ export class Freetext implements Deserializable {
   getCapaciteBilan(capaciteBilan: any) {
   }
 
-  getCritere(critereId: string): Critere {
+  getCritere(critereId: string): null {
     return null;
   }
-  getCritereDeep(critereId: string): Critere {
+  getCritereDeep(critereId: string): null {
     return null;
   }
 }

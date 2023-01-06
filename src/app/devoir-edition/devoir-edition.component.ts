@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import * as InlineEditor from '../_helpers/ckeditor/ckeditor.js';
+//import * as InlineEditor from '../_helpers/ckeditor/ckeditor.js';
+import * as InlineEditor from '@ckeditor/ckeditor5-build-inline';
 import { BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 
 import { DevoirService } from '../_services/devoir.service';
@@ -12,7 +13,7 @@ import { DevoirService } from '../_services/devoir.service';
 })
 export class DevoirEditionComponent implements OnInit {
 
-  public editor = InlineEditor;
+  public editor: any = InlineEditor;
   public itemEdited = null;
 
   constructor(
@@ -26,7 +27,7 @@ export class DevoirEditionComponent implements OnInit {
     return item.id;
   }
 
-  convertToEditor(item, event) {
+  convertToEditor(item: any, event: any) {
     this.itemEdited = item;
   }
 
@@ -34,11 +35,11 @@ export class DevoirEditionComponent implements OnInit {
     // this.itemEdited = null;
   }
 
-  public onReadyEditor(editor) {
+  public onReadyEditor(editor: any) {
     editor.editing.view.focus();
   }
 
-  public toggleItem(item) {
+  public toggleItem(item: any) {
     const itemId = item.id;
     if (itemId) {
       item.visible = !item.visible;

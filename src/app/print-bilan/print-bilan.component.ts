@@ -13,8 +13,8 @@ import { DevoirService } from '../_services/devoir.service';
 export class PrintBilanComponent implements OnInit {
 
   public devoirDetails: Devoir;
-  public eleveNotations;
-  public classeNotation;
+  public eleveNotations: { [key: string]: any } ;
+  public classeNotation: any[];
   public bilanCompetencesClasse;
 
   public printNotesNotValidated: boolean;
@@ -35,18 +35,20 @@ export class PrintBilanComponent implements OnInit {
     this.devoirDetails = this.devoirService.devoir;
     // On recupere toutes les notations (efficacite)
     this.eleveNotations = {};
-    for (const eleve of this.devoirDetails.classe.eleves) {
-      this.eleveNotations[eleve] = this.devoirDetails.getEleveNotation(eleve);
+    if(this.devoirDetails.classe){
+      for (const eleve of this.devoirDetails.classe.eleves) {
+        this.eleveNotations[eleve] = this.devoirDetails.getEleveNotation(eleve);
+      }
     }
 
     // On crecupere toutes les options passées en paramètres
-    const options = route.snapshot.params.options.split(',');
-    this.printNotesNotValidated = options[0] === 'true';
-    this.printNotesBrutes = options[1] === 'true';
-    this.printNotesBulletin = options[2] === 'true';
-    this.printCommentaire = options[3] === 'true';
-    this.printDevoirStatistiques = options[4] === 'true';
-    this.printCompetencesSummary = options[5] === 'true';
+    const routeOptions = route.snapshot.params['options'].split(',');
+    this.printNotesNotValidated = routeOptions[0] === 'true';
+    this.printNotesBrutes = routeOptions[1] === 'true';
+    this.printNotesBulletin = routeOptions[2] === 'true';
+    this.printCommentaire = routeOptions[3] === 'true';
+    this.printDevoirStatistiques = routeOptions[4] === 'true';
+    this.printCompetencesSummary = routeOptions[5] === 'true';
 
     // On recupere les stats de la classe
     this.bilanCompetencesClasse = this.devoirDetails.getCompetenceBilan();
@@ -77,7 +79,7 @@ export class PrintBilanComponent implements OnInit {
     this.printService.onDataReady();
   }
 
-  filterEleveBy(eleves) {
+  filterEleveBy(eleves: string[]) {
     let elevesFiltered: string[] = [];
 
     for (const eleve of eleves) {

@@ -10,14 +10,14 @@ import { Classe } from '../_models/classe';
 })
 export class ModalClasseSelectionComponent implements OnInit {
 
-  @Input() classes;
-  @Input() selectedClasse;
+  @Input() classes: any[];
+  @Input() selectedClasse: any = null;
   @Input() canChooseEleve;
 
   constructor(
     public modal: NgbActiveModal
   ) {
-    this.classes = null;
+    this.classes = [];
     this.selectedClasse = null;
     this.canChooseEleve = false;
   }

@@ -15,7 +15,7 @@ export class DevoirComponent implements OnInit {
 
   // Function inserted to prevent user to close the window without saving the content
   @HostListener('window:beforeunload', ['$event'])
-  doSomething($event) {
+  doSomething($event: any) {
     if (this.devoirService.docIsEdited) {
       $event.preventDefault();
       $event.returnValue = `Vous souhaitez quitter la page alors que le devoir en cours n\'est pas sauvegardée.\n

@@ -7,7 +7,7 @@
 <div class="modal-body">
   <p>
     <strong>Êtes-vous sûr de vouloir modifier la classe actuelle par la nouvelle classe
-      <span class="text-danger">{{classeConfirm.titre}}</span> ?</strong>
+      <span class="text-danger">{{classeConfirm?classeConfirm.titre:''}}</span> ?</strong>
   </p>
   <div *ngIf="impactedNotations.length > 0;else noRemovedEleves">
     <p>Les élèves suivants n'existent plus dans la nouvelle classe : </p>

@@ -5,14 +5,14 @@
   </button>
 </div>
 <div class="modal-body">
-  <ngb-tabset *ngIf="selectedgrille==null">
-    <ngb-tab *ngFor='let grille of grilles | keyvalue'>
-      <ng-template ngbTabTitle>{{grille.value.titre}}</ng-template>
-      <ng-template ngbTabContent>
+  <ul ngbNav *ngIf="selectedgrille==null" class="nav-tabs">
+    <li *ngFor='let grille of grilles | keyvalue'>
+      <a ngbNavLink>{{$any(grille.value).titre}}</a>
+      <ng-template ngbNavContent>
         <ng-container *ngTemplateOutlet="grid; context:{currentGrille: grille.value}"></ng-container>
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </li>
+  </ul>
   <div *ngIf="selectedgrille">
     <ng-container *ngTemplateOutlet="grid; context:{currentGrille: selectedgrille}"></ng-container>
   </div>

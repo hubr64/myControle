@@ -18,12 +18,12 @@ import { Critere } from '../_models/critere';
 })
 export class DevoirEditionToolboxComponent implements OnInit {
 
-  @Input() public itemType;
-  @Input() public exeId;
-  @Input() public queId;
-  @Input() public criId;
+  @Input() public itemType: string;
+  @Input() public exeId: any;
+  @Input() public queId: any;
+  @Input() public criId: any;
 
-  itemTextConversion = {
+  public itemTextConversion: {[key:string]: string} = {
     exercice: 'un exercice',
     critere: 'un critère',
     question: 'une question'
@@ -33,7 +33,9 @@ export class DevoirEditionToolboxComponent implements OnInit {
     public devoirService: DevoirService,
     public clipboardService: ClipboardService,
     public messageService: MessageService,
-    public configurationService: ConfigurationService) { }
+    public configurationService: ConfigurationService) { 
+      this.itemType = '';
+    }
 
   ngOnInit() {
   }
@@ -66,7 +68,7 @@ export class DevoirEditionToolboxComponent implements OnInit {
 
     if (idExe !== 'end') {
       let idPos = 0;
-      this.devoirService.devoir.exercices.forEach((exercice, index) => {
+      this.devoirService.devoir.exercices.forEach((exercice: any, index: any) => {
         if (exercice.id === idExe) {
           idPos = index;
         }
@@ -92,11 +94,11 @@ export class DevoirEditionToolboxComponent implements OnInit {
     newQuestion.criteres = itemValue ? itemValue.criteres : [];
 
     if (idExe !== null) {
-      this.devoirService.devoir.exercices.forEach((exercice, indexExe) => {
+      this.devoirService.devoir.exercices.forEach((exercice: any, indexExe: any) => {
         if (exercice.id === idExe) {
           if (idQue !== 'end') {
             let idPos = 0;
-            this.devoirService.devoir.exercices[indexExe].questions.forEach((question, indexQue) => {
+            this.devoirService.devoir.exercices[indexExe].questions.forEach((question: any, indexQue: any) => {
               if (question.id === idQue) {
                 idPos = indexQue;
               }
@@ -130,13 +132,13 @@ export class DevoirEditionToolboxComponent implements OnInit {
     newCritere.capacite = itemValue ? itemValue.capacite : null; // CONFIG
 
     if (idExe !== null && idQue !== null) {
-      this.devoirService.devoir.exercices.forEach((exercice, indexExe) => {
+      this.devoirService.devoir.exercices.forEach((exercice: any, indexExe: any) => {
         if (exercice.id === idExe) {
-          this.devoirService.devoir.exercices[indexExe].questions.forEach((question, indexQue) => {
+          this.devoirService.devoir.exercices[indexExe].questions.forEach((question: any, indexQue: any) => {
             if (question.id === idQue) {
               if (idCri !== 'end') {
                 let idPos = 0;
-                this.devoirService.devoir.exercices[indexExe].questions[indexQue].criteres.forEach((critere, indexCri) => {
+                this.devoirService.devoir.exercices[indexExe].questions[indexQue].criteres.forEach((critere: any, indexCri: any) => {
                   if (critere.id === idCri) {
                     idPos = indexCri;
                   }
@@ -231,8 +233,6 @@ export class DevoirEditionToolboxComponent implements OnInit {
         this.addItem('critere', idExe, idQue, idCri, item);
       }
     }
-
-    console.dir(this.devoirService.devoir);
   }
 
 }

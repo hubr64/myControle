@@ -9,6 +9,8 @@ export class Competence implements Deserializable {
 
   constructor() {
     this.className = 'Competence';
+    this.titre = '';
+    this.couleur = '';
     this.capacites = [];
   }
 

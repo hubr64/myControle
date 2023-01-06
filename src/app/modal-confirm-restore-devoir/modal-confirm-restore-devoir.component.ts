@@ -11,8 +11,8 @@ import { Devoir } from '../_models/devoir';
 })
 export class ModalConfirmRestoreDevoirComponent implements OnInit {
 
-  @Input() devoir;
-  @Input() devoirDate;
+  @Input() devoir: string = '';
+  @Input() devoirDate: string = '';
   public devoirDetails = '';
 
   constructor(

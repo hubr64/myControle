@@ -8,6 +8,9 @@ export class Classe implements Deserializable {
 
   constructor() {
     this.className = 'Classe';
+    this.id = '';
+    this.titre = '';
+    this.eleves = [];
   }
 
   deserialize(input: any) {

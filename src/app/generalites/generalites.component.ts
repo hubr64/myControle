@@ -56,7 +56,7 @@ export class GeneralitesComponent implements OnInit {
 
   toggleNotationMode() {
     if (this.devoirService.devoir.notationMode) {
-      this.configurationService.getValue('notationModeArr').forEach((mode, index) => {
+      this.configurationService.getValue('notationModeArr').forEach((mode: any, index: any) => {
         if (this.devoirService.devoir.notationMode === mode.id) {
           this.notationModeNormalTitre = 'Mode de notation : ' + mode.titre;
           this.notationModeNormalContent = mode.description;
@@ -68,7 +68,7 @@ export class GeneralitesComponent implements OnInit {
     }
   }
 
-  grilleChanged(newGrille) {
+  grilleChanged(newGrille: any) {
     // No grille defined then can assigned a new one
     if (this.devoirService.devoir.grille === null) {
       this.devoirService.devoir.grille = newGrille;
@@ -96,7 +96,7 @@ export class GeneralitesComponent implements OnInit {
     this.grilleService.showGrille(this.devoirService.devoir.grille, false, this.devoirService.devoir);
   }
 
-  classeChanged(newClasse) {
+  classeChanged(newClasse: any) {
     // No classe defined then can assigned a new one
     if (this.devoirService.devoir.classe === null) {
       this.devoirService.devoir.classe = newClasse;

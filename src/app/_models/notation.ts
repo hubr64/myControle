@@ -12,7 +12,10 @@ export class Notation implements Deserializable {
 
   constructor() {
     this.className = 'Notation';
+    this.eleve = '';
+    this.commentaire = '';
     this.notes = [];
+    this.noteCoeffs = [];
   }
 
   // Convert from JSON
@@ -31,7 +34,7 @@ export class Notation implements Deserializable {
 
   // Convert to JSON
   serialize(): any {
-    let serializeNotation = {
+    let serializeNotation: {eleve: any, commentaire: string, notes: any[]} = {
       eleve: this.eleve,
       commentaire: this.commentaire,
       notes: []
@@ -42,7 +45,7 @@ export class Notation implements Deserializable {
     return serializeNotation;
   }
 
-  set notes_coefficients(value) {
+  set notes_coefficients(value: any) {
     this.noteCoeffs = value;
     for (const note of this.notes) {
       note.noteCoeffs = this.noteCoeffs;
@@ -76,7 +79,7 @@ export class Notation implements Deserializable {
     return null;
   }
 
-  getCapaciteBilan(capaciteBilan: any, eleve: string): any {
+  getCapaciteBilan(capaciteBilan: any, eleve?: string): any {
     for (const note of this.notes) {
       if ((eleve === undefined) || (eleve && this.eleve && this.eleve === eleve)) {
         note.getCapaciteBilan(capaciteBilan);

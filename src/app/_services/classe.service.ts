@@ -17,7 +17,7 @@ export class ClasseService {
 
   public classeItems: any;
   public classeStoragePrefix: string;
-  public selectedEleveSub;
+  public selectedEleveSub: Subject<any> = new Subject<any>();
 
   constructor(
     public messageService: MessageService,
@@ -71,11 +71,11 @@ export class ClasseService {
     }
   }
 
-  getClasse(id) {
+  getClasse(id: any) {
     return this.classeItems[id];
   }
 
-  setClasse(id, newClasse) {
+  setClasse(id: any, newClasse: any) {
     if (this.classeItems[id]) {
       this.classeItems[id] = newClasse;
       localStorage.setItem(this.classeStoragePrefix + newClasse.id, JSON.stringify(newClasse));
@@ -140,7 +140,7 @@ export class ClasseService {
   }
 
   diffElevesInClasses(classe1: Classe, classe2: Classe) {
-    let removedEleves = [];
+    let removedEleves: any[] = [];
     classe1.eleves.forEach((curEleve, indexEleve) => {
       const existingEleve = classe2.eleves.indexOf(curEleve);
       if (existingEleve === -1) {

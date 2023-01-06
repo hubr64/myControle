@@ -13,11 +13,13 @@
   <div class="btn-group btn-group-sm mr-2">
     <div class="btn-group" ngbDropdown>
       <button class="btn btn-sm btn-outline-secondary" title="Trier par" ngbDropdownToggle>
-        <i class="material-icons md-dark">filter_list</i>
+        <i class="material-icons md-dark">sort</i>
       </button>
       <div class="dropdown-menu" ngbDropdownMenu>
-        <button [ngClass]="{'active':orderList == 'nom'}" (click)="orderList = 'nom'" ngbDropdownItem>Nom</button>
-        <button [ngClass]="{'active':orderList == 'note'}" (click)="orderList = 'note'" ngbDropdownItem>Note</button>
+        <button [ngClass]="{'active':orderList == 'nom'}" (click)="orderList = 'nom'" ngbDropdownItem>
+          <i class="material-icons md-dark">sort_by_alpha</i>Nom</button>
+        <button [ngClass]="{'active':orderList == 'note'}" (click)="orderList = 'note'" ngbDropdownItem>
+          <i class="material-icons md-dark">123</i>Note</button>
       </div>
     </div>
     <div class="btn-group" ngbDropdown>
@@ -41,7 +43,7 @@
         <div class="list-group m-2">
           <span class="list-group-item p-1">
             <p class="notation-progress">
-              <ngb-progressbar showValue="true" [type]="getGlobalProgressStatus()" [value]="getGlobalProgressValue()"></ngb-progressbar>
+              <ngb-progressbar [showValue]="true" [type]="getGlobalProgressStatus()" [value]="getGlobalProgressValue()"></ngb-progressbar>
             </p>
           </span>
           <span class="list-group-item p-1">

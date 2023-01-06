@@ -13,9 +13,9 @@ import { Classe } from '../_models/classe';
 })
 export class ModalConfirmClasseComponent implements OnInit {
 
-  @Input() classeConfirm: Classe;
-  public removedEleves;
-  public impactedNotations;
+  @Input() classeConfirm: Classe|null = null;
+  public removedEleves: any[];
+  public impactedNotations: any[];
 
   constructor(
     public messageService: MessageService,

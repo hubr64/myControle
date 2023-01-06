@@ -7,13 +7,16 @@ import { Grille } from './grille';
 export class Critere implements Deserializable {
   id: string;
   text: string;
-  capacite: Capacite;
+  capacite: Capacite|null;
   bareme: number;
   className: string;
 
   constructor() {
     this.className = 'Critere';
+    this.id='';
+    this.text='';
     this.capacite = null;
+    this.bareme=0;
   }
 
   // Convert from JSON
@@ -50,7 +53,7 @@ export class Critere implements Deserializable {
     return false;
   }
 
-  getCapaciteBilan(capaciteBilan: any): any {
+  getCapaciteBilan(capaciteBilan: any) {
     if (this.capacite) {
       if (capaciteBilan[this.capacite.id]) {
         capaciteBilan[this.capacite.id].bareme += this.bareme;

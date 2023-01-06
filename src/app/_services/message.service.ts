@@ -4,14 +4,20 @@ import { debounceTime } from 'rxjs/operators';
 
 import { ConfigurationService } from './configuration.service';
 
+export interface MessageType {
+  text: string;
+  type: string;
+  date: Date;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
 
   public messageDuration;
-  messagesUser: any[] = [];
-  messagesDev: any[] = [];
+  messagesUser: MessageType[] = [];
+  messagesDev: MessageType[] = [];
 
   constructor(
     public configurationService: ConfigurationService
@@ -22,7 +28,7 @@ export class MessageService {
   add(msgText: string, msgType: string, context: string) {
 
     // Message creation
-    const msg = {
+    const msg: MessageType = {
       text: msgText,
       type: msgType,
       date: new Date()
@@ -66,7 +72,7 @@ export class MessageService {
   }
 
   // Remove a message from the list
-  close(msg) {
+  close(msg:MessageType) {
     this.messagesUser.forEach((message, indexMessage) => {
       if (message === msg) {
         this.messagesUser.splice(indexMessage, 1);

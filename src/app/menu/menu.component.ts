@@ -19,7 +19,7 @@ import { ModalPrintBilanComponent } from '../modal-print-bilan/modal-print-bilan
 export class MenuComponent implements OnInit {
 
   @Output() toggleModeDevoir = new EventEmitter<string>();
-  @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
   public visible = true;
   public appVersionMenu = environment.appVersion;
@@ -66,7 +66,7 @@ export class MenuComponent implements OnInit {
   }
 
   // Actions of the menu
-  openFile($event): void {
+  openFile($event: any): void {
     this.devoirService.loadLocalFile($event.target);
   }
 

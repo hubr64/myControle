@@ -38,7 +38,7 @@
       <ng-container *ngFor="let competenceUsed of devoirDetails.getCompetenceBilan() | keyvalue; index as i ">
         <tr>
           <td>
-            {{competenceUsed.value.competence.titre}}
+            {{$any(competenceUsed.value).competence.titre}}
           </td>
           <td>
             {{ (bilanCompetencesClasse[i].pts/devoirDetails.nb_notations) | number:'1.0-2' }}/{{bilanCompetencesClasse[i].bareme}}
@@ -48,7 +48,7 @@
     </tbody>
   </table>
 
-  <table class="bilan">
+  <table class="bilan" *ngIf="devoirDetails.classe">
     <thead>
       <tr>
         <th [attr.colspan]="nbColBilan">Bilan des notes</th>

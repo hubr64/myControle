@@ -3,14 +3,16 @@ import { Critere } from './critere';
 import { Devoir } from './devoir';
 
 export class Note implements Deserializable {
-  critere: Critere;
+  critere: Critere|null;
   status: string;
-  noteCoeffs: any[];
+  noteCoeffs: any;
   className: string;
 
   constructor() {
     this.className = 'Note';
     this.critere = null;
+    this.status='';
+    this.noteCoeffs=[];
   }
 
   // Convert from JSON

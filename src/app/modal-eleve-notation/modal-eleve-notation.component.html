@@ -79,7 +79,7 @@
 </div>
 <div class="modal-footer" *ngIf="displayCommentaire">
   <h4>Commentaire de notation</h4>
-  <ckeditor [editor]="editor" [(ngModel)]="notation.commentaire" (blur)="onBlurEditor($event)" (focus)="onFocusEditor($event)"
+  <ckeditor [editor]="editor" [(ngModel)]="notation && notation.commentaire" (blur)="onBlurEditor($event)" (focus)="onFocusEditor($event)"
     (ready)="onReadyEditor($event)"></ckeditor>
 </div>
 <div class="modal-footer">

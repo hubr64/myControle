@@ -32,8 +32,8 @@ export class DevoirService {
 
   public docIsEdited = false;
   public oldDevoir = '';
-  public devoir;
-  public noteCoeffs = [];
+  public devoir: any;
+  public noteCoeffs: {[key:string]: any} = {};
 
   public devoirStoragePrefix: string;
   public devoirDateStoragePrefix: string;
@@ -107,7 +107,7 @@ export class DevoirService {
     };
     myReader.onerror = (e) => {
       this.messageService.add('Echec de l\'ouverture du fichier ' + this.currentFileName + ' !', 'danger', 'USER');
-      this.messageService.add(myReader.error.name, 'danger', 'DEV');
+      this.messageService.add(myReader.error?myReader.error.name:'Erreur inconnue', 'danger', 'DEV');
       this.currentFileName = '';
     };
     myReader.onabort = (e) => {
@@ -119,7 +119,7 @@ export class DevoirService {
     myReader.readAsText(file);
   }
 
-  loadDevoir(content) {
+  loadDevoir(content: any) {
     if (this.docIsEdited === false ||
       (this.docIsEdited === true &&
         confirm('Le devoir actuel n\'est pas sauvegardé. Êtes-vous sûr de vouloir continuer (le travail non sauvegardé sera perdu) ? '))) {
@@ -287,9 +287,9 @@ export class DevoirService {
       };
       delete devoirContent.grilles;
 
-      let tmpCompetences = [];
+      let tmpCompetences: {id:any, titre:string, couleur: string, capacites: any[]}[] = [];
       for (const keyComp of Object.keys(devoirContent.data.general.grille.competences)) {
-        let tmpCompetence = {
+        let tmpCompetence: {id:any, titre:string, couleur: string, capacites: any[]} = {
           id: keyComp,
           titre: devoirContent.data.general.grille.competences[keyComp].titre,
           couleur: devoirContent.data.general.grille.competences[keyComp].couleur,
@@ -334,9 +334,9 @@ export class DevoirService {
       }
 
       this.messageService.add('Génération des nouvelles structures de notation.', 'success', 'DEV');
-      let tmpNotations = [];
+      let tmpNotations: {eleve:any, notes:any[], commentaire:string }[] = [];
       for (const keyEleve of Object.keys(devoirContent.data.notes)) {
-        let tmpNotation = {
+        let tmpNotation: {eleve:any, notes:any[], commentaire:string } = {
           eleve: keyEleve,
           notes: [],
           commentaire: devoirContent.data.notes[keyEleve].commentaire
@@ -404,12 +404,12 @@ export class DevoirService {
     return devoirContent;
   }
 
-  migrateMyControleLines(correspondance, nb, decalage, chaine) {
+  migrateMyControleLines(correspondance: string, nb: number, decalage: string , chaine: string) {
     let newString = '<div class="mycontrole-lines"><span class="mycontrole-lines__label">Bloc de ' + nb + ' lignes</span></div>';
     return newString;
   }
 
-  getImpactedCriteres(removedCapacites) {
+  getImpactedCriteres(removedCapacites: any[]) {
     let impactedCriteres = removedCapacites;
 
     if (removedCapacites.length > 0) {
@@ -432,7 +432,7 @@ export class DevoirService {
     return impactedCriteres;
   }
 
-  getImpactedNotations(removedEleves) {
+  getImpactedNotations(removedEleves: any[]) {
     let impactedNotations = removedEleves;
     if (removedEleves.length > 0) {
       removedEleves.forEach((removedEleve, indexEleve) => {

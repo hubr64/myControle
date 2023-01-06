@@ -13,9 +13,9 @@ import { ConfigurationService } from '../_services/configuration.service';
 })
 export class PrintDevoirComponent implements OnInit {
 
-  devoirDetails: Devoir;
-  impressionMargeExercice: number;
-  impressionMargeQuestion: number;
+  public devoirDetails: Devoir;
+  public impressionMargeExercice: number;
+  public impressionMargeQuestion: number;
 
   constructor(
     route: ActivatedRoute,
@@ -24,6 +24,8 @@ export class PrintDevoirComponent implements OnInit {
     public printService: PrintService) { 
       this.impressionMargeExercice = parseInt(this.configurationService.getValue('impressionMargeExercice'));
       this.impressionMargeQuestion = parseInt(this.configurationService.getValue('impressionMargeQuestion'));
+
+      this.devoirDetails = this.devoirService.devoir;
     }
 
   ngOnInit() {

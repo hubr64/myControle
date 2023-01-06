@@ -36,13 +36,13 @@ export class DevoirNotationComponent implements OnInit {
   ngOnInit() {
   }
 
-  sortEleveBy(eleves) {
+  sortEleveBy(eleves: any[]) {
     if (this.orderList === 'nom') {
-      return eleves.sort((a, b) =>
+      return eleves.sort((a: any, b: any) =>
         a > b ? 1 : a === b ? 0 : -1
       );
     } else {
-      return eleves.sort((a, b) => {
+      return eleves.sort((a: string, b: string) => {
         if (this.devoirService.devoir.getEleveNotation(a) === null && this.devoirService.devoir.getEleveNotation(b) === null) {
           return 0;
         }
@@ -61,6 +61,7 @@ export class DevoirNotationComponent implements OnInit {
         if (this.devoirService.devoir.getEleveNotation(a).getNote() < this.devoirService.devoir.getEleveNotation(b).getNote()) {
           return 1;
         }
+        return 0
       });
     }
   }
@@ -83,7 +84,7 @@ export class DevoirNotationComponent implements OnInit {
     }
   }
 
-  selectNotation(notation: Notation, groupe: Groupe = null) {
+  selectNotation(notation: Notation, groupe: Groupe|null = null) {
     // Display modal window
     const modalRef = this.modalService.open(ModalEleveNotationComponent, { centered: true, size: 'xl', scrollable: true });
     // @ts-ignore: Provide it the required notation
@@ -135,7 +136,7 @@ export class DevoirNotationComponent implements OnInit {
     modalRef.componentInstance.selectedGroupe = true;
   }
 
-  editGroupe(groupe) {
+  editGroupe(groupe: any) {
     // Display modal window
     const modalRef = this.modalService.open(ModalEditGroupComponent, { centered: true, scrollable: true });
     // @ts-ignore: provide group

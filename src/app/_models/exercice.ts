@@ -15,6 +15,8 @@ export class Exercice implements Deserializable {
 
   constructor() {
     this.className = 'Exercice';
+    this.id = '';
+    this.title = ""
     this.questions = [];
     this.visible = false;
   }
@@ -37,7 +39,7 @@ export class Exercice implements Deserializable {
 
   // Convert to JSON
   serialize(): any {
-    let serializeExe = {
+    let serializeExe: {id: any, title: string, type: string, questions: any[]} = {
       id: this.id,
       title: this.title,
       type: 'exe',
@@ -71,7 +73,7 @@ export class Exercice implements Deserializable {
   }
 
   // Get a criteria anywhere in the exerice
-  getCritere(questionId: string, critereId: string): Critere {
+  getCritere(questionId: string, critereId: string): Critere|null {
     if (this.questions !== undefined) {
       for (const que of this.questions) {
         if (que.id === questionId) {
@@ -82,7 +84,7 @@ export class Exercice implements Deserializable {
     return null;
   }
 
-  getCritereDeep(critereId: string): Critere {
+  getCritereDeep(critereId: string): Critere|null {
     if (this.questions !== undefined) {
       for (const question of this.questions) {
         const critereFound = question.getCritere(critereId);

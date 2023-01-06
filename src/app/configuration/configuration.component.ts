@@ -23,11 +23,11 @@ export class ConfigurationComponent implements OnInit {
     this.visible = !this.visible;
   }
 
-  reset(item) {
+  reset(item: any) {
     this.configurationService.initValue(item);
   }
 
-  setValue(item, event) {
+  setValue(item:any, event:any) {
     this.configurationService.setValue(item, event.target.value);
   }
 

@@ -19,8 +19,8 @@ import { Critere } from '../_models/critere';
 })
 export class DevoirEditionOptionboxComponent implements OnInit {
 
-  @Input() public itemType;
-  @Input() public item;
+  @Input() public itemType: any;
+  @Input() public item: any;
 
   constructor(
     public devoirService: DevoirService,
@@ -101,7 +101,7 @@ export class DevoirEditionOptionboxComponent implements OnInit {
     }
   }
 
-  deleteConfirmItem(item) {
+  deleteConfirmItem(item: any) {
     // If user confirms thus look for the item to be removed
     for (const [indexExe, exercice] of this.devoirService.devoir.exercices.entries()) {
       if (exercice.id === item.id) {
@@ -128,7 +128,7 @@ export class DevoirEditionOptionboxComponent implements OnInit {
     }
   }
 
-  deleteItem(item) {
+  deleteItem(item: any) {
 
     // Display modal window to ask user for confirmation
     const modalRef = this.modalService.open(ModalConfirmComponent, { centered: true });

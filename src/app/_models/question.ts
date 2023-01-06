@@ -13,6 +13,8 @@ export class Question implements Deserializable {
 
   constructor() {
     this.className = 'Question';
+    this.id = '';
+    this.title = '';
     this.criteres = [];
   }
 
@@ -34,7 +36,7 @@ export class Question implements Deserializable {
 
   // Convert to JSON
   serialize(): any {
-    let serializeQue = {
+    let serializeQue: {id:string, title:string, type:string, criteres: any[] } = {
       id: this.id,
       title: this.title,
       type: 'que',
@@ -56,7 +58,7 @@ export class Question implements Deserializable {
   }
 
   // Get a criteria anywhere in the question
-  getCritere(critereId: string): Critere {
+  getCritere(critereId: string): Critere|null {
     if (this.criteres !== undefined) {
       for (const cri of this.criteres) {
         if (cri.id === critereId) {

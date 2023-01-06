@@ -10,9 +10,9 @@ import { MessageService } from '../_services/message.service';
 })
 export class ModalConfirmComponent implements OnInit {
 
-  @Input() itemConfirm;
+  @Input() itemConfirm: any;
   public itemDetails = '';
-  public itemContent = null;
+  public itemContent: string|null = null;
 
   constructor(
     public messageService: MessageService,
@@ -37,10 +37,10 @@ export class ModalConfirmComponent implements OnInit {
           let nbQuestions = 0;
           let nbCriteres = 0;
           let nbFree = 0;
-          this.itemConfirm.questions.forEach((question, indexQue) => {
+          this.itemConfirm.questions.forEach((question: any, indexQue: any) => {
             if (question.criteres) {
               nbQuestions++;
-              question.criteres.forEach((critere, indexCri) => {
+              question.criteres.forEach((critere: any, indexCri: any) => {
                 if (critere.bareme) {
                   nbCriteres++;
                 } else {
@@ -60,7 +60,7 @@ export class ModalConfirmComponent implements OnInit {
           this.itemDetails = 'une question (' + this.itemConfirm.bareme + ' pts)';
           let nbCriteres = 0;
           let nbFree = 0;
-          this.itemConfirm.criteres.forEach((critere, indexCri) => {
+          this.itemConfirm.criteres.forEach((critere: any, indexCri: any) => {
             if (critere.bareme) {
               nbCriteres++;
             } else {

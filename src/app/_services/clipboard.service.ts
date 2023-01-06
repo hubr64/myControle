@@ -9,7 +9,7 @@ export class ClipboardService {
   public clipboardKeyName;
 
   clipboardType = null;
-  clipboardTypeConversion = {
+  clipboardTypeConversion: {[key:string]:any } = {
     free: 'freetext',
     exe: 'exercice',
     cri: 'critere',
@@ -42,7 +42,7 @@ export class ClipboardService {
   }
 
   // Store an element in the clipboard
-  copy(itemContent) {
+  copy(itemContent: any) {
     // First compute and memorize the type
     this.clipboardType = this.clipboardTypeConversion[itemContent.type];
     // Next store it in local storage

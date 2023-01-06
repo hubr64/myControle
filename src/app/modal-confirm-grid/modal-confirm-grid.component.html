@@ -7,7 +7,7 @@
 <div class="modal-body">
   <p>
     <strong>Êtes-vous sûr de vouloir modifier la grille actuelle par la nouvelle grille
-      <span class="text-danger">{{grilleConfirm.titre}}</span> ?</strong>
+      <span class="text-danger">{{grilleConfirm?grilleConfirm.titre:''}}</span> ?</strong>
   </p>
   <div *ngIf="impactedCriteres.length > 0;else noRemovedCapacites">
     <p>Les capacités suivantes n'existent plus dans la nouvelle grille : </p>

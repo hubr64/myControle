@@ -13,9 +13,9 @@ import { Grille } from '../_models/grille';
 })
 export class ModalConfirmGridComponent implements OnInit {
 
-  @Input() grilleConfirm: Grille;
-  public removedCapacites;
-  public impactedCriteres;
+  @Input() grilleConfirm: Grille|null = null;
+  public removedCapacites : any[];
+  public impactedCriteres : any[];
 
   constructor(
     public messageService: MessageService,

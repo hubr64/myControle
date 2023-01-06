@@ -8,6 +8,9 @@ export class Groupe implements Deserializable {
 
   constructor() {
     this.className = 'Groupe';
+    this.id = '';
+    this.nom = '';
+    this. eleves = [];
   }
 
   deserialize(input: any) {

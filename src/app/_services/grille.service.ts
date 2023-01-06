@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-// @ts-ignore:
-import { grilles } from '../../assets/configuration/grilles.json';
+import GrilleDefinition  from '../../assets/configuration/grilles.json';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { MessageService } from './message.service';
@@ -19,9 +18,10 @@ import { ModalGridSelectionComponent } from '../modal-grid-selection/modal-grid-
 })
 export class GrilleService {
 
+  public grilles: any = GrilleDefinition.grilles;
   public grilleItems: any;
   public grilleStoragePrefix: string;
-  public selectedCapaciteSub;
+  public selectedCapaciteSub: Subject<any> = new Subject<any>();
 
   constructor(
     public messageService: MessageService,
@@ -32,23 +32,23 @@ export class GrilleService {
     this.grilleStoragePrefix = this.configurationService.getValue('storagePrefix') + 'grille-';
 
     // First convert configuration file into accepted JSON
-    for (let [keyg, valueg] of Object.entries(grilles)) {
-      for (let [keyComp, valueComp] of Object.entries(grilles[keyg].competences)) {
+    for (let [keyg, valueg] of Object.entries(this.grilles)) {
+      for (let [keyComp, valueComp] of Object.entries(this.grilles[keyg].competences)) {
         let tmpCapacites = [];
-        for (let [keyCap, valueCap] of Object.entries(grilles[keyg].competences[keyComp].capacites)) {
+        for (let [keyCap, valueCap] of Object.entries(this.grilles[keyg].competences[keyComp].capacites)) {
           tmpCapacites.push({
             id: keyCap,
             texte: valueCap
           });
         }
-        grilles[keyg].competences[keyComp].capacites = tmpCapacites;
+        this.grilles[keyg].competences[keyComp].capacites = tmpCapacites;
       }
     }
 
     // then get the configuration from the default file
     this.grilleItems = {};
-    for (let [key, value] of Object.entries(grilles)) {
-      this.grilleItems[key] = new Grille().deserialize(grilles[key]);
+    for (let [key, value] of Object.entries(this.grilles)) {
+      this.grilleItems[key] = new Grille().deserialize(this.grilles[key]);
     }
 
     // Load local storage that replace the global initial storage
@@ -65,11 +65,11 @@ export class GrilleService {
     }
   }
 
-  getGrille(id) {
+  getGrille(id: any) {
     return this.grilleItems[id];
   }
 
-  setGrille(id, newGrid) {
+  setGrille(id: any, newGrid: any) {
     if (this.grilleItems[id]) {
       this.grilleItems[id] = newGrid;
       localStorage.setItem(this.grilleStoragePrefix + id, JSON.stringify(newGrid));
@@ -145,9 +145,9 @@ export class GrilleService {
     return grilleExisting;
   }
 
-  diffCapacitesInGrilles(grille1: Grille, grille2: Grille) {
+  diffCapacitesInGrilles(grille1: Grille, grille2: Grille): {capacite: Capacite, criteres: number}[] {
 
-    let removedCapacites = [];
+    let removedCapacites: {capacite: Capacite, criteres: number}[] = [];
 
     grille1.competences.forEach((competence, indexComp) => {
       competence.capacites.forEach((capa, indexCapa) => {

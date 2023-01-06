@@ -10,6 +10,9 @@ export class Capacite implements Deserializable {
 
   constructor() {
     this.className = 'Capacite';
+    this.id='',
+    this.texte='';
+    this.couleur='';
   }
 
   deserialize(input: any) {
@@ -18,7 +21,7 @@ export class Capacite implements Deserializable {
     return this;
   }
 
-  getCompetence(grille: Grille): Competence {
+  getCompetence(grille: Grille): Competence|null {
 
     if (grille !== undefined) {
       for (const comp of grille.competences) {

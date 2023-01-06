@@ -11,15 +11,14 @@ import { ConfigurationService } from '../_services/configuration.service';
 })
 export class ModalCheckDevoirComponent implements OnInit {
 
-  @Input() devoir: Devoir;
+  @Input() devoir: Devoir|null = null;
 
-  @ViewChild('imgCheck', { static: false }) imgCheck: ElementRef;
+  @ViewChild('imgCheck', { static: false }) imgCheck!: ElementRef;
   public urlList: string[];
   public urlListPos = 0;
 
-  public errorList;
-
-  public fixList;
+  public errorList: {type: string, msg: string, level: string}[];
+  public fixList: string[];
 
   constructor(
     public modal: NgbActiveModal,
@@ -71,33 +70,34 @@ export class ModalCheckDevoirComponent implements OnInit {
   }
 
   checkGeneral() {
-    let generalPb = 0;
-    if (this.devoir.titre === '' || this.devoir.titre === this.configurationService.getValue('devoirTitreDefault')) {
-      this.errorList.push({
-        type: 'Général',
-        msg: 'Le titre du devoir n\'est pas renseigné.',
-        level: 'danger'
-      });
-      generalPb++;
+    if(this.devoir){
+      let generalPb = 0;
+      if (this.devoir.titre === '' || this.devoir.titre === this.configurationService.getValue('devoirTitreDefault')) {
+        this.errorList.push({
+          type: 'Général',
+          msg: 'Le titre du devoir n\'est pas renseigné.',
+          level: 'danger'
+        });
+        generalPb++;
+      }
+      if (this.devoir.author === '') {
+        this.errorList.push({
+          type: 'Général',
+          msg: 'L\'auteur du devoir n\'est pas renseigné.',
+          level: 'warning'
+        });
+        this.fixList.push('auteur');
+        generalPb++;
+      }
+      if (this.devoir.devoirDate === null) {
+        this.errorList.push({
+          type: 'Général',
+          msg: 'La date du devoir n\'est pas renseignée.',
+          level: 'danger'
+        });
+        generalPb++;
+      }
     }
-    if (this.devoir.author === '') {
-      this.errorList.push({
-        type: 'Général',
-        msg: 'L\'auteur du devoir n\'est pas renseigné.',
-        level: 'warning'
-      });
-      this.fixList.push('auteur');
-      generalPb++;
-    }
-    if (this.devoir.devoirDate === null) {
-      this.errorList.push({
-        type: 'Général',
-        msg: 'La date du devoir n\'est pas renseignée.',
-        level: 'danger'
-      });
-      generalPb++;
-    }
-
   }
 
   checkURL() {
@@ -123,7 +123,7 @@ export class ModalCheckDevoirComponent implements OnInit {
       }
     }
   }
-  urlError(url) {
+  urlError(url: string) {
     this.errorList.push({
       type: 'Images',
       msg: 'L\'URL de l\'image ' + url + ' n\'est pas valide.',
@@ -131,7 +131,7 @@ export class ModalCheckDevoirComponent implements OnInit {
     });
     this.nextURL();
   }
-  urlSucceed(url) {
+  urlSucceed(url: string) {
     //On ignore le premier qui est juste pour lancer l'algo
     if(url.indexOf('/assets/') === -1){
       this.errorList.push({
@@ -151,197 +151,207 @@ export class ModalCheckDevoirComponent implements OnInit {
 
   checkCritere() {
     let criterePb = 0;
-    for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
-      if (exercice.questions) {
-        for (const [indexQue, question] of exercice.questions.entries()) {
-          if (question.criteres) {
-            for (const [indexCri, critere] of question.criteres.entries()) {
-              if (critere.className === 'Critere') {
-                if (critere.bareme === 0) {
-                  this.errorList.push({
-                    type: 'Edition',
-                    msg: 'Un des critères de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' possède un barême nul.',
-                    level: 'warning'
-                  });
-                  criterePb++;
-                }
-                if (critere.capacite === null) {
-                  this.errorList.push({
-                    type: 'Edition',
-                    msg: 'Un des critères de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède pas de capacité liée.',
-                    level: 'warning'
-                  });
-                  criterePb++;
-                }
-                if (critere.text === '' || critere.text === this.configurationService.getValue('critereTitreDefaut')) {
-                  this.errorList.push({
-                    type: 'Edition',
-                    msg: 'Un des critères de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède aucun texte.',
-                    level: 'danger'
-                  });
-                  criterePb++;
+    if(this.devoir){
+      for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+        if (exercice.questions) {
+          for (const [indexQue, question] of exercice.questions.entries()) {
+            if (question.criteres) {
+              for (const [indexCri, critere] of question.criteres.entries()) {
+                if (critere.className === 'Critere') {
+                  if (critere.bareme === 0) {
+                    this.errorList.push({
+                      type: 'Edition',
+                      msg: 'Un des critères de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' possède un barême nul.',
+                      level: 'warning'
+                    });
+                    criterePb++;
+                  }
+                  if (critere.capacite === null) {
+                    this.errorList.push({
+                      type: 'Edition',
+                      msg: 'Un des critères de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède pas de capacité liée.',
+                      level: 'warning'
+                    });
+                    criterePb++;
+                  }
+                  if (critere.text === '' || critere.text === this.configurationService.getValue('critereTitreDefaut')) {
+                    this.errorList.push({
+                      type: 'Edition',
+                      msg: 'Un des critères de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède aucun texte.',
+                      level: 'danger'
+                    });
+                    criterePb++;
+                  }
                 }
               }
             }
           }
         }
       }
-    }
-    if (criterePb === 0) {
-      this.errorList.push({
-        type: 'Edition',
-        msg: 'Tous les critères sont corrects.',
-        level: 'success'
-      });
+      if (criterePb === 0) {
+        this.errorList.push({
+          type: 'Edition',
+          msg: 'Tous les critères sont corrects.',
+          level: 'success'
+        });
+      }
     }
   }
 
   checkExercices() {
     let exercicePb = 0;
-    for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
-      if (exercice.title === '' || exercice.title === this.configurationService.getValue('exerciceTitreDefaut')) {
+    if(this.devoir){
+      for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+        if (exercice.title === '' || exercice.title === this.configurationService.getValue('exerciceTitreDefaut')) {
+          this.errorList.push({
+            type: 'Edition',
+            msg: 'L\'exercice n°' + (indexExe + 1) + ' possède un intitulé vide.',
+            level: 'warning'
+          });
+          exercicePb++;
+        }
+        if (exercice.questions && exercice.questions.length === 0) {
+          this.errorList.push({
+            type: 'Edition',
+            msg: 'L\'exercice n°' + (indexExe + 1) + ' ne contient ni question ni texte libre.',
+            level: 'danger'
+          });
+          exercicePb++;
+        }
+      }
+      if (exercicePb === 0) {
         this.errorList.push({
           type: 'Edition',
-          msg: 'L\'exercice n°' + (indexExe + 1) + ' possède un intitulé vide.',
-          level: 'warning'
+          msg: 'Tous les exercices sont corrects.',
+          level: 'success'
         });
-        exercicePb++;
       }
-      if (exercice.questions && exercice.questions.length === 0) {
-        this.errorList.push({
-          type: 'Edition',
-          msg: 'L\'exercice n°' + (indexExe + 1) + ' ne contient ni question ni texte libre.',
-          level: 'danger'
-        });
-        exercicePb++;
-      }
-    }
-    if (exercicePb === 0) {
-      this.errorList.push({
-        type: 'Edition',
-        msg: 'Tous les exercices sont corrects.',
-        level: 'success'
-      });
     }
   }
 
   checkQuestions() {
     let questionPb = 0;
-    for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
-      if (exercice.questions) {
-        for (const [indexQue, question] of exercice.questions.entries()) {
-          if (question.title === '' || question.title === this.configurationService.getValue('questionTitreDefaut')) {
-            this.errorList.push({
-              type: 'Edition',
-              msg: 'La question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' possède un intitulé vide.',
-              level: 'warning'
-            });
-            questionPb++;
-          }
-          if (question.criteres && question.criteres.length === 0) {
-            this.errorList.push({
-              type: 'Edition',
-              msg: 'La question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne contient ni critère ni texte libre.',
-              level: 'danger'
-            });
-            questionPb++;
+    if(this.devoir){
+      for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+        if (exercice.questions) {
+          for (const [indexQue, question] of exercice.questions.entries()) {
+            if (question.title === '' || question.title === this.configurationService.getValue('questionTitreDefaut')) {
+              this.errorList.push({
+                type: 'Edition',
+                msg: 'La question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' possède un intitulé vide.',
+                level: 'warning'
+              });
+              questionPb++;
+            }
+            if (question.criteres && question.criteres.length === 0) {
+              this.errorList.push({
+                type: 'Edition',
+                msg: 'La question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne contient ni critère ni texte libre.',
+                level: 'danger'
+              });
+              questionPb++;
+            }
           }
         }
       }
-    }
-    if (questionPb === 0) {
-      this.errorList.push({
-        type: 'Edition',
-        msg: 'Toutes les questions sont correctes.',
-        level: 'success'
-      });
+      if (questionPb === 0) {
+        this.errorList.push({
+          type: 'Edition',
+          msg: 'Toutes les questions sont correctes.',
+          level: 'success'
+        });
+      }
     }
   }
 
   checkFreeText() {
     let freeTextPb = 0;
-    for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
-      if (exercice.className === 'Freetext') {
-        if (exercice.text === '' || exercice.text === this.configurationService.getValue('critereFreeDefaut')) {
-          this.errorList.push({
-            type: 'Edition',
-            msg: 'Le Texte libre n°' + (indexExe + 1) + ' ne possède aucun texte.',
-            level: 'danger'
-          });
-          freeTextPb++;
-        }
-      } else {
-        for (const [indexQue, question] of exercice.questions.entries()) {
-          if (question.className === 'Freetext') {
-            if (question.text === '' || question.text === this.configurationService.getValue('critereFreeDefaut')) {
-              this.errorList.push({
-                type: 'Edition',
-                msg: 'Le Texte libre n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède aucun texte.',
-                level: 'danger'
-              });
-              freeTextPb++;
-            }
-          } else {
-            for (const [indexCri, critere] of question.criteres.entries()) {
-              if (critere.className === 'Freetext') {
-                if (critere.text === '' || critere.text === this.configurationService.getValue('critereFreeDefaut')) {
-                  this.errorList.push({
-                    type: 'Edition',
-                    msg: 'Un des textes libres de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède aucun texte.',
-                    level: 'danger'
-                  });
-                  freeTextPb++;
+    if(this.devoir){
+      for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+        if (exercice.className === 'Freetext') {
+          if (exercice.text === '' || exercice.text === this.configurationService.getValue('critereFreeDefaut')) {
+            this.errorList.push({
+              type: 'Edition',
+              msg: 'Le Texte libre n°' + (indexExe + 1) + ' ne possède aucun texte.',
+              level: 'danger'
+            });
+            freeTextPb++;
+          }
+        } else {
+          for (const [indexQue, question] of exercice.questions.entries()) {
+            if (question.className === 'Freetext') {
+              if (question.text === '' || question.text === this.configurationService.getValue('critereFreeDefaut')) {
+                this.errorList.push({
+                  type: 'Edition',
+                  msg: 'Le Texte libre n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède aucun texte.',
+                  level: 'danger'
+                });
+                freeTextPb++;
+              }
+            } else {
+              for (const [indexCri, critere] of question.criteres.entries()) {
+                if (critere.className === 'Freetext') {
+                  if (critere.text === '' || critere.text === this.configurationService.getValue('critereFreeDefaut')) {
+                    this.errorList.push({
+                      type: 'Edition',
+                      msg: 'Un des textes libres de la question n°' + (indexQue + 1) + ' de l\'exercice n°' + (indexExe + 1) + ' ne possède aucun texte.',
+                      level: 'danger'
+                    });
+                    freeTextPb++;
+                  }
                 }
               }
             }
           }
         }
       }
-    }
-    if (freeTextPb === 0) {
-      this.errorList.push({
-        type: 'Edition',
-        msg: 'Tous les textes libres sont corrects.',
-        level: 'success'
-      });
+      if (freeTextPb === 0) {
+        this.errorList.push({
+          type: 'Edition',
+          msg: 'Tous les textes libres sont corrects.',
+          level: 'success'
+        });
+      }
     }
   }
 
   checkNotation() {
     let notationPb = 0;
-    if (this.devoir.notations.length > 0) {
-      if (this.devoir.notations.length !== this.devoir.classe.eleves.length) {
-        this.errorList.push({
-          type: 'Notation',
-          msg: 'Tous les élèves de la classe choisie n\'ont pas été notés.',
-          level: 'warning'
-        });
-        notationPb++;
-      }
-      for (const [indexNot, notation] of this.devoir.notations.entries()) {
-        if (notation.getNoteMax() !== this.devoir.bareme) {
+    if(this.devoir){
+      if (this.devoir.notations.length > 0) {
+        if (this.devoir.classe && this.devoir.notations.length !== this.devoir.classe.eleves.length) {
           this.errorList.push({
             type: 'Notation',
-            msg: 'L\'élève ' + notation.eleve + ' n\'est pas entièrement évalué.',
-            level: 'danger'
-          });
-        }
-        if (notation.commentaire === null || notation.commentaire === '') {
-          this.errorList.push({
-            type: 'Notation',
-            msg: 'La note de l\'élève ' + notation.eleve + ' n\'est pas commentée.',
+            msg: 'Tous les élèves de la classe choisie n\'ont pas été notés.',
             level: 'warning'
           });
+          notationPb++;
+        }
+        for (const [indexNot, notation] of this.devoir.notations.entries()) {
+          if (notation.getNoteMax() !== this.devoir.bareme) {
+            this.errorList.push({
+              type: 'Notation',
+              msg: 'L\'élève ' + notation.eleve + ' n\'est pas entièrement évalué.',
+              level: 'danger'
+            });
+          }
+          if (notation.commentaire === null || notation.commentaire === '') {
+            this.errorList.push({
+              type: 'Notation',
+              msg: 'La note de l\'élève ' + notation.eleve + ' n\'est pas commentée.',
+              level: 'warning'
+            });
+          }
         }
       }
-    }
 
-    if (notationPb === 0) {
-      this.errorList.push({
-        type: 'Edition',
-        msg: 'Toute la notation est correcte.',
-        level: 'success'
-      });
+      if (notationPb === 0) {
+        this.errorList.push({
+          type: 'Edition',
+          msg: 'Toute la notation est correcte.',
+          level: 'success'
+        });
+      }
     }
   }
 
@@ -349,54 +359,56 @@ export class ModalCheckDevoirComponent implements OnInit {
     let idPb = 0;
     let idList: string[] = [];
 
-    for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
-      if( idList.lastIndexOf(exercice.id) >= 0 ){
-        this.errorList.push({
-          type: 'Edition',
-          msg: 'L\'objet n°' + (indexExe + 1) + ' utilise un identifiant en double ('+exercice.id+').',
-          level: 'danger'
-        });
-        idPb++;
-      }else{
-        idList.push(exercice.id);
-      }
-      if (exercice.questions) {
-        for (const [indexQue, question] of exercice.questions.entries()) {
-          if( idList.lastIndexOf(question.id) >= 0 ){
-            this.errorList.push({
-              type: 'Edition',
-              msg: 'L\'objet n°' + (indexQue + 1) + '.' + (indexExe + 1) + ' utilise un identifiant en double ('+question.id+').',
-              level: 'danger'
-            });
-            idPb++;
-          }else{
-            idList.push(question.id);
-          }
-          if (question.criteres) {
-            for (const [indexCri, critere] of question.criteres.entries()) {
-              if( idList.lastIndexOf(critere.id) >= 0 ){
-                this.errorList.push({
-                  type: 'Edition',
-                  msg: 'L\'objet n°' + (indexExe + 1) + '.' + (indexQue + 1) + '.' + (indexCri + 1) + ' utilise un identifiant en double ('+critere.id+').',
-                  level: 'danger'
-                });
-                idPb++;
-              }else{
-                idList.push(critere.id);
+    if(this.devoir){
+      for (const [indexExe, exercice] of this.devoir.exercices.entries()) {
+        if( idList.lastIndexOf(exercice.id) >= 0 ){
+          this.errorList.push({
+            type: 'Edition',
+            msg: 'L\'objet n°' + (indexExe + 1) + ' utilise un identifiant en double ('+exercice.id+').',
+            level: 'danger'
+          });
+          idPb++;
+        }else{
+          idList.push(exercice.id);
+        }
+        if (exercice.questions) {
+          for (const [indexQue, question] of exercice.questions.entries()) {
+            if( idList.lastIndexOf(question.id) >= 0 ){
+              this.errorList.push({
+                type: 'Edition',
+                msg: 'L\'objet n°' + (indexQue + 1) + '.' + (indexExe + 1) + ' utilise un identifiant en double ('+question.id+').',
+                level: 'danger'
+              });
+              idPb++;
+            }else{
+              idList.push(question.id);
+            }
+            if (question.criteres) {
+              for (const [indexCri, critere] of question.criteres.entries()) {
+                if( idList.lastIndexOf(critere.id) >= 0 ){
+                  this.errorList.push({
+                    type: 'Edition',
+                    msg: 'L\'objet n°' + (indexExe + 1) + '.' + (indexQue + 1) + '.' + (indexCri + 1) + ' utilise un identifiant en double ('+critere.id+').',
+                    level: 'danger'
+                  });
+                  idPb++;
+                }else{
+                  idList.push(critere.id);
+                }
               }
             }
           }
         }
       }
-    }
-    if (idPb === 0) {
-      this.errorList.push({
-        type: 'Edition',
-        msg: 'Tous les identifiants sont uniques.',
-        level: 'success'
-      });
-    }else{
-      this.fixList.push('ids');
+      if (idPb === 0) {
+        this.errorList.push({
+          type: 'Edition',
+          msg: 'Tous les identifiants sont uniques.',
+          level: 'success'
+        });
+      }else{
+        this.fixList.push('ids');
+      }
     }
   }
 

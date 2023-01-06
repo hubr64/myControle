@@ -17,8 +17,8 @@ export class Devoir {
   arrondi: number;
   notationMode: number;
   notationCible: number;
-  classe: Classe;
-  grille: Grille;
+  classe: Classe|null;
+  grille: Grille|null;
   exercices: any[];
   notations: Notation[];
   groupes: Groupe[];
@@ -33,6 +33,7 @@ export class Devoir {
     this.modificationDate = new Date();
     this.toolVersion = '';
 
+    this.id = 0;
     this.titre = '';
     this.arrondi = 0;
     this.devoirDate = new Date();
@@ -67,7 +68,7 @@ export class Devoir {
 
     for (const keyExe of Object.keys(input.data.exercices)) {
       if (input.data.exercices[keyExe].type === 'exe') {
-        this.exercices.push(new Exercice().deserialize(input.data.exercices[keyExe], this.grille));
+        this.exercices.push(new Exercice().deserialize(input.data.exercices[keyExe], this.grille?this.grille:undefined));
       }
       if (input.data.exercices[keyExe].type === 'free') {
         this.exercices.push(new Freetext().deserialize(input.data.exercices[keyExe]));
@@ -85,7 +86,7 @@ export class Devoir {
 
   // Convert to JSON
   serialize(): any {
-    let serializeDevoir = {
+    let serializeDevoir: {meta: any, data: any} = {
       meta: {
         author: this.author,
         version: this.toolVersion,
@@ -116,7 +117,7 @@ export class Devoir {
     return serializeDevoir;
   }
 
-  set notes_coefficients(value) {
+  set notes_coefficients(value: any) {
     this.noteCoeffs = value;
     for (const notation of this.notations) {
       notation.notes_coefficients = this.noteCoeffs;
@@ -220,7 +221,7 @@ export class Devoir {
     return nb;
   }
 
-  getEleveNotation(eleve: string): Notation {
+  getEleveNotation(eleve: string): Notation|null {
     for (const notation of this.notations) {
       if (notation.eleve === eleve) {
         return notation;
@@ -271,7 +272,7 @@ export class Devoir {
 
   // GESTION DES CRITERES/CAPACITES
 
-  getCritere(exerciceId: string, questionId: string, critereId: string): Critere {
+  getCritere(exerciceId: string, questionId: string, critereId: string): Critere|null {
     if (this.exercices !== undefined) {
       for (const exe of this.exercices) {
         if (exe.id === exerciceId) {
@@ -282,7 +283,7 @@ export class Devoir {
     return null;
   }
 
-  getCritereDeep(critereId: string): Critere {
+  getCritereDeep(critereId: string): Critere|null {
     if (this.exercices !== undefined) {
       for (const exercice of this.exercices) {
         const critereFound = exercice.getCritereDeep(critereId);
@@ -303,8 +304,8 @@ export class Devoir {
     return false;
   }
 
-  getCapaciteBilan(eleve?: string): any {
-    let capaciteBilan = [];
+  getCapaciteBilan(eleve?: string): {[id: string]: {ok: number, encours: number, ko: number, total: number, pts: number, bareme: number}} {
+    let capaciteBilan: {[id: string]: {ok: number, encours: number, ko: number, total: number, pts: number, bareme: number}} = {};
     for (const exercice of this.exercices) {
       exercice.getCapaciteBilan(capaciteBilan);
     }
@@ -318,38 +319,40 @@ export class Devoir {
 
   getCompetenceBilan(eleve?: string): any {
     // On recupere d'abord le bilan de capacites (par eleve ou au global selon le parametre)
-    const capaciteBilan = this.getCapaciteBilan(eleve);
+    const capaciteBilan:  {[id: string]: {ok: number, encours: number, ko: number, total: number, pts: number, bareme: number}} = this.getCapaciteBilan(eleve);
 
     // On construit ensuite un bilan de compentence en parcourant toutes les competences
-    let competenceBilan = [];
-    for (const currentCompetence of this.grille.competences) {
-      // On créé un bilan vierge de la competence en cours de traitement
-      let newCompetence = {
-        competence: currentCompetence,
-        ok: 0,
-        encours: 0,
-        ko: 0,
-        total: 0,
-        pts: 0,
-        bareme: 0,
-        capacites: []
-      };
-      // On parcours toutes les capacites de cette competence
-      for (const capacite of currentCompetence.capacites) {
-        // Si cette capacite existe bien dans le bilan de capcite alors elle vient enrichir le bilan de compétences
-        if (capaciteBilan[capacite.id]) {
-          newCompetence.ok += capaciteBilan[capacite.id].ok;
-          newCompetence.encours += capaciteBilan[capacite.id].encours;
-          newCompetence.ko += capaciteBilan[capacite.id].ko;
-          newCompetence.total += capaciteBilan[capacite.id].total;
-          newCompetence.pts += capaciteBilan[capacite.id].pts;
-          newCompetence.bareme += capaciteBilan[capacite.id].bareme;
-          newCompetence.capacites.push(capaciteBilan[capacite.id]);
+    let competenceBilan: any[] = [];
+    if(this.grille){
+      for (const currentCompetence of this.grille.competences) {
+        // On créé un bilan vierge de la competence en cours de traitement
+        let newCompetence: {competence: any, ok: number, encours: number, ko: number, total: number, pts: number, bareme: number, capacites: any[]} = {
+          competence: currentCompetence,
+          ok: 0,
+          encours: 0,
+          ko: 0,
+          total: 0,
+          pts: 0,
+          bareme: 0,
+          capacites: []
+        };
+        // On parcours toutes les capacites de cette competence
+        for (const capacite of currentCompetence.capacites) {
+          // Si cette capacite existe bien dans le bilan de capcite alors elle vient enrichir le bilan de compétences
+          if (capaciteBilan[capacite.id]) {
+            newCompetence.ok += capaciteBilan[capacite.id].ok;
+            newCompetence.encours += capaciteBilan[capacite.id].encours;
+            newCompetence.ko += capaciteBilan[capacite.id].ko;
+            newCompetence.total += capaciteBilan[capacite.id].total;
+            newCompetence.pts += capaciteBilan[capacite.id].pts;
+            newCompetence.bareme += capaciteBilan[capacite.id].bareme;
+            newCompetence.capacites.push(capaciteBilan[capacite.id]);
+          }
         }
-      }
-      // J'ai finit mon parcours je viens enrichir mon bilan de compétences uniquement s'il est utilisé
-      if (newCompetence.bareme > 0) {
-        competenceBilan.push(newCompetence);
+        // J'ai finit mon parcours je viens enrichir mon bilan de compétences uniquement s'il est utilisé
+        if (newCompetence.bareme > 0) {
+          competenceBilan.push(newCompetence);
+        }
       }
     }
     return competenceBilan;
@@ -357,7 +360,7 @@ export class Devoir {
 
 
   // GESTION DES GROUPES
-  getEleveGroupe(eleve: string): Groupe {
+  getEleveGroupe(eleve: string): Groupe|null {
     for (const groupe of this.groupes) {
       if (groupe.eleves.indexOf(eleve) !== -1) {
         return groupe;
