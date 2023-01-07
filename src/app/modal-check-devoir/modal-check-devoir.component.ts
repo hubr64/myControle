@@ -133,7 +133,7 @@ export class ModalCheckDevoirComponent implements OnInit {
   }
   urlSucceed(url: string) {
     //On ignore le premier qui est juste pour lancer l'algo
-    if(url.indexOf('/assets/') === -1){
+    if(url.indexOf('assets/') === -1){
       this.errorList.push({
         type: 'Images',
         msg: 'L\'URL de l\'image ' + url + ' est  valide.',

@@ -22,7 +22,7 @@
         <td [ngClass]="{'bg-warning':error.level=='warning', 'bg-danger':error.level=='danger', 'bg-success':error.level=='success'}">{{error.level | titlecase}}</td>
       </tr>
   </table>
-  <img #imgCheck src="/assets/index.png" (error)="urlError(imgCheck.src)" (load)="urlSucceed(imgCheck.src)" />
+  <img #imgCheck src="assets/index.png" (error)="urlError(imgCheck.src)" (load)="urlSucceed(imgCheck.src)" />
 </div>
 <div class="modal-footer">
   <button type="button" ngbAutofocus class="btn btn-success" (click)="modal.close('ok')">FERMER</button>
