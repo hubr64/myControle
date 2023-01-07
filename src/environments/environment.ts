@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  appVersion: "2.0.3-b",
+  appVersion: "3.0.0-b",
   appName: "my-controle-beta"
 };
 
