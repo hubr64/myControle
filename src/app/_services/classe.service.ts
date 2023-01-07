@@ -34,7 +34,7 @@ export class ClasseService {
       .subscribe(
         data => {
           if (data) {
-            const rows = data.split('\r\n');
+            const rows = data.split('\n');
             for (const [i, row] of rows.entries()) {
               const cols = row.split(';');
               for (const [j, col] of cols.entries()) {
